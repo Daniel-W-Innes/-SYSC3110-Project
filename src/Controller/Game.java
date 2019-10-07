@@ -9,16 +9,18 @@ public class Game {
     private Board board;
 
     public static void main(String[] args) {
-        setUp();
+        Game game = new Game();
+        game.setUp();
+        System.out.println(game.board.toString());
     }
 
-    private static void setUp() {
+    public void setUp() {
         setUpBoard();
     }
 
-    private static void setUpBoard() {
+    private void setUpBoard() {
         Point boardSize = new Point(5, 5);
-        Board board = new Builder(boardSize)
+        board = new Builder(boardSize)
                 .addTunnel(new Point(0, 0))
                 .addTunnel(new Point(4, 4))
                 .addTunnel(new Point(0, 4))

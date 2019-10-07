@@ -18,6 +18,7 @@ public class Board {
             this.size = size;
             tunnels = new HashSet<>();
             pieces = new HashMap<>();
+            raisedSquares = new HashSet<>();
         }
 
         public Builder addTunnel(Point Loc) {
@@ -53,6 +54,13 @@ public class Board {
             for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
                 board[entry.getKey().x][entry.getKey().y] = new Square(false, false, entry.getValue());
             }
+            for (int x = 0; x < size.x; x++) {
+                for (int y = 0; y < size.y; y++) {
+                    if (board[x][y] == null) {
+                        board[x][y] = new Square(false, false, null);
+                    }
+                }
+            }
             return new Board(board);
         }
     }
@@ -78,5 +86,18 @@ public class Board {
 
     private boolean isValidLoc(Point loc) {
         return loc.x < board.length && loc.y < board[0].length;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        for (Square[] squares : board) {
+            for (Square square : squares) {
+                stringBuilder.append(square.toString());
+            }
+            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+        // return Arrays.deepToString(board);
     }
 }

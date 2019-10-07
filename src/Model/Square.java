@@ -30,4 +30,25 @@ public class Square {
     public boolean isRaised() {
         return isRaised;
     }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append('{');
+        if (isTunnel) {
+            stringBuilder.append("Tunnel");
+        } else if (isRaised) {
+            stringBuilder.append("Raised");
+        } else {
+            stringBuilder.append("Normal");
+        }
+        stringBuilder.append(' ');
+        if (hasPiece()) {
+            stringBuilder.append(piece.toString());
+        } else {
+            stringBuilder.append("Empty");
+        }
+        stringBuilder.append('}');
+        return stringBuilder.toString();
+    }
 }
