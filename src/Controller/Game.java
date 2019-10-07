@@ -2,6 +2,8 @@ package Controller;
 
 import Model.Board;
 import Model.Board.Builder;
+import View.TextBased;
+import View.ViewApi;
 
 import java.awt.*;
 
@@ -10,8 +12,9 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
+        ViewApi view = new TextBased();
         game.setUp();
-        System.out.println(game.board.toString());
+        view.draw(game.board);
     }
 
     public void setUp() {
