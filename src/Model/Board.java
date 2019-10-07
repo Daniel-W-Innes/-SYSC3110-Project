@@ -71,11 +71,6 @@ public class Board {
         this.board = board;
     }
 
-    public Square getSquare(Point loc) {
-        assert isValidLoc(loc);
-        return (board[loc.y][loc.x]);
-    }
-
     public void movePiece(Point oldLoc, Point newLoc) {
         assert isValidLoc(oldLoc);
         assert isValidLoc(newLoc);
@@ -86,6 +81,15 @@ public class Board {
 
     private boolean isValidLoc(Point loc) {
         return loc.y < board.length && loc.x < board[0].length;
+    }
+
+    public Piece getPiece(Point loc) {
+        assert isValidLoc(loc);
+        return board[loc.y][loc.x].getPiece();
+    }
+
+    public Point getSize(){
+        return new Point(board[0].length, board.length);
     }
 
     @Override

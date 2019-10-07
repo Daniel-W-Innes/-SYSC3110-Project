@@ -2,6 +2,8 @@ package Controller;
 
 import Model.Board;
 import Model.Board.Builder;
+import Model.Command;
+import Model.MoveCommand;
 import Model.Piece;
 import View.TextBased;
 import View.ViewApi;
@@ -10,12 +12,54 @@ import java.awt.*;
 
 public class Game {
     private Board board;
+    private boolean exit;
+    private boolean reset;
+    private ViewApi view;
+
+    private Game(ViewApi view) {
+        this.view = view;
+    }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        ViewApi view = new TextBased();
-        game.setUp();
-        view.draw(game.board);
+        Game game = new Game(new TextBased());
+        game.mainLoop();
+    }
+
+    private void mainLoop() {
+        exit = false;
+        while (!exit) {
+            setUp();
+            reset = false;
+            while (!reset) {
+                view.draw(board);
+                Command command = view.getCommand();
+                switch (command.getCommandType()) {
+                    case EXIT:
+                        exit = true;
+                    case RESET:
+                        reset = true;
+                    case MOVE:
+                        MoveCommand moveCommand = (MoveCommand) command;
+                        if (checkLoc(moveCommand.getOldLoc()) && checkLoc(moveCommand.getNewLoc())) {
+                            Piece piece = board.getPiece(moveCommand.getOldLoc());
+                            //TODO
+                            switch (piece) {
+                                case RABBIT:
+                                    break;
+                                case FOX_HEAD:
+                                    break;
+                                case FOX_TAIL:
+                                    break;
+                            }
+                        }
+                }
+            }
+        }
+    }
+
+    private boolean checkLoc(Point loc) {
+        Point size = board.getSize();
+        return loc.x <= size.x && loc.y <= size.y;
     }
 
     public void setUp() {
