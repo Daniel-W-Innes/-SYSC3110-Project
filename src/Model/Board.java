@@ -37,25 +37,25 @@ public class Board {
         }
 
         public Board build() {
-            Square[][] board = new Square[size.x][size.y];
-            for (int x = 0; x < size.x; x++) {
-                for (int y = 0; y < size.y; y++) {
+            Square[][] board = new Square[size.y][size.x];
+            for (int x = 0; x < size.y; x++) {
+                for (int y = 0; y < size.x; y++) {
                     board[x][y] = null;
                 }
             }
             for (Point point : tunnels) {
-                board[point.x][point.y] = new Square(true, true, pieces.get(point));
+                board[point.y][point.x] = new Square(true, true, pieces.get(point));
                 pieces.remove(point);
             }
             for (Point point : raisedSquares) {
-                board[point.x][point.y] = new Square(false, true, pieces.get(point));
+                board[point.y][point.x] = new Square(false, true, pieces.get(point));
                 pieces.remove(point);
             }
             for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
-                board[entry.getKey().x][entry.getKey().y] = new Square(false, false, entry.getValue());
+                board[entry.getKey().y][entry.getKey().x] = new Square(false, false, entry.getValue());
             }
-            for (int x = 0; x < size.x; x++) {
-                for (int y = 0; y < size.y; y++) {
+            for (int x = 0; x < size.y; x++) {
+                for (int y = 0; y < size.x; y++) {
                     if (board[x][y] == null) {
                         board[x][y] = new Square(false, false, null);
                     }
@@ -73,19 +73,19 @@ public class Board {
 
     public Square getSquare(Point loc) {
         assert isValidLoc(loc);
-        return (board[loc.x][loc.y]);
+        return (board[loc.y][loc.x]);
     }
 
     public void movePiece(Point oldLoc, Point newLoc) {
         assert isValidLoc(oldLoc);
         assert isValidLoc(newLoc);
-        assert board[oldLoc.x][oldLoc.y].hasPiece();
-        assert !board[newLoc.x][newLoc.y].hasPiece();
-        board[newLoc.x][newLoc.y].setPiece(board[oldLoc.x][oldLoc.y].getPiece());
+        assert board[oldLoc.y][oldLoc.x].hasPiece();
+        assert !board[newLoc.y][newLoc.x].hasPiece();
+        board[newLoc.y][newLoc.x].setPiece(board[oldLoc.y][oldLoc.x].getPiece());
     }
 
     private boolean isValidLoc(Point loc) {
-        return loc.x < board.length && loc.y < board[0].length;
+        return loc.y < board.length && loc.x < board[0].length;
     }
 
     @Override
