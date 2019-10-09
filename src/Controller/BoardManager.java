@@ -56,6 +56,7 @@ public class BoardManager {
         assert board.getSquare(oldLoc).hasPiece();
         assert !board.getSquare(newLoc).hasPiece();
         board.getSquare(newLoc).setPiece(board.getSquare(oldLoc).getPiece());
+        board.getSquare(oldLoc).removePiece();
     }
 
     boolean checkLoc(Point loc) {

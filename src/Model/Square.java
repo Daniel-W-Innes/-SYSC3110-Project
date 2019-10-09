@@ -33,6 +33,10 @@ public class Square {
         return isRaised;
     }
 
+    public void removePiece() {
+        piece = null;
+    }
+
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
