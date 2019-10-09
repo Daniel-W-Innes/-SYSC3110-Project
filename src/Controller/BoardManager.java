@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class BoardManager {
     private Board board;
-    private Map<Integer, Board> levels;
+    private final Map<Integer, Board> levels;
 
     BoardManager() {
         levels = new HashMap<>();
@@ -73,7 +73,7 @@ public class BoardManager {
         return board.getSquare(loc).hasPiece();
     }
 
-    public Square getSquare(Point loc) {
+    Square getSquare(Point loc) {
         return board.getSquare(loc);
     }
 

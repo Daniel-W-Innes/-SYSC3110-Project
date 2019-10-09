@@ -7,10 +7,8 @@ import View.TextBased;
 import View.ViewApi;
 
 public class Game {
-    private BoardManager boardManager;
-    private boolean exit;
-    private boolean reset;
-    private ViewApi view;
+    private final BoardManager boardManager;
+    private final ViewApi view;
 
     private Game(ViewApi view) {
         boardManager = new BoardManager();
@@ -24,10 +22,10 @@ public class Game {
     }
 
     private void mainLoop() {
-        exit = false;
+        boolean exit = false;
         while (!exit) {
             setUp();
-            reset = false;
+            boolean reset = false;
             while (!reset) {
                 view.drawBoard();
                 Command command = view.getCommand();

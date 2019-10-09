@@ -11,10 +11,10 @@ import java.util.Set;
 public class Board {
 
     public static class Builder {
-        Point size;
-        Set<Point> tunnels;
-        Set<Point> raisedSquares;
-        Map<Point, Piece> pieces;
+        private Point size;
+        private Set<Point> tunnels;
+        private Set<Point> raisedSquares;
+        private Map<Point, Piece> pieces;
 
         public Builder(Point size) {
             this.size = size;

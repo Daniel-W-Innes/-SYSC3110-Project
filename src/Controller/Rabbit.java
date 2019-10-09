@@ -3,7 +3,7 @@ package Controller;
 import java.awt.*;
 
 public class Rabbit implements Piece {
-    private BoardManager boardManager;
+    private final BoardManager boardManager;
 
     Rabbit(BoardManager boardManager) {
         this.boardManager = boardManager;

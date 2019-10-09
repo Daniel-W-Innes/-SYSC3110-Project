@@ -12,7 +12,7 @@ public class Fox implements Piece {
 
     @Override
     public boolean move(Point oldLoc, Point newLoc) {
-        return false;
+        return false; //TODO make foxes move
     }
 
     @Override
