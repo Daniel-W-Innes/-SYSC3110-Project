@@ -16,5 +16,10 @@ public enum CommandType {
         public String toString() {
             return "reset";
         }
+    }, GET {
+        @Override
+        public String toString() {
+            return "get";
+        }
     }
 }

@@ -1,9 +1,14 @@
 package View;
 
-import Model.Board;
+import Controller.BoardManager;
 import Model.Command;
 
 public interface ViewApi {
-    void draw(Board board);
+    void setBoardManager(BoardManager boardManager);
+
+    void drawBoard();
+
     Command getCommand();
+
+    void drawMessage(String message);
 }

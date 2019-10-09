@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.Piece;
+
 public class Square {
     private final boolean isTunnel;
     private final boolean isRaised;

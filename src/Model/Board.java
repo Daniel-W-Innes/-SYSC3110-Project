@@ -1,5 +1,7 @@
 package Model;
 
+import Controller.Piece;
+
 import java.awt.*;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -71,21 +73,8 @@ public class Board {
         this.board = board;
     }
 
-    public void movePiece(Point oldLoc, Point newLoc) {
-        assert isValidLoc(oldLoc);
-        assert isValidLoc(newLoc);
-        assert board[oldLoc.y][oldLoc.x].hasPiece();
-        assert !board[newLoc.y][newLoc.x].hasPiece();
-        board[newLoc.y][newLoc.x].setPiece(board[oldLoc.y][oldLoc.x].getPiece());
-    }
-
-    private boolean isValidLoc(Point loc) {
-        return loc.y < board.length && loc.x < board[0].length;
-    }
-
-    public Piece getPiece(Point loc) {
-        assert isValidLoc(loc);
-        return board[loc.y][loc.x].getPiece();
+    public Square getSquare(Point loc) {
+        return board[loc.y][loc.x];
     }
 
     public Point getSize(){
