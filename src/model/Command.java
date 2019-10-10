@@ -1,4 +1,4 @@
-package Model;
+package model;
 
 public class Command {
     private final CommandType commandType;

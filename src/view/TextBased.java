@@ -1,25 +1,25 @@
-package View;
+package view;
 
-import Controller.BoardManager;
-import Model.Command;
-import Model.CommandType;
-import Model.GetCommand;
-import Model.MoveCommand;
+import controller.GraphManager;
+import model.Command;
+import model.CommandType;
+import model.GetCommand;
+import model.MoveCommand;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.Scanner;
 
 public class TextBased implements ViewApi {
-    private BoardManager boardManager;
+    private GraphManager graphManager;
     @Override
-    public void setBoardManager(BoardManager boardManager) {
-        this.boardManager = boardManager;
+    public void setGraphManager(GraphManager graphManager) {
+        this.graphManager = graphManager;
     }
 
     @Override
     public void drawBoard() {
-        System.out.println(boardManager.toString());
+        System.out.println(graphManager.toString());
     }
 
     @Override

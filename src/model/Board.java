@@ -1,6 +1,4 @@
-package Model;
-
-import Controller.Piece;
+package model;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -11,9 +9,9 @@ import java.util.Set;
 public class Board {
 
     public static class Builder {
-        private Set<Point> tunnels;
-        private Set<Point> raisedSquares;
-        private Map<Point, Piece> pieces;
+        private final Set<Point> tunnels;
+        private final Set<Point> raisedSquares;
+        private final Map<Point, Piece> pieces;
 
         public Builder() {
             tunnels = new HashSet<>();
@@ -48,6 +46,13 @@ public class Board {
         public Board build() {
             Map<Point, Square> board = new HashMap<>();
             Point max = new Point(0, 0);
+            boolean isVictory = true;
+            for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
+                if (entry.getValue() == Piece.RABBIT && !tunnels.contains(entry.getKey())) {
+                    isVictory = false;
+                    break;
+                }
+            }
             for (Point point : tunnels) {
                 board.put(point, new Square(true, true, pieces.get(point)));
                 pieces.remove(point);
@@ -62,16 +67,18 @@ public class Board {
                 board.put(entry.getKey(), new Square(false, false, entry.getValue()));
                 updateMax(max, entry.getKey());
             }
-            return new Board(board, max);
+            return new Board(board, max, isVictory);
         }
     }
 
-    private Map<Point, Square> board;
-    private Point max;
+    private final Map<Point, Square> board;
+    private final Point max;
+    private final boolean isVictory;
 
-    private Board(Map<Point, Square> board, Point max) {
+    private Board(Map<Point, Square> board, Point max, boolean isVictory) {
         this.board = board;
         this.max = max;
+        this.isVictory = isVictory;
     }
 
     public Square getSquare(Point loc) {
@@ -80,6 +87,10 @@ public class Board {
 
     public boolean hasSquare(Point loc) {
         return board.containsKey(loc);
+    }
+
+    public boolean isVictory() {
+        return isVictory;
     }
 
     @Override

@@ -1,24 +1,24 @@
-package Controller;
+package controller;
 
-import Model.Command;
-import Model.GetCommand;
-import Model.MoveCommand;
-import View.TextBased;
-import View.ViewApi;
+import model.Command;
+import model.GetCommand;
+import model.MoveCommand;
+import view.TextBased;
+import view.ViewApi;
 
 public class Game {
-    private final BoardManager boardManager;
+    private GraphManager graphManager;
+    private final GraphBuilder graphBuilder;
     private final ViewApi view;
-
-    private Game(ViewApi view) {
-        boardManager = new BoardManager();
-        this.view = view;
-        view.setBoardManager(boardManager);
-    }
 
     public static void main(String[] args) {
         Game game = new Game(new TextBased());
         game.mainLoop();
+    }
+
+    private Game(ViewApi view) {
+        graphBuilder = new GraphBuilder();
+        this.view = view;
     }
 
     private void mainLoop() {
@@ -38,22 +38,20 @@ public class Game {
                         reset = true;
                         break;
                     case MOVE:
-                        MoveCommand moveCommand = (MoveCommand) command;
-                        if (!(boardManager.hasPiece(moveCommand.getOldLoc()) &&
-                                boardManager.getPiece(moveCommand.getOldLoc())
-                                        .move(moveCommand.getOldLoc(), moveCommand.getNewLoc()))) {
+                        if (!(graphManager.move((MoveCommand) command))) {
                             view.drawMessage("Bad move message");
                         }
                         break;
                     case GET:
                         GetCommand getCommand = (GetCommand) command;
-                        view.drawMessage(boardManager.getSquareAsString(getCommand.getLoc()));
+                        view.drawMessage(graphManager.getSquareAsString(getCommand.getLoc()));
                 }
             }
         }
     }
 
     public void setUp() {
-        boardManager.applyLevel(20);
+        graphManager = graphBuilder.getGraphManager(20);
+        view.setGraphManager(graphManager);
     }
 }
