@@ -1,9 +1,11 @@
 package Controller;
 
+import Model.Direction;
+
 import java.awt.*;
 
-public class Fox implements Piece {
-
+public class Fox extends twoLongPiece {
+    private Direction direction;
     private final BoardManager boardManager;
 
     Fox(BoardManager boardManager) {
@@ -18,5 +20,10 @@ public class Fox implements Piece {
     @Override
     public String toString() {
         return "Fox";
+    }
+
+    @Override
+    public void setDirection(Direction direction) {
+        this.direction = direction;
     }
 }

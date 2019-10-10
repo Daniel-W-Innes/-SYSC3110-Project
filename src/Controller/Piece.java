@@ -2,6 +2,6 @@ package Controller;
 
 import java.awt.*;
 
-public interface Piece {
-    boolean move(Point oldLoc, Point newLoc);
+public abstract class Piece {
+    abstract boolean move(Point oldLoc, Point newLoc);
 }

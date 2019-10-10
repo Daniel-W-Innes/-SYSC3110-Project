@@ -1,6 +1,7 @@
 package Controller;
 
 import Model.Board;
+import Model.Direction;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -12,8 +13,6 @@ public class BoardManager {
 
     BoardManager() {
         levels = new HashMap<>();
-        Fox fox1 = new Fox(this);
-        Fox fox2 = new Fox(this);
         levels.put(20, new Board.Builder()
                 .addTunnel(new Point(0, 0))
                 .addTunnel(new Point(4, 4))
@@ -33,10 +32,8 @@ public class BoardManager {
                 .addPieces(new Point(2, 4), new Mushroom())
                 .addPieces(new Point(3, 1), new Mushroom())
 
-                .addPieces(new Point(1, 1), fox1)
-                .addPieces(new Point(1, 0), fox1)
-                .addPieces(new Point(4, 3), fox2)
-                .addPieces(new Point(3, 3), fox2)
+                .addPieces(new Point(1, 1), new Fox(this), Direction.UP)
+                .addPieces(new Point(4, 3), new Fox(this), Direction.LEFT)
                 .build());
     }
 

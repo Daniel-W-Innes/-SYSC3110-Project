@@ -2,7 +2,7 @@ package Controller;
 
 import java.awt.*;
 
-public class Rabbit implements Piece {
+public class Rabbit extends Piece {
     private final BoardManager boardManager;
 
     Rabbit(BoardManager boardManager) {
