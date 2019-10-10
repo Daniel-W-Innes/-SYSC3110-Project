@@ -7,7 +7,7 @@ public class Square {
     private final boolean isRaised;
     private Piece piece;
 
-    public Square(boolean isTunnel, boolean isRaised, Piece piece) {
+    Square(boolean isTunnel, boolean isRaised, Piece piece) {
         this.isTunnel = isTunnel;
         this.isRaised = isRaised;
         this.piece = piece;

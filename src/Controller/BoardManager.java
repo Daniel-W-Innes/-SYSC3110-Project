@@ -1,7 +1,6 @@
 package Controller;
 
 import Model.Board;
-import Model.Square;
 
 import java.awt.*;
 import java.util.HashMap;
@@ -15,7 +14,7 @@ public class BoardManager {
         levels = new HashMap<>();
         Fox fox1 = new Fox(this);
         Fox fox2 = new Fox(this);
-        levels.put(20, new Board.Builder(new Point(5, 5))
+        levels.put(20, new Board.Builder()
                 .addTunnel(new Point(0, 0))
                 .addTunnel(new Point(4, 4))
                 .addTunnel(new Point(0, 4))
@@ -51,30 +50,23 @@ public class BoardManager {
     }
 
     void movePiece(Point oldLoc, Point newLoc) {
-        assert checkLoc(oldLoc);
-        assert checkLoc(newLoc);
-        assert board.getSquare(oldLoc).hasPiece();
-        assert !board.getSquare(newLoc).hasPiece();
+        assert hasPiece(oldLoc);
+        assert !hasPiece(newLoc);
         board.getSquare(newLoc).setPiece(board.getSquare(oldLoc).getPiece());
         board.getSquare(oldLoc).removePiece();
     }
 
-    boolean checkLoc(Point loc) {
-        Point size = board.getSize();
-        return loc.x <= size.x && loc.y <= size.y;
-    }
-
     Piece getPiece(Point loc) {
-        assert checkLoc(loc);
+        assert board.hasSquare(loc);
         return board.getSquare(loc).getPiece();
     }
 
     boolean hasPiece(Point loc) {
-        return board.getSquare(loc).hasPiece();
+        return board.hasSquare(loc) && board.getSquare(loc).hasPiece();
     }
 
-    Square getSquare(Point loc) {
-        return board.getSquare(loc);
+    String getSquareAsString(Point loc) {
+        return (board.hasSquare(loc)) ? board.getSquare(loc).toString() : "Empty";
     }
 
     @Override

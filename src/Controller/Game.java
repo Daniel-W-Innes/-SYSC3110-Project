@@ -39,9 +39,7 @@ public class Game {
                         break;
                     case MOVE:
                         MoveCommand moveCommand = (MoveCommand) command;
-                        if (!(boardManager.checkLoc(moveCommand.getOldLoc()) &&
-                                boardManager.checkLoc(moveCommand.getNewLoc()) &&
-                                boardManager.hasPiece(moveCommand.getOldLoc()) &&
+                        if (!(boardManager.hasPiece(moveCommand.getOldLoc()) &&
                                 boardManager.getPiece(moveCommand.getOldLoc())
                                         .move(moveCommand.getOldLoc(), moveCommand.getNewLoc()))) {
                             view.drawMessage("Bad move message");
@@ -49,9 +47,7 @@ public class Game {
                         break;
                     case GET:
                         GetCommand getCommand = (GetCommand) command;
-                        if (boardManager.checkLoc(getCommand.getLoc())) {
-                            view.drawMessage(boardManager.getSquare(getCommand.getLoc()).toString());
-                        }
+                        view.drawMessage(boardManager.getSquareAsString(getCommand.getLoc()));
                 }
             }
         }

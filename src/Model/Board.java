@@ -11,13 +11,11 @@ import java.util.Set;
 public class Board {
 
     public static class Builder {
-        private Point size;
         private Set<Point> tunnels;
         private Set<Point> raisedSquares;
         private Map<Point, Piece> pieces;
 
-        public Builder(Point size) {
-            this.size = size;
+        public Builder() {
             tunnels = new HashSet<>();
             pieces = new HashMap<>();
             raisedSquares = new HashSet<>();
@@ -38,59 +36,65 @@ public class Board {
             return this;
         }
 
-        public Board build() {
-            Square[][] board = new Square[size.y][size.x];
-            for (int x = 0; x < size.y; x++) {
-                for (int y = 0; y < size.x; y++) {
-                    board[x][y] = null;
-                }
+        private void updateMax(Point max, Point point) {
+            if (point.x > max.x) {
+                max.x = point.x;
             }
+            if (point.y > max.y) {
+                max.y = point.y;
+            }
+        }
+
+        public Board build() {
+            Map<Point, Square> board = new HashMap<>();
+            Point max = new Point(0, 0);
             for (Point point : tunnels) {
-                board[point.y][point.x] = new Square(true, true, pieces.get(point));
+                board.put(point, new Square(true, true, pieces.get(point)));
                 pieces.remove(point);
+                updateMax(max, point);
             }
             for (Point point : raisedSquares) {
-                board[point.y][point.x] = new Square(false, true, pieces.get(point));
+                board.put(point, new Square(false, true, pieces.get(point)));
                 pieces.remove(point);
+                updateMax(max, point);
             }
             for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
-                board[entry.getKey().y][entry.getKey().x] = new Square(false, false, entry.getValue());
+                board.put(entry.getKey(), new Square(false, false, entry.getValue()));
+                updateMax(max, entry.getKey());
             }
-            for (int x = 0; x < size.y; x++) {
-                for (int y = 0; y < size.x; y++) {
-                    if (board[x][y] == null) {
-                        board[x][y] = new Square(false, false, null);
-                    }
-                }
-            }
-            return new Board(board);
+            return new Board(board, max);
         }
     }
 
-    private Square[][] board;
+    private Map<Point, Square> board;
+    private Point max;
 
-    private Board(Square[][] board) {
+    private Board(Map<Point, Square> board, Point max) {
         this.board = board;
+        this.max = max;
     }
 
     public Square getSquare(Point loc) {
-        return board[loc.y][loc.x];
+        return board.get(loc);
     }
 
-    public Point getSize(){
-        return new Point(board[0].length, board.length);
+    public boolean hasSquare(Point loc) {
+        return board.containsKey(loc);
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        for (Square[] squares : board) {
-            for (Square square : squares) {
-                stringBuilder.append(square.toString());
+        Point point;
+        for (int x = 0; x <= max.x; x++) {
+            for (int y = 0; y <= max.y; y++) {
+                point = new Point(x, y);
+                stringBuilder.append('|');
+                stringBuilder.append(String.format("%1$" + 17 + "s", hasSquare(point) ? getSquare(point).toString() : "Empty"));
             }
+            stringBuilder.append('|');
             stringBuilder.append("\n");
         }
         return stringBuilder.toString();
-        // return Arrays.deepToString(board);
     }
 }
