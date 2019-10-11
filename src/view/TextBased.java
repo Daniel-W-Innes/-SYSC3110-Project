@@ -32,13 +32,13 @@ public class TextBased implements ViewApi {
                 command = new Command(CommandType.EXIT);
             } else if (CommandType.MOVE.toString().equals(inputStrings[0])) {
                 if (inputStrings.length == 5) {
-                    command = new MoveCommand(CommandType.MOVE, new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])), new Point(Integer.parseInt(inputStrings[3]), Integer.parseInt(inputStrings[4])));
+                    command = new MoveCommand(new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])), new Point(Integer.parseInt(inputStrings[3]), Integer.parseInt(inputStrings[4])));
                 }
             } else if (CommandType.RESET.toString().equals(inputStrings[0])) {
                 command = new Command(CommandType.RESET);
             } else if (CommandType.GET.toString().equals(inputStrings[0])) {
                 if (inputStrings.length == 3) {
-                    command = new GetCommand(CommandType.GET, new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])));
+                    command = new GetCommand(new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])));
                 }
             }
         }

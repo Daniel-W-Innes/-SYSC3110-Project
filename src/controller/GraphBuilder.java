@@ -1,12 +1,11 @@
 package controller;
 
-import model.Board;
-import model.Node;
-import model.Piece;
+import model.*;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Queue;
+import java.util.*;
+import java.util.stream.Collectors;
 
 class GraphBuilder {
 
@@ -44,7 +43,71 @@ class GraphBuilder {
                 .build()));
     }
 
-    private Node genGraph(Board board) {
-        return new Node(board);
+    private Node genGraph(Board start) {
+        Set<Node> visitedBoards = new HashSet<>();
+        Node head = new Node(start);
+        Queue<Node> nodesToProcess = new LinkedList<>();
+        for (Map.Entry<Point, Square> entry : start) {
+            if (entry.getValue().hasPiece()) {
+                switch (entry.getValue().getPiece()) {
+                    case RABBIT:
+                        Map<MoveCommand, Node> rabbitMoves = mapBoardToNode(getRabbitMoves(start, entry.getKey()));
+                        head.addEdges(rabbitMoves);
+                        nodesToProcess.addAll(rabbitMoves.values());
+                }
+            }
+        }
+        visitedBoards.add(head);
+        for (Node node : nodesToProcess) {
+            nodesToProcess.remove();
+            for (Map.Entry<Point, Square> entry : node.getBoard()) {
+                if (entry.getValue().hasPiece()) {
+                    switch (entry.getValue().getPiece()) {
+                        case RABBIT:
+                            Map<MoveCommand, Node> rabbitMoves = mapBoardToNode(getRabbitMoves(start, entry.getKey()));
+                            node.addEdges(rabbitMoves);
+                            nodesToProcess.addAll(rabbitMoves.values().parallelStream().filter(x -> !visitedBoards.contains(x)).collect(Collectors.toSet()));
+                    }
+                }
+            }
+        }
+        return head;
+    }
+
+    private Map<MoveCommand, Node> mapBoardToNode(Map<MoveCommand, Board> moveCommandBoardMap) {
+        return moveCommandBoardMap.entrySet().parallelStream().map(x -> Map.entry(x.getKey(), new Node(x.getValue()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+    }
+
+    private Map<MoveCommand, Board> getRabbitMoves(Board board, Point start) {
+        Map<MoveCommand, Board> moves = new HashMap<>();
+        Point point = new Point(start.x, start.y + 1);
+        boolean c = true;
+        while (c) {
+            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+            point = new Point(point.x, point.y + 1);
+        }
+        moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
+        point = new Point(start.x, start.y - 1);
+        c = true;
+        while (c) {
+            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+            point = new Point(point.x, point.y - 1);
+        }
+        moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
+        point = new Point(start.x + 1, start.y);
+        c = true;
+        while (c) {
+            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+            point = new Point(point.x + 1, point.y);
+        }
+        moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
+        point = new Point(start.x - 1, start.y);
+        c = true;
+        while (c) {
+            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+            point = new Point(point.x - 1, point.y);
+        }
+        moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
+        return moves;
     }
 }

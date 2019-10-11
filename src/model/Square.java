@@ -11,8 +11,20 @@ public class Square {
         this.piece = piece;
     }
 
-    private boolean hasPiece() {
+    public boolean hasPiece() {
         return piece != null;
+    }
+
+    public Piece getPiece() {
+        return piece;
+    }
+
+    boolean isRaised() {
+        return isRaised;
+    }
+
+    boolean isTunnel() {
+        return isTunnel;
     }
 
     @Override

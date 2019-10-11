@@ -7,8 +7,8 @@ import java.util.Set;
 public class MoveCommand extends Command implements Iterable<Point> {
     private final Set<Point> move;
 
-    public MoveCommand(CommandType commandType, Point oldLoc, Point newLoc) {
-        super(commandType);
+    public MoveCommand(Point oldLoc, Point newLoc) {
+        super(CommandType.MOVE);
         move = Set.of(oldLoc, newLoc);
     }
 

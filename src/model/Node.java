@@ -12,8 +12,8 @@ public class Node {
         edges = new HashMap<>();
     }
 
-    void addEdges(MoveCommand moveCommand, Node node) {
-        edges.put(moveCommand, node);
+    public void addEdges(Map<MoveCommand, Node> edges) {
+        this.edges.putAll(edges);
     }
 
     public Board getBoard() {
