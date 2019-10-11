@@ -205,6 +205,11 @@ public class Board implements Iterable<Map.Entry<ImmutablePoint, Square>> {
     }
 
     @Override
+    public int hashCode() {
+        return getBoard().hashCode();
+    }
+
+    @Override
     public Iterator<Map.Entry<ImmutablePoint, Square>> iterator() {
         return board.entrySet().iterator();
     }

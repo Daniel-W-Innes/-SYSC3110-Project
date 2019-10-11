@@ -1,6 +1,5 @@
 package model;
 
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -13,6 +12,14 @@ class BoardTest {
     private Board boardSame;
     private Board boardDifferentPiece;
     private Board boardDifferentRaised;
+
+    @Test
+    void testHashCode() {
+        assertEquals(board.hashCode(), board.hashCode());
+        assertEquals(board.hashCode(), boardSame.hashCode());
+        assertNotEquals(board.hashCode(), boardDifferentPiece.hashCode());
+        assertNotEquals(board.hashCode(), boardDifferentRaised.hashCode());
+    }
 
     @Test
     void testEquals() {
@@ -123,9 +130,5 @@ class BoardTest {
                 .addPieces(new ImmutablePoint(4, 3), Piece.FOX)
                 .addPieces(new ImmutablePoint(3, 3), Piece.FOX)
                 .build();
-    }
-
-    @AfterEach
-    void tearDown() {
     }
 }
