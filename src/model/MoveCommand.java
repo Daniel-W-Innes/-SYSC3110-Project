@@ -17,4 +17,25 @@ public class MoveCommand extends Command implements Iterable<Point> {
     public Iterator<Point> iterator() {
         return move.iterator();
     }
+
+    private Set<Point> getMove() {
+        return move;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        MoveCommand moveCommand = (MoveCommand) obj;
+        return move.equals(moveCommand.getMove());
+    }
+
+    @Override
+    public int hashCode() {
+        return move.hashCode();
+    }
 }
