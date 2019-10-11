@@ -58,7 +58,6 @@ class GraphBuilder {
         }
         visitedBoards.add(start);
         for (Node.Builder node : nodesToProcess) {
-            nodesToProcess.remove();
             for (Map.Entry<ImmutablePoint, Square> entry : node.getBoard()) {
                 if (entry.getValue().hasPiece()) {
                     switch (entry.getValue().getPiece()) {
