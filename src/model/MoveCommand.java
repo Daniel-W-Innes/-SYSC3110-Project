@@ -1,6 +1,7 @@
 package model;
 
 import java.awt.*;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
@@ -9,7 +10,7 @@ public class MoveCommand extends Command implements Iterable<Point> {
 
     public MoveCommand(Point oldLoc, Point newLoc) {
         super(CommandType.MOVE);
-        move = Set.of(oldLoc, newLoc);
+        move = Collections.unmodifiableSet(Set.of(oldLoc, newLoc));
     }
 
     @Override

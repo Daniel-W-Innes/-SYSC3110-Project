@@ -2,7 +2,6 @@ package model;
 
 import java.awt.*;
 import java.util.*;
-import java.util.stream.Stream;
 
 public class Board implements Iterable<Map.Entry<Point, Square>> {
 
@@ -152,18 +151,9 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
     private final boolean isVictory;
 
     private Board(Map<Point, Square> board, Point max, boolean isVictory) {
-        this.board = board;
+        this.board = Collections.unmodifiableMap(board);
         this.max = max;
         this.isVictory = isVictory;
-    }
-
-    @Override
-    public Iterator<Map.Entry<Point, Square>> iterator() {
-        return board.entrySet().iterator();
-    }
-
-    public Stream<Map.Entry<Point, Square>> getStream() {
-        return board.entrySet().parallelStream();
     }
 
     public Square getSquare(Point loc) {
@@ -176,6 +166,14 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
 
     private boolean isVictory() {
         return isVictory;
+    }
+
+    private Map<Point, Square> getBoard() {
+        return board;
+    }
+
+    private Point getMax() {
+        return max;
     }
 
     @Override
@@ -194,14 +192,6 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
         return stringBuilder.toString();
     }
 
-    private Map<Point, Square> getBoard() {
-        return board;
-    }
-
-    private Point getMax() {
-        return max;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -212,5 +202,10 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
         }
         Board board = (Board) obj;
         return getBoard().equals(board.getBoard());
+    }
+
+    @Override
+    public Iterator<Map.Entry<Point, Square>> iterator() {
+        return board.entrySet().iterator();
     }
 }
