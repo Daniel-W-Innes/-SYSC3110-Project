@@ -9,7 +9,7 @@ public class ImmutablePoint {
     private final int hashCode;
 
 
-    public ImmutablePoint(Point point) {
+    ImmutablePoint(Point point) {
         this.x = (int) point.getX();
         this.y = (int) point.getY();
         hashCode = Arrays.hashCode((new int[]{x, y}));
@@ -29,7 +29,7 @@ public class ImmutablePoint {
         return y;
     }
 
-    public Point getMutablePoint() {
+    Point getMutablePoint() {
         return new Point(getX(), getY());
     }
 
