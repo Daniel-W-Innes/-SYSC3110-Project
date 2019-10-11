@@ -5,20 +5,25 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.Set;
 
-public class MoveCommand extends Command implements Iterable<Point> {
-    private final Set<Point> move;
+public class MoveCommand extends Command implements Iterable<ImmutablePoint> {
+    private final Set<ImmutablePoint> move;
 
-    public MoveCommand(Point oldLoc, Point newLoc) {
+    public MoveCommand(Point loc1, Point loc2) {
         super(CommandType.MOVE);
-        move = Collections.unmodifiableSet(Set.of(oldLoc, newLoc));
+        move = Collections.unmodifiableSet(Set.of(new ImmutablePoint(loc1), new ImmutablePoint(loc2)));
+    }
+
+    public MoveCommand(ImmutablePoint loc1, ImmutablePoint loc2) {
+        super(CommandType.MOVE);
+        move = Collections.unmodifiableSet(Set.of(loc1, loc2));
     }
 
     @Override
-    public Iterator<Point> iterator() {
+    public Iterator<ImmutablePoint> iterator() {
         return move.iterator();
     }
 
-    private Set<Point> getMove() {
+    private Set<ImmutablePoint> getMove() {
         return move;
     }
 

@@ -1,5 +1,6 @@
 package model;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
@@ -28,14 +29,38 @@ public class Node {
         public Node build() {
             return new Node(board, edges.entrySet().parallelStream().map(x -> Map.entry(x.getKey(), x.getValue().build())).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
         }
+
+        private Map<MoveCommand, Builder> getEdges() {
+            return edges;
+        }
+
+        @Override
+        public boolean equals(Object obj) {
+            if (obj == this) {
+                return true;
+            }
+            if (obj == null || obj.getClass() != this.getClass()) {
+                return false;
+            }
+            Builder builder = (Builder) obj;
+            return getBoard().equals(builder.getBoard()) && getEdges().equals(builder.getEdges());
+        }
+
+
+        @Override
+        public int hashCode() {
+            return Arrays.hashCode((new int[]{board.hashCode(), edges.hashCode()}));
+        }
     }
 
     private final Board board;
     private final Map<MoveCommand, Node> edges;
+    private final int hashCode;
 
     private Node(Board board, Map<MoveCommand, Node> edges) {
         this.board = board;
         this.edges = Collections.unmodifiableMap(edges);
+        hashCode = Arrays.hashCode((new int[]{board.hashCode(), edges.hashCode()}));
     }
 
     public Board getBoard() {
@@ -50,4 +75,25 @@ public class Node {
         return edges.get(moveCommand);
     }
 
+    private Map<MoveCommand, Node> getEdges() {
+        return edges;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Node node = (Node) obj;
+        return getBoard().equals(node.getBoard()) && getEdges().equals(node.getEdges());
+    }
+
+
+    @Override
+    public int hashCode() {
+        return hashCode;
+    }
 }

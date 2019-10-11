@@ -3,14 +3,14 @@ package model;
 import java.awt.*;
 
 public class GetCommand extends Command {
-    private final Point loc;
+    private final ImmutablePoint loc;
 
     public GetCommand(Point loc) {
         super(CommandType.GET);
-        this.loc = loc;
+        this.loc = new ImmutablePoint(loc);
     }
 
-    public Point getLoc() {
+    public ImmutablePoint getLoc() {
         return loc;
     }
 }

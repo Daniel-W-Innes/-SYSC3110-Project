@@ -1,9 +1,8 @@
 package controller;
 
+import model.ImmutablePoint;
 import model.MoveCommand;
 import model.Node;
-
-import java.awt.*;
 
 public class GraphManager {
 
@@ -22,7 +21,7 @@ public class GraphManager {
         }
     }
 
-    String getSquareAsString(Point loc) {
+    String getSquareAsString(ImmutablePoint loc) {
         return (head.getBoard().hasSquare(loc)) ? head.getBoard().getSquare(loc).toString() : "Empty";
     }
 
