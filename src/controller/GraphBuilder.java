@@ -64,7 +64,7 @@ class GraphBuilder {
                 if (entry.getValue().hasPiece()) {
                     switch (entry.getValue().getPiece()) {
                         case RABBIT:
-                            Map<MoveCommand, Node.Builder> rabbitMoves = mapBoardToNode(getRabbitMoves(start, entry.getKey()));
+                            Map<MoveCommand, Node.Builder> rabbitMoves = mapBoardToNode(getRabbitMoves(node.getBoard(), entry.getKey()));
                             node = node.addEdges(rabbitMoves);
                             nodesToProcess.addAll(rabbitMoves.values().parallelStream().filter(x -> !visitedBoards.contains(x)).collect(Collectors.toSet()));
                     }

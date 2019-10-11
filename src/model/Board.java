@@ -21,7 +21,7 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
         }
 
         public Copier removePieces(Point loc) {
-            Square square = board.get(loc); //FIXME
+            Square square = board.get(loc);
             if (square.isTunnel()) {
                 board.put(loc, new Square(true, true, null));
             } else if (square.isRaised()) {
