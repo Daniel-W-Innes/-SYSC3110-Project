@@ -3,8 +3,10 @@ package model;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotEquals;
+import java.util.HashSet;
+import java.util.Set;
+
+import static org.junit.jupiter.api.Assertions.*;
 
 
 class BoardTest {
@@ -12,6 +14,15 @@ class BoardTest {
     private Board boardSame;
     private Board boardDifferentPiece;
     private Board boardDifferentRaised;
+
+    @Test
+    void testSetContains() {
+        Set<Board> visitedBoards = new HashSet<>();
+        visitedBoards.add(board);
+        assertTrue(visitedBoards.contains(boardSame));
+        assertFalse(visitedBoards.contains(boardDifferentPiece));
+        assertFalse(visitedBoards.contains(boardDifferentRaised));
+    }
 
     @Test
     void testHashCode() {
