@@ -65,7 +65,12 @@ class GraphBuilder {
                             visitedBoards.add(node.getBoard());
                             Map<MoveCommand, Node.Builder> rabbitMoves = mapBoardToNode(getRabbitMoves(node.getBoard(), entry.getKey()));
                             node = node.addEdges(rabbitMoves);
-                            nodesToProcess.addAll(rabbitMoves.values().parallelStream().filter(x -> !visitedBoards.contains(x.getBoard())).filter(x -> !nodesToProcess.contains(x)).collect(Collectors.toSet()));
+                            for (Node.Builder move : rabbitMoves.values()){
+                                if (!visitedBoards.contains(move.getBoard()) && !nodesToProcess.contains(move)){
+                                    nodesToProcess.add(move);
+                                }
+                            }
+                            //nodesToProcess.addAll(rabbitMoves.values().parallelStream().filter(x -> !visitedBoards.contains(x.getBoard())).filter(x -> !nodesToProcess.contains(x)).collect(Collectors.toSet()));
                     }
                 }
             }
