@@ -117,4 +117,25 @@ class GraphBuilder {
         }
         return moves;
     }
+
+    private Map<Integer, Node> getLevels() {
+        return levels;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        GraphBuilder graphBuilder = (GraphBuilder) obj;
+        return getLevels() == graphBuilder.getLevels();
+    }
+
+    @Override
+    public int hashCode() {
+        return getLevels().hashCode();
+    }
 }

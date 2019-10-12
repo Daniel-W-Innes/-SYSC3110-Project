@@ -36,11 +36,11 @@ public class MoveCommand extends Command implements Iterable<ImmutablePoint> {
             return false;
         }
         MoveCommand moveCommand = (MoveCommand) obj;
-        return move.equals(moveCommand.getMove());
+        return getMove().equals(moveCommand.getMove());
     }
 
     @Override
     public int hashCode() {
-        return move.hashCode();
+        return getMove().hashCode();
     }
 }
