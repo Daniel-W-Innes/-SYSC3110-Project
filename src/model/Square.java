@@ -3,7 +3,7 @@ package model;
 public class Square {
     private final boolean isTunnel;
     private final boolean isRaised;
-    private final Piece piece;
+    private Piece piece;
     private final int hashCode;
 
     Square(boolean isTunnel, boolean isRaised, Piece piece) {
@@ -35,7 +35,15 @@ public class Square {
         return piece;
     }
 
-    boolean isRaised() {
+    public void setPiece(Piece piece) {
+        this.piece = piece;
+    }
+
+    public void removePiece() {
+        this.piece = null;
+    }
+
+    public boolean isRaised() {
         return isRaised;
     }
 
