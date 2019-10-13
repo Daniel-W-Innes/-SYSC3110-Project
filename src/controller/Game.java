@@ -36,18 +36,18 @@ public class Game {
                 .build();
     }
 
-    public boolean move(MoveCommand moveCommand) {
+    public void move(MoveCommand moveCommand) {
         if (board.hasSquare(moveCommand.getFrom()) && board.getSquare(moveCommand.getFrom()).hasPiece()) {
             switch (board.getSquare(moveCommand.getFrom()).getPiece()) {
                 case RABBIT:
-                    return Rabbits.checkMove(board, moveCommand);
+                    Rabbits.checkAndMove(board, moveCommand);
                 case FOX_PLUS_X:
                 case FOX_PLUS_Y:
                 case FOX_MINUS_X:
                 case FOX_MINUS_Y:
-                    return Foxes.checkMove(board, moveCommand);
+                    Foxes.checkAndMove(board, moveCommand);
             }
+            board.removeSquareIfEmpty(moveCommand.getFrom());
         }
-        return false;
     }
 }
