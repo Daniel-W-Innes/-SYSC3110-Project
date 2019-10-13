@@ -77,6 +77,12 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
         return board.containsKey(loc);
     }
 
+    public void removeSquareIfEmpty(Point loc) {
+        if (board.containsKey(loc) && !(board.get(loc).hasPiece()) || board.get(loc).isRaised() || board.get(loc).isTunnel()) {
+            board.remove(loc);
+        }
+    }
+
     private Map<Point, Square> getBoard() {
         return board;
     }
