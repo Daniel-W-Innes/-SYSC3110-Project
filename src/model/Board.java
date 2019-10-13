@@ -1,9 +1,13 @@
 package model;
 
+import view.Observer;
+
 import java.awt.*;
 import java.util.*;
 
-public class Board implements Iterable<Map.Entry<Point, Square>> {
+public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
+
+
 
     public static class Builder {
         private final Set<Point> hole;
@@ -63,10 +67,23 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
 
     private Map<Point, Square> board;
     private final Point max;
+    private Observer observer;
 
     private Board(Map<Point, Square> board, Point max) {
         this.board = new HashMap<>(board);
         this.max = max;
+    }
+
+    @Override
+    public void setObserver(Observer observer) {
+        this.observer = observer;
+    }
+
+    @Override
+    public void notifyObserver() {
+        if (this.observer != null){
+            this.observer.update(this);
+        }
     }
 
     public Square getSquare(Point loc) {
@@ -78,7 +95,7 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
     }
 
     public void removeSquareIfEmpty(Point loc) {
-        if (board.containsKey(loc) && !(board.get(loc).hasPiece()) || board.get(loc).isRaised() || board.get(loc).isTunnel()) {
+        if (board.containsKey(loc) && !(board.get(loc).hasPiece()) || board.get(loc).isRaised() || board.get(loc).isHole()) {
             board.remove(loc);
         }
     }
@@ -119,8 +136,20 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
 
         if (end == null){
             end = new Square(false, false, start.getPiece());
+            board.put(move.getEndPoint(), end);
+        } else {
+            end.setPiece(start.getPiece());
         }
+        start.setPiece(null);
+        removeSquareIfEmpty(move.getStartPoint());
+        return this; //may create a clone of board later
 
+        /*
+        If all squares are not null
+        end.setPiece(start.getPiece());
+        start.setPiece(null);
+        return this;
+         */
     }
 
     @Override

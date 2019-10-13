@@ -1,13 +1,23 @@
 package controller;
 
 import model.Board;
+import model.Move;
 import model.MoveCommand;
 import model.Piece;
+import view.TextView;
 
-import java.awt.*;
+import java.awt.Point;
 
 public class Game {
     private Board board;
+
+    public Game(){
+        setUp();
+    }
+
+    public static void main(String[] args){
+        new Game();
+    }
 
     public void setUp() {
         board = new Board.Builder()
@@ -34,6 +44,7 @@ public class Game {
                 .addPieces(new Point(4, 3), Piece.FOX_PLUS_X)
                 .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
                 .build();
+        board.setObserver(new TextView(this));
     }
 
     public void move(MoveCommand moveCommand) {
@@ -49,5 +60,9 @@ public class Game {
             }
             board.removeSquareIfEmpty(moveCommand.getFrom());
         }
+    }
+
+    public void move(Move move){
+        board.move(move);
     }
 }

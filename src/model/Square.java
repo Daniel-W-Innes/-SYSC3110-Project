@@ -31,10 +31,6 @@ public class Square {
         return piece != null;
     }
 
-    public void setPiece(Piece p) {
-        this.piece = p;
-    }
-
     public Piece getPiece() {
         return piece;
     }
