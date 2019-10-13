@@ -3,90 +3,12 @@ package model;
 import java.awt.*;
 import java.util.*;
 
-public class Board implements Iterable<Map.Entry<ImmutablePoint, Square>> {
-
-    public static class Copier {
-        private final Map<ImmutablePoint, Square> board;
-        private final Point max;
-        private boolean isVictory;
-        private boolean isVictoryValid;
-        private boolean isMaxValid;
-
-        public Copier(Board board) {
-            this.board = new HashMap<>(board.getBoard());
-            max = board.getMax().getMutablePoint();
-            isVictory = board.isVictory();
-            isMaxValid = true;
-            isVictoryValid = true;
-        }
-
-        public Copier removePieces(ImmutablePoint loc) {
-            Square square = board.get(loc);
-            if (square.isTunnel()) {
-                board.put(loc, new Square(true, true, null));
-            } else if (square.isRaised()) {
-                board.put(loc, new Square(false, true, null));
-            } else {
-                board.remove(loc);
-                if (max.getX() == loc.getX() || max.getY() == loc.getY()) {
-                    isMaxValid = false;
-                }
-            }
-            if (!square.isTunnel() && !isVictory && square.getPiece() == Piece.RABBIT) {
-                isVictoryValid = false;
-            }
-            return this;
-
-        }
-
-        public Copier addPieces(ImmutablePoint loc, Piece piece) {
-            if (board.containsKey(loc)) {
-                Square square = board.get(loc);
-                if (!square.hasPiece()) {
-                    board.put(loc, new Square(square.isTunnel(), square.isRaised(), piece));
-                    if (!square.isTunnel() && piece == Piece.RABBIT) {
-                        isVictory = false;
-                    }
-                }
-            } else {
-                board.put(loc, new Square(false, false, piece));
-                updateMax(max, loc);
-            }
-            return this;
-        }
-
-        private void updateMax(Point max, ImmutablePoint point) {
-            if (point.getX() > max.x) {
-                max.x = point.getX();
-            }
-            if (point.getY() > max.y) {
-                max.y = point.getY();
-            }
-        }
-
-        public Board build() {
-            if (!isMaxValid) {
-                for (ImmutablePoint point : board.keySet()) {
-                    updateMax(max, point);
-                }
-            }
-            if (!isVictoryValid) {
-                isVictory = true;
-                for (Square square : board.values()) {
-                    if (square.getPiece() == Piece.RABBIT && !square.isTunnel()) {
-                        isVictory = false;
-                        break;
-                    }
-                }
-            }
-            return new Board(board, new ImmutablePoint(max), isVictory);
-        }
-    }
+public class Board implements Iterable<Map.Entry<Point, Square>> {
 
     public static class Builder {
-        private final Set<ImmutablePoint> tunnels;
-        private final Set<ImmutablePoint> raisedSquares;
-        private final Map<ImmutablePoint, Piece> pieces;
+        private final Set<Point> tunnels;
+        private final Set<Point> raisedSquares;
+        private final Map<Point, Piece> pieces;
 
         public Builder() {
             tunnels = new HashSet<>();
@@ -94,95 +16,82 @@ public class Board implements Iterable<Map.Entry<ImmutablePoint, Square>> {
             raisedSquares = new HashSet<>();
         }
 
-        public Builder addTunnel(ImmutablePoint loc) {
+        public Builder addTunnel(Point loc) {
             tunnels.add(loc);
             return this;
         }
 
-        public Builder addRaisedSquare(ImmutablePoint loc) {
+        public Builder addRaisedSquare(Point loc) {
             raisedSquares.add(loc);
             return this;
         }
 
-        public Builder addPieces(ImmutablePoint loc, Piece piece) {
+        public Builder addPieces(Point loc, Piece piece) {
             pieces.put(loc, piece);
             return this;
         }
 
-        private void updateMax(Point max, ImmutablePoint point) {
-            if (point.getX() > max.x) {
-                max.x = point.getX();
+        private void updateMax(java.awt.Point max, Point point) {
+            if (point.x > max.x) {
+                max.x = point.x;
             }
-            if (point.getY() > max.y) {
-                max.y = point.getY();
+            if (point.y > max.y) {
+                max.y = point.y;
             }
         }
 
         public Board build() {
-            Map<ImmutablePoint, Square> board = new HashMap<>();
-            Point max = new Point(0, 0);
-            boolean isVictory = true;
-            for (Map.Entry<ImmutablePoint, Piece> entry : pieces.entrySet()) {
-                if (entry.getValue() == Piece.RABBIT && !tunnels.contains(entry.getKey())) {
-                    isVictory = false;
-                    break;
-                }
-            }
-            for (ImmutablePoint point : tunnels) {
+            Map<Point, Square> board = new HashMap<>();
+            java.awt.Point max = new java.awt.Point(0, 0);
+            for (Point point : tunnels) {
                 board.put(point, new Square(true, true, pieces.get(point)));
                 pieces.remove(point);
                 updateMax(max, point);
             }
-            for (ImmutablePoint point : raisedSquares) {
+            for (Point point : raisedSquares) {
                 board.put(point, new Square(false, true, pieces.get(point)));
                 pieces.remove(point);
                 updateMax(max, point);
             }
-            for (Map.Entry<ImmutablePoint, Piece> entry : pieces.entrySet()) {
+            for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
                 board.put(entry.getKey(), new Square(false, false, entry.getValue()));
                 updateMax(max, entry.getKey());
             }
-            return new Board(board, new ImmutablePoint(max), isVictory);
+            return new Board(board, new Point(max));
         }
     }
 
-    private final Map<ImmutablePoint, Square> board;
-    private final ImmutablePoint max;
-    private final boolean isVictory;
+    private final Map<Point, Square> board;
+    private final Point max;
 
-    private Board(Map<ImmutablePoint, Square> board, ImmutablePoint max, boolean isVictory) {
-        this.board = Collections.unmodifiableMap(board);
+    private Board(Map<Point, Square> board, Point max) {
+        this.board = new HashMap<>(board);
         this.max = max;
-        this.isVictory = isVictory;
     }
 
-    public Square getSquare(ImmutablePoint loc) {
+    public Square getSquare(Point loc) {
         return board.get(loc);
     }
 
-    public boolean hasSquare(ImmutablePoint loc) {
+    public boolean hasSquare(Point loc) {
         return board.containsKey(loc);
     }
 
-    private boolean isVictory() {
-        return isVictory;
-    }
-
-    private Map<ImmutablePoint, Square> getBoard() {
+    private Map<Point, Square> getBoard() {
         return board;
     }
 
-    public ImmutablePoint getMax() {
+    public Point getMax() {
         return max;
     }
 
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        ImmutablePoint point;
-        for (int x = 0; x <= max.getX(); x++) {
-            for (int y = 0; y <= max.getY(); y++) {
-                point = new ImmutablePoint(x, y);
+        Point point;
+        for (int x = 0; x <= max.x; x++) {
+            for (int y = 0; y <= max.y; y++) {
+                point = new Point(x, y);
                 stringBuilder.append('|');
                 stringBuilder.append(String.format("%1$" + 17 + "s", hasSquare(point) ? getSquare(point).toString() : "Empty"));
             }
@@ -210,7 +119,7 @@ public class Board implements Iterable<Map.Entry<ImmutablePoint, Square>> {
     }
 
     @Override
-    public Iterator<Map.Entry<ImmutablePoint, Square>> iterator() {
+    public Iterator<Map.Entry<Point, Square>> iterator() {
         return board.entrySet().iterator();
     }
 }
