@@ -16,6 +16,22 @@ class BoardTest {
     private Board boardDifferentRaised;
 
     @Test
+    void testCopier() {
+        Board board = new Board.Copier(this.board)
+                .removePieces(new ImmutablePoint(1, 4))
+                .addPieces(new ImmutablePoint(1, 4), Piece.MUSHROOM)
+                .build();
+        assertEquals(board, boardDifferentPiece);
+        assertEquals(board.hashCode(), boardDifferentPiece.hashCode());
+
+        board = new Board.Copier(this.board)
+                .removePieces(new ImmutablePoint(1, 4))
+                .build();
+        assertNotEquals(board, boardDifferentPiece);
+        assertNotEquals(board.hashCode(), boardDifferentPiece.hashCode());
+    }
+
+    @Test
     void testSetContains() {
         Set<Board> visitedBoards = new HashSet<>();
         visitedBoards.add(board);
