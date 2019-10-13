@@ -172,7 +172,7 @@ public class Board implements Iterable<Map.Entry<ImmutablePoint, Square>> {
         return board;
     }
 
-    private ImmutablePoint getMax() {
+    public ImmutablePoint getMax() {
         return max;
     }
 

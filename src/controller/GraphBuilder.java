@@ -90,7 +90,7 @@ class GraphBuilder {
             point = new ImmutablePoint(point.getX(), point.getY() + 1);
             c = board.hasSquare(point) && board.getSquare(point).hasPiece();
         }
-        if (point.getY() > start.getY() + 1) {
+        if (point.getY() > start.getY() + 1 && point.getX() <= board.getMax().getX() && point.getY() <= board.getMax().getY()) {
             moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
         }
         point = new ImmutablePoint(start.getX(), start.getY());
@@ -99,7 +99,7 @@ class GraphBuilder {
             point = new ImmutablePoint(point.getX(), point.getY() - 1);
             c = board.hasSquare(point) && board.getSquare(point).hasPiece();
         }
-        if (point.getY() < start.getY() - 1) {
+        if (point.getY() < start.getY() - 1 && point.getX() <= board.getMax().getX() && point.getY() <= board.getMax().getY()) {
             moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
         }
         point = new ImmutablePoint(start.getX(), start.getY());
@@ -108,7 +108,7 @@ class GraphBuilder {
             point = new ImmutablePoint(point.getX() + 1, point.getY());
             c = board.hasSquare(point) && board.getSquare(point).hasPiece();
         }
-        if (point.getX() > start.getX() + 1) {
+        if (point.getX() > start.getX() + 1 && point.getX() <= board.getMax().getX() && point.getY() <= board.getMax().getY()) {
             moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
         }
         point = new ImmutablePoint(start.getX(), start.getY());
@@ -117,7 +117,7 @@ class GraphBuilder {
             point = new ImmutablePoint(point.getX() - 1, point.getY());
             c = board.hasSquare(point) && board.getSquare(point).hasPiece();
         }
-        if (point.getX() < start.getX() - 1) {
+        if (point.getX() < start.getX() - 1 && point.getX() <= board.getMax().getX() && point.getY() <= board.getMax().getY()) {
             moves.put(new MoveCommand(start, point), new Board.Copier(board).removePieces(start).addPieces(point, Piece.RABBIT).build());
         }
         return moves;
