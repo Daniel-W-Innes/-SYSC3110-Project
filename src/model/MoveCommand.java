@@ -1,30 +1,25 @@
 package model;
 
 import java.awt.*;
-import java.util.Collections;
-import java.util.Iterator;
-import java.util.Set;
+import java.util.Arrays;
 
-public class MoveCommand extends Command implements Iterable<ImmutablePoint> {
-    private final Set<ImmutablePoint> move;
+public class MoveCommand {
+    private final Point from;
+    private final Point to;
+    private final int hashcode;
 
-    public MoveCommand(Point loc1, Point loc2) {
-        super(CommandType.MOVE);
-        move = Collections.unmodifiableSet(Set.of(new ImmutablePoint(loc1), new ImmutablePoint(loc2)));
+    public MoveCommand(Point from, Point to) {
+        this.from = from;
+        this.to = to;
+        hashcode = Arrays.hashCode((new int[]{from.hashCode(), to.hashCode()}));
     }
 
-    public MoveCommand(ImmutablePoint loc1, ImmutablePoint loc2) {
-        super(CommandType.MOVE);
-        move = Collections.unmodifiableSet(Set.of(loc1, loc2));
+    public Point getFrom() {
+        return from;
     }
 
-    @Override
-    public Iterator<ImmutablePoint> iterator() {
-        return move.iterator();
-    }
-
-    private Set<ImmutablePoint> getMove() {
-        return move;
+    public Point getTo() {
+        return to;
     }
 
     @Override
@@ -36,11 +31,11 @@ public class MoveCommand extends Command implements Iterable<ImmutablePoint> {
             return false;
         }
         MoveCommand moveCommand = (MoveCommand) obj;
-        return getMove().equals(moveCommand.getMove());
+        return getFrom().equals(moveCommand.getFrom()) && getTo().equals(moveCommand.getTo());
     }
 
     @Override
     public int hashCode() {
-        return getMove().hashCode();
+        return hashcode;
     }
 }
