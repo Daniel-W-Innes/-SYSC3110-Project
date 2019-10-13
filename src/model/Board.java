@@ -6,18 +6,18 @@ import java.util.*;
 public class Board implements Iterable<Map.Entry<Point, Square>> {
 
     public static class Builder {
-        private final Set<Point> tunnels;
+        private final Set<Point> hole;
         private final Set<Point> raisedSquares;
         private final Map<Point, Piece> pieces;
 
         public Builder() {
-            tunnels = new HashSet<>();
+            hole = new HashSet<>();
             pieces = new HashMap<>();
             raisedSquares = new HashSet<>();
         }
 
         public Builder addTunnel(Point loc) {
-            tunnels.add(loc);
+            hole.add(loc);
             return this;
         }
 
@@ -42,8 +42,8 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
 
         public Board build() {
             Map<Point, Square> board = new HashMap<>();
-            java.awt.Point max = new java.awt.Point(0, 0);
-            for (Point point : tunnels) {
+            Point max = new Point(0, 0);
+            for (Point point : hole) {
                 board.put(point, new Square(true, true, pieces.get(point)));
                 pieces.remove(point);
                 updateMax(max, point);
@@ -61,7 +61,7 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
         }
     }
 
-    private final Map<Point, Square> board;
+    private Map<Point, Square> board;
     private final Point max;
 
     private Board(Map<Point, Square> board, Point max) {
@@ -99,6 +99,22 @@ public class Board implements Iterable<Map.Entry<Point, Square>> {
             stringBuilder.append("\n");
         }
         return stringBuilder.toString();
+    }
+
+    public Board move(Move move){
+        Square start = board.get(move.getStartPoint());
+        Square end = board.get(move.getEndPoint());
+
+        if (start == null || ! start.hasPiece()){
+            throw new RuntimeException("Not a valid start square");
+        } else if (end != null || end.hasPiece()) {
+            throw new RuntimeException("Not a valid end square");
+        }
+
+        if (end == null){
+            end = new Square(false, false, start.getPiece());
+        }
+
     }
 
     @Override

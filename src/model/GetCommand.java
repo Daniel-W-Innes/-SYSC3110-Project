@@ -2,7 +2,8 @@ package model;
 
 import java.awt.*;
 
-public class GetCommand extends Command {
+public class GetCommand {
+    /*
     private final ImmutablePoint loc;
 
     public GetCommand(Point loc) {
@@ -29,5 +30,5 @@ public class GetCommand extends Command {
     @Override
     public int hashCode() {
         return getLoc().hashCode();
-    }
+    }*/
 }

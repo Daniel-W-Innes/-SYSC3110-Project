@@ -1,17 +1,17 @@
 package model;
 
 public class Square {
-    private final boolean isTunnel;
+    private final boolean isHole;
     private final boolean isRaised;
-    private final Piece piece;
+    private Piece piece;
     private final int hashCode;
 
-    Square(boolean isTunnel, boolean isRaised, Piece piece) {
-        this.isTunnel = isTunnel;
+    Square(boolean isHole, boolean isRaised, Piece piece) {
+        this.isHole = isHole;
         this.isRaised = isRaised;
         this.piece = piece;
         StringBuilder stringBuilder = new StringBuilder();
-        if (isTunnel) {
+        if (isHole) {
             stringBuilder.append(2);
             stringBuilder.append(2);
         } else if (isRaised) {
@@ -31,6 +31,10 @@ public class Square {
         return piece != null;
     }
 
+    public void setPiece(Piece p) {
+        this.piece = p;
+    }
+
     public Piece getPiece() {
         return piece;
     }
@@ -39,8 +43,8 @@ public class Square {
         return isRaised;
     }
 
-    boolean isTunnel() {
-        return isTunnel;
+    boolean isHole() {
+        return isHole;
     }
 
     @Override
@@ -52,7 +56,7 @@ public class Square {
             return false;
         }
         Square square = (Square) obj;
-        return hasPiece() != square.hasPiece() || isTunnel() != square.isTunnel() || isRaised() != square.isRaised() || !hasPiece() || getPiece().equals(square.getPiece());
+        return hasPiece() != square.hasPiece() || isHole() != square.isHole() || isRaised() != square.isRaised() || !hasPiece() || getPiece().equals(square.getPiece());
     }
 
     @Override
@@ -64,7 +68,7 @@ public class Square {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('{');
-        if (isTunnel) {
+        if (isHole) {
             stringBuilder.append("Tunnel");
         } else if (isRaised) {
             stringBuilder.append("Raised");
