@@ -1,57 +1,53 @@
 package controller;
 
-import model.Command;
-import model.GetCommand;
+import model.Board;
 import model.MoveCommand;
-import view.TextBased;
-import view.ViewApi;
+import model.Piece;
+
+import java.awt.*;
 
 public class Game {
-    private GraphManager graphManager;
-    private final GraphBuilder graphBuilder;
-    private final ViewApi view;
-
-    public static void main(String[] args) {
-        Game game = new Game(new TextBased());
-        game.mainLoop();
-    }
-
-    private Game(ViewApi view) {
-        graphBuilder = new GraphBuilder();
-        this.view = view;
-    }
-
-    private void mainLoop() {
-        boolean exit = false;
-        while (!exit) {
-            setUp();
-            boolean reset = false;
-            while (!reset) {
-                view.drawBoard();
-                Command command = view.getCommand();
-                switch (command.getCommandType()) {
-                    case EXIT:
-                        exit = true;
-                        reset = true;
-                        break;
-                    case RESET:
-                        reset = true;
-                        break;
-                    case MOVE:
-                        if (!(graphManager.move((MoveCommand) command))) {
-                            view.drawMessage("Bad move message");
-                        }
-                        break;
-                    case GET:
-                        GetCommand getCommand = (GetCommand) command;
-                        view.drawMessage(graphManager.getSquareAsString(getCommand.getLoc()));
-                }
-            }
-        }
-    }
+    private Board board;
 
     public void setUp() {
-        graphManager = graphBuilder.getGraphManager(20);
-        view.setGraphManager(graphManager);
+        board = new Board.Builder()
+                .addTunnel(new Point(0, 0))
+                .addTunnel(new Point(4, 4))
+                .addTunnel(new Point(0, 4))
+                .addTunnel(new Point(4, 0))
+                .addTunnel(new Point(2, 2))
+
+                .addRaisedSquare(new Point(0, 2))
+                .addRaisedSquare(new Point(2, 0))
+                .addRaisedSquare(new Point(2, 4))
+                .addRaisedSquare(new Point(4, 2))
+
+                .addPieces(new Point(1, 4), Piece.RABBIT)
+                .addPieces(new Point(4, 2), Piece.RABBIT)
+                .addPieces(new Point(3, 0), Piece.RABBIT)
+
+                .addPieces(new Point(2, 4), Piece.MUSHROOM)
+                .addPieces(new Point(3, 1), Piece.MUSHROOM)
+
+                .addPieces(new Point(1, 1), Piece.FOX_PLUS_Y)
+                .addPieces(new Point(1, 0), Piece.FOX_MINUS_Y)
+                .addPieces(new Point(4, 3), Piece.FOX_PLUS_X)
+                .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
+                .build();
+    }
+
+    public boolean move(MoveCommand moveCommand) {
+        if (board.hasSquare(moveCommand.getFrom()) && board.getSquare(moveCommand.getFrom()).hasPiece()) {
+            switch (board.getSquare(moveCommand.getFrom()).getPiece()) {
+                case RABBIT:
+                    return Rabbits.checkMove(board, moveCommand);
+                case FOX_PLUS_X:
+                case FOX_PLUS_Y:
+                case FOX_MINUS_X:
+                case FOX_MINUS_Y:
+                    return Foxes.checkMove(board, moveCommand);
+            }
+        }
+        return false;
     }
 }
