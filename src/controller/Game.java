@@ -2,7 +2,6 @@ package controller;
 
 import model.Board;
 import model.Move;
-import model.MoveCommand;
 import model.Piece;
 import view.TextView;
 
@@ -47,22 +46,17 @@ public class Game {
         board.setObserver(new TextView(this));
     }
 
-    public void move(MoveCommand moveCommand) {
-        if (board.hasSquare(moveCommand.getFrom()) && board.getSquare(moveCommand.getFrom()).hasPiece()) {
-            switch (board.getSquare(moveCommand.getFrom()).getPiece()) {
+    public void move(Move move) {
+        if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
+            switch (board.getSquare(move.getStartPoint()).getPiece()) {
                 case RABBIT:
-                    Rabbits.checkAndMove(board, moveCommand);
+                    Rabbits.checkAndMove(board, move);
                 case FOX_PLUS_X:
                 case FOX_PLUS_Y:
                 case FOX_MINUS_X:
                 case FOX_MINUS_Y:
-                    Foxes.checkAndMove(board, moveCommand);
+                    Foxes.checkAndMove(board, move);
             }
-            board.removeSquareIfEmpty(moveCommand.getFrom());
         }
-    }
-
-    public void move(Move move){
-        board.move(move);
     }
 }

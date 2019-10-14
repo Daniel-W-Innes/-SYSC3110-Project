@@ -1,12 +1,16 @@
 package model;
 import java.awt.*;
+import java.util.Arrays;
 
 public class Move {
     private final Point start;
     private final Point end;
+    private final int hashcode;
+
     public Move(Point start, Point end){
         this.start = start;
         this.end = end;
+        hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
     }
 
     public Point getStartPoint(){
@@ -19,6 +23,23 @@ public class Move {
 
     public Move getReverseMove(){
         return new Move(end, start);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Move move = (Move) obj;
+        return getStartPoint().equals(move.getStartPoint()) && getEndPoint().equals(move.getEndPoint());
+    }
+
+    @Override
+    public int hashCode() {
+        return hashcode;
     }
 
     public String toString(){

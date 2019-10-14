@@ -124,34 +124,6 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
         return stringBuilder.toString();
     }
 
-    public Board move(Move move){
-        Square start = board.get(move.getStartPoint());
-        Square end = board.get(move.getEndPoint());
-
-        if (start == null || ! start.hasPiece()){
-            throw new RuntimeException("Not a valid start square");
-        } else if (end != null || end.hasPiece()) {
-            throw new RuntimeException("Not a valid end square");
-        }
-
-        if (end == null){
-            end = new Square(false, false, start.getPiece());
-            board.put(move.getEndPoint(), end);
-        } else {
-            end.setPiece(start.getPiece());
-        }
-        start.setPiece(null);
-        removeSquareIfEmpty(move.getStartPoint());
-        return this; //may create a clone of board later
-
-        /*
-        If all squares are not null
-        end.setPiece(start.getPiece());
-        start.setPiece(null);
-        return this;
-         */
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

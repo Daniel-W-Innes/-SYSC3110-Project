@@ -1,53 +1,59 @@
 package controller;
 
 import model.Board;
-import model.MoveCommand;
+import model.Move;
+import model.Piece;
 
 import java.awt.*;
 
 
 class Rabbits {
-    static boolean checkMove(Board board, MoveCommand moveCommand) {
-        if (board.hasSquare(moveCommand.getTo()) && board.getSquare(moveCommand.getTo()).hasPiece()) {
+    private static void move(Board board, Move move) {
+        board.getSquare(move.getStartPoint()).removePiece();
+        board.getSquare(move.getStartPoint()).setPiece(Piece.RABBIT);
+        board.removeSquareIfEmpty(move.getStartPoint());
+    }
+
+    static void checkAndMove(Board board, Move move) {
+        if (board.hasSquare(move.getEndPoint()) && board.getSquare(move.getEndPoint()).hasPiece()) {
             Point point;
-            if (moveCommand.getFrom().x == moveCommand.getTo().x) {
-                if (moveCommand.getFrom().y > moveCommand.getTo().y + 1) {
-                    for (int y = moveCommand.getTo().y + 1; y < moveCommand.getFrom().y - 1; y++) {
-                        point = new Point(moveCommand.getFrom().x, y);
+            if (move.getStartPoint().x == move.getEndPoint().x) {
+                if (move.getStartPoint().y > move.getEndPoint().y + 1) {
+                    for (int y = move.getEndPoint().y + 1; y < move.getStartPoint().y - 1; y++) {
+                        point = new Point(move.getStartPoint().x, y);
                         if (!board.hasSquare(point) || !board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
-                } else if (moveCommand.getFrom().y < moveCommand.getTo().y - 1) {
-                    for (int y = moveCommand.getFrom().y + 1; y < moveCommand.getTo().y - 1; y++) {
-                        point = new Point(moveCommand.getFrom().x, y);
+                    move(board, move);
+                } else if (move.getStartPoint().y < move.getEndPoint().y - 1) {
+                    for (int y = move.getStartPoint().y + 1; y < move.getEndPoint().y - 1; y++) {
+                        point = new Point(move.getStartPoint().x, y);
                         if (!board.hasSquare(point) || !board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
+                    move(board, move);
                 }
-            } else if (moveCommand.getFrom().y == moveCommand.getTo().y) {
-                if (moveCommand.getFrom().x > moveCommand.getTo().x + 1) {
-                    for (int x = moveCommand.getTo().x + 1; x < moveCommand.getFrom().x - 1; x++) {
-                        point = new Point(x, moveCommand.getFrom().y);
+            } else if (move.getStartPoint().y == move.getEndPoint().y) {
+                if (move.getStartPoint().x > move.getEndPoint().x + 1) {
+                    for (int x = move.getEndPoint().x + 1; x < move.getStartPoint().x - 1; x++) {
+                        point = new Point(x, move.getStartPoint().y);
                         if (!board.hasSquare(point) || !board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
-                } else if (moveCommand.getFrom().x < moveCommand.getTo().x - 1) {
-                    for (int x = moveCommand.getFrom().x + 1; x < moveCommand.getTo().x - 1; x++) {
-                        point = new Point(x, moveCommand.getFrom().y);
+                    move(board, move);
+                } else if (move.getStartPoint().x < move.getEndPoint().x - 1) {
+                    for (int x = move.getStartPoint().x + 1; x < move.getEndPoint().x - 1; x++) {
+                        point = new Point(x, move.getStartPoint().y);
                         if (!board.hasSquare(point) || !board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
+                    move(board, move);
                 }
             }
         }
-        return false;
     }
 }
