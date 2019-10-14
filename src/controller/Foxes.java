@@ -2,52 +2,111 @@ package controller;
 
 import model.Board;
 import model.Move;
+import model.Square;
 
 import java.awt.*;
 
 class Foxes {
-    static boolean checkAndMove(Board board, Move move) {
+    private static void move(Board board, Move move) {
+        if (board.hasSquare(move.getEndPoint())) {
+            board.getSquare(move.getEndPoint()).setPiece(board.getSquare(move.getStartPoint()).getPiece());
+        } else {
+            board.addSquare(move.getEndPoint(), new Square(false, false, board.getSquare(move.getStartPoint()).getPiece()));
+        }
+        board.getSquare(move.getStartPoint()).removePiece();
+        board.removeSquareIfEmpty(move.getStartPoint());
+    }
+
+    static void checkAndMove(Board board, Move move) {
         Point point;
         switch (board.getSquare(move.getStartPoint()).getPiece()) {
             case FOX_PLUS_Y:
+                if (move.isPlusY()) {
+                    for (int y = move.getStartPoint().y + 1; y <= move.getEndPoint().y; y++) {
+                        point = new Point(move.getStartPoint().x, y);
+                        if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
+                            return;
+                        }
+                    }
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
+                    board.notifyObserver();
+                } else if (move.isMinusY()) {
+                    for (int y = move.getEndPoint().y - 1; y <= move.getStartPoint().y - 2; y++) {
+                        point = new Point(move.getStartPoint().x, y);
+                        if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
+                            return;
+                        }
+                    }
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
+                    board.notifyObserver();
+                }
             case FOX_MINUS_Y:
-                if (move.getStartPoint().y > move.getStartPoint().y) {
-                    for (int y = move.getEndPoint().y; y < move.getStartPoint().y - 1; y++) {
+                if (move.isPlusY()) {
+                    for (int y = move.getStartPoint().y + 2; y <= move.getEndPoint().y + 1; y++) {
                         point = new Point(move.getStartPoint().x, y);
                         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
-                } else if (move.getStartPoint().y < move.getEndPoint().y - 1) {
-                    for (int y = move.getStartPoint().y + 1; y < move.getEndPoint().y; y++) {
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
+                    board.notifyObserver();
+                } else if (move.isMinusY()) {
+                    for (int y = move.getEndPoint().y - 1; y < move.getStartPoint().y; y++) {
                         point = new Point(move.getStartPoint().x, y);
                         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
+                    board.notifyObserver();
                 }
             case FOX_PLUS_X:
+                if (move.isPlusX()) {
+                    for (int x = move.getStartPoint().x + 1; x <= move.getEndPoint().x; x++) {
+                        point = new Point(x, move.getStartPoint().y);
+                        if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
+                            return;
+                        }
+                    }
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
+                } else if (move.isMinusX()) {
+                    for (int x = move.getEndPoint().x - 1; x <= move.getStartPoint().x - 2; x++) {
+                        point = new Point(x, move.getStartPoint().y);
+                        if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
+                            return;
+                        }
+                    }
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
+                    board.notifyObserver();
+                }
             case FOX_MINUS_X:
-                if (move.getStartPoint().x > move.getEndPoint().x + 1) {
-                    for (int x = move.getEndPoint().x; x < move.getStartPoint().x - 1; x++) {
+                if (move.isPlusX()) {
+                    for (int x = move.getStartPoint().x + 2; x <= move.getEndPoint().x + 1; x++) {
                         point = new Point(x, move.getStartPoint().y);
                         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
-                } else if (move.getStartPoint().x < move.getEndPoint().x - 1) {
-                    for (int x = move.getStartPoint().x + 1; x < move.getEndPoint().x; x++) {
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
+                    board.notifyObserver();
+                } else if (move.isMinusX()) {
+                    for (int x = move.getEndPoint().x - 1; x <= move.getStartPoint().x; x++) {
                         point = new Point(x, move.getStartPoint().y);
                         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
-                            return false;
+                            return;
                         }
                     }
-                    return true;
+                    move(board, move);
+                    move(board, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
+                    board.notifyObserver();
                 }
         }
-        return false;
     }
 }

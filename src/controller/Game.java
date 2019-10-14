@@ -5,20 +5,12 @@ import model.Move;
 import model.Piece;
 import view.TextView;
 
-import java.awt.Point;
+import java.awt.*;
 
 public class Game {
     private Board board;
 
-    public Game(){
-        setUp();
-    }
-
-    public static void main(String[] args){
-        new Game();
-    }
-
-    public void setUp() {
+    public void setUp(TextView textView) {
         board = new Board.Builder()
                 .addTunnel(new Point(0, 0))
                 .addTunnel(new Point(4, 4))
@@ -43,19 +35,15 @@ public class Game {
                 .addPieces(new Point(4, 3), Piece.FOX_PLUS_X)
                 .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
                 .build();
-        board.setObserver(new TextView(this));
+        board.setObserver(textView);
+        board.notifyObserver();
     }
 
     public void move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
-                case RABBIT:
-                    Rabbits.checkAndMove(board, move);
-                case FOX_PLUS_X:
-                case FOX_PLUS_Y:
-                case FOX_MINUS_X:
-                case FOX_MINUS_Y:
-                    Foxes.checkAndMove(board, move);
+                case RABBIT -> Rabbits.checkAndMove(board, move);
+                case FOX_PLUS_X, FOX_PLUS_Y, FOX_MINUS_X, FOX_MINUS_Y -> Foxes.checkAndMove(board, move);
             }
         }
     }

@@ -25,6 +25,22 @@ public class Move {
         return new Move(end, start);
     }
 
+    public boolean isPlusY() {
+        return start.x == end.x && start.y < end.y;
+    }
+
+    public boolean isPlusX() {
+        return start.y == end.y && start.x < end.x;
+    }
+
+    public boolean isMinusY() {
+        return start.x == end.x && start.y > end.y;
+    }
+
+    public boolean isMinusX() {
+        return start.y == end.y && start.x > end.x;
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

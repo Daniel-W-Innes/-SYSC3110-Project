@@ -7,8 +7,6 @@ import java.util.*;
 
 public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
 
-
-
     public static class Builder {
         private final Set<Point> hole;
         private final Set<Point> raisedSquares;
@@ -88,6 +86,10 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
 
     public Square getSquare(Point loc) {
         return board.get(loc);
+    }
+
+    public void addSquare(Point loc, Square square) {
+        board.put(loc, square);
     }
 
     public boolean hasSquare(Point loc) {

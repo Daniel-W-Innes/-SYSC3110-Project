@@ -6,7 +6,7 @@ public class Square {
     private Piece piece;
     private final int hashCode;
 
-    Square(boolean isHole, boolean isRaised, Piece piece) {
+    public Square(boolean isHole, boolean isRaised, Piece piece) {
         this.isHole = isHole;
         this.isRaised = isRaised;
         this.piece = piece;
