@@ -63,7 +63,7 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
         }
     }
 
-    private Map<Point, Square> board;
+    private final Map<Point, Square> board;
     private final Point max;
     private Observer observer;
 

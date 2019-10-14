@@ -2,7 +2,7 @@ package model;
 
 import view.Observer;
 
-public interface Observable {
+interface Observable {
     void setObserver(Observer observer);
     void notifyObserver();
 }
