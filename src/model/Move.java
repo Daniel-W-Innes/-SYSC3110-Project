@@ -29,16 +29,32 @@ public class Move {
         return start.x == end.x && start.y < end.y;
     }
 
+    public boolean isPlusY(int offset) {
+        return start.x == end.x && start.y < end.y + offset;
+    }
+
     public boolean isPlusX() {
         return start.y == end.y && start.x < end.x;
+    }
+
+    public boolean isPlusX(int offset) {
+        return start.y == end.y && start.x < end.x + offset;
     }
 
     public boolean isMinusY() {
         return start.x == end.x && start.y > end.y;
     }
 
+    public boolean isMinusY(int offset) {
+        return start.x == end.x && start.y > end.y + offset;
+    }
+
     public boolean isMinusX() {
         return start.y == end.y && start.x > end.x;
+    }
+
+    public boolean isMinusX(int offset) {
+        return start.y == end.y && start.x > end.x + offset;
     }
 
     @Override
