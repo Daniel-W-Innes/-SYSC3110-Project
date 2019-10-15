@@ -24,8 +24,14 @@ public class TextView implements Observer {
      */
     private TextView(Game game) {
         this.game = game;
+        game.setUp(this);
     }
 
+    /**
+     * Main method - Used to start the game with a TextView
+     *
+     * @param args - These arguments are not used
+     */
     public static void main(String[] args) {
         TextView textView = new TextView(new Game());
         textView.run();
@@ -36,7 +42,6 @@ public class TextView implements Observer {
     }
 
     private void run() {
-        game.setUp(this);
         Scanner in = new Scanner(System.in);
         Method[] userCommands = Arrays.stream(game.getClass().getMethods())
                 .filter(method -> method.getAnnotation(Game.UserCommand.class) != null)
@@ -92,17 +97,8 @@ public class TextView implements Observer {
         }
     }
 
-    /**
-     * Main method - Used to start the game with a TextView
-     * @param args - These arguments are not used
-     */
-    public static void main(String[] args) {
-        TextView textView = new TextView(new Game());
-
-    }
-
     @Override
     public void update(Board board) {
-        System.out.println(board.toString());
+        System.out.print(board.toString());
     }
 }
