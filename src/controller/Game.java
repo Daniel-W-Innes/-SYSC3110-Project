@@ -52,17 +52,17 @@ public class Game {
         draw();
     }
 
-    @UserCommand(description = "description")
-    public void setUp() {
+    @UserCommand(description = "Reset the game board")
+    public void reset() {
         setUp(textView);
     }
 
-    @UserCommand(description = "description")
+    @UserCommand(description = "Exit the game")
     public void exit() {
         textView.exit();
     }
 
-    @UserCommand(description = "description")
+    @UserCommand(description = "Move a game piece from one location to another")
     public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
@@ -78,7 +78,7 @@ public class Game {
         return false;
     }
 
-    @UserCommand(description = "description")
+    @UserCommand(description = "redraw the game board")
     public void draw() {
         board.notifyObserver();
     }
