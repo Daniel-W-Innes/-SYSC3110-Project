@@ -9,6 +9,15 @@ import java.awt.*;
 
 public class Game {
     private Board board;
+    private TextView textView;
+
+
+    private void addView(TextView textView) {
+        this.textView = textView;
+        if (board != null) {
+            board.setObserver(textView);
+        }
+    }
 
     public void setUp(TextView textView) {
         board = new Board.Builder()
@@ -35,11 +44,15 @@ public class Game {
                 .addPieces(new Point(4, 3), Piece.FOX_PLUS_X)
                 .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
                 .build();
-        board.setObserver(textView);
-        board.notifyObserver();
+        addView(textView);
+        reflectedDraw();
     }
 
-    public boolean move(Move move) {
+    public void reflectedSetUp() {
+        setUp(textView);
+    }
+
+    public boolean reflectedMove(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
                 case RABBIT:
@@ -54,7 +67,7 @@ public class Game {
         return false;
     }
 
-    public void draw() {
+    public void reflectedDraw() {
         board.notifyObserver();
     }
 }
