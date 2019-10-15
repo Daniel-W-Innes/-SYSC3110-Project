@@ -12,7 +12,6 @@ import java.util.Scanner;
 
 public class TextView implements Observer {
     private final Game game;
-    private final String REFLECTED_PREFIX = "reflected";
     private boolean c;
 
     private TextView(Game game) {
@@ -31,7 +30,7 @@ public class TextView implements Observer {
     private void run() {
         game.setUp(this);
         Scanner in = new Scanner(System.in);
-        Method[] gameMethods = Arrays.stream(game.getClass().getMethods())
+        Method[] userCommands = Arrays.stream(game.getClass().getMethods())
                 .filter(method -> method.getAnnotation(Game.UserCommand.class) != null)
                 .toArray(Method[]::new);
         c = true;
@@ -42,7 +41,7 @@ public class TextView implements Observer {
                     .filter(x -> !x.equals(""))
                     .map(String::toLowerCase)
                     .toArray(String[]::new);
-            for (Method method : gameMethods) {
+            for (Method method : userCommands) {
                 if (method.getName().toLowerCase().equals(inputStrings[0])) {
                     try {
                         if (method.getParameters().length == 1
@@ -64,14 +63,24 @@ public class TextView implements Observer {
                     }
                 }
             }
-            if (inputStrings[0].equals("help") && inputStrings.length == 1) {
-                System.out.println("exit");
-                for (Method method : gameMethods) {
-                    System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
+            if (inputStrings[0].equals("help")) {
+                if (inputStrings.length == 1) {
+                    for (Method method : userCommands) {
+                        System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
+                    }
+                    continue;
+                } else {
+                    for (Method method : userCommands) {
+                        for (String inputString : Arrays.copyOfRange(inputStrings, 1, inputStrings.length)) {
+                            if (method.getName().toLowerCase().equals(inputString)) {
+                                System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
+                            }
+                        }
+                    }
+                    continue;
                 }
-            } else {
-                System.out.println("Bad command");
             }
+            System.out.println("Bad command");
         }
     }
 
