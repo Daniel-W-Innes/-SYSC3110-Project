@@ -6,6 +6,10 @@ import model.Piece;
 import view.TextView;
 
 import java.awt.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
 
 public class Game {
     private Board board;
@@ -45,14 +49,16 @@ public class Game {
                 .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
                 .build();
         addView(textView);
-        reflectedDraw();
+        draw();
     }
 
-    public void reflectedSetUp() {
+    @Reflected(description = "description")
+    public void setUp() {
         setUp(textView);
     }
 
-    public boolean reflectedMove(Move move) {
+    @Reflected(description = "description")
+    public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
                 case RABBIT:
@@ -67,7 +73,14 @@ public class Game {
         return false;
     }
 
-    public void reflectedDraw() {
+    @Reflected(description = "description")
+    public void draw() {
         board.notifyObserver();
+    }
+
+    @Retention(RetentionPolicy.RUNTIME)
+    @Target(ElementType.METHOD)
+    public @interface Reflected {
+        String description();
     }
 }
