@@ -27,7 +27,9 @@ public class TextView implements Observer {
         while (c) {
             String[] inputStrings = Arrays.stream(in.nextLine().split("[\\s{},]")).parallel().map(String::toLowerCase).filter(x -> !x.equals("")).toArray(String[]::new);
             if (inputStrings[0].equals("move") && inputStrings.length == 5) {
-                game.move(new Move(new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])), new Point(Integer.parseInt(inputStrings[3]), Integer.parseInt(inputStrings[4]))));
+                if (!game.move(new Move(new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])), new Point(Integer.parseInt(inputStrings[3]), Integer.parseInt(inputStrings[4]))))) {
+                    System.out.println("Bad move");
+                }
             } else if (inputStrings[0].equals("exit") && inputStrings.length == 1) {
                 c = false;
             } else {

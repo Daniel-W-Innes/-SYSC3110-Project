@@ -20,40 +20,45 @@ class Rabbits {
         board.notifyObserver();
     }
 
-    static void checkAndMove(Board board, Move move) {
+    static boolean checkAndMove(Board board, Move move) {
         Point point;
         if (move.isMinusY(1)) {
             for (int y = move.getEndPoint().y + 1; y <= move.getStartPoint().y - 1; y++) {
                 point = new Point(move.getStartPoint().x, y);
                 if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.y - 1 < 0) {
-                    return;
+                    return false;
                 }
             }
             move(board, move);
+            return true;
         } else if (move.isPlusY(1)) {
             for (int y = move.getStartPoint().y + 1; y <= move.getEndPoint().y - 1; y++) {
                 point = new Point(move.getStartPoint().x, y);
                 if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.y + 1 > board.getMax().y) {
-                    return;
+                    return false;
                 }
             }
             move(board, move);
+            return true;
         } else if (move.isMinusX(1)) {
             for (int x = move.getEndPoint().x + 1; x <= move.getStartPoint().x - 1; x++) {
                 point = new Point(x, move.getStartPoint().y);
                 if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.x - 1 < 0) {
-                    return;
+                    return false;
                 }
             }
             move(board, move);
+            return true;
         } else if (move.isPlusX(1)) {
             for (int x = move.getStartPoint().x + 1; x <= move.getEndPoint().x - 1; x++) {
                 point = new Point(x, move.getStartPoint().y);
                 if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.x + 1 > board.getMax().x) {
-                    return;
+                    return false;
                 }
             }
             move(board, move);
+            return true;
         }
+        return false;
     }
 }

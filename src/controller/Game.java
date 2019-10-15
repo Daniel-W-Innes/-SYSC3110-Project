@@ -39,12 +39,18 @@ public class Game {
         board.notifyObserver();
     }
 
-    public void move(Move move) {
+    public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
-                case RABBIT -> Rabbits.checkAndMove(board, move);
-                case FOX_PLUS_X, FOX_PLUS_Y, FOX_MINUS_X, FOX_MINUS_Y -> Foxes.checkAndMove(board, move);
+                case RABBIT:
+                    return Rabbits.checkAndMove(board, move);
+                case FOX_PLUS_X:
+                case FOX_PLUS_Y:
+                case FOX_MINUS_X:
+                case FOX_MINUS_Y:
+                    return Foxes.checkAndMove(board, move);
             }
         }
+        return false;
     }
 }
