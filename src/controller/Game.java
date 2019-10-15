@@ -12,11 +12,11 @@ public class Game {
 
     public void setUp(TextView textView) {
         board = new Board.Builder()
-                .addTunnel(new Point(0, 0))
-                .addTunnel(new Point(4, 4))
-                .addTunnel(new Point(0, 4))
-                .addTunnel(new Point(4, 0))
-                .addTunnel(new Point(2, 2))
+                .addHole(new Point(0, 0))
+                .addHole(new Point(4, 4))
+                .addHole(new Point(0, 4))
+                .addHole(new Point(4, 0))
+                .addHole(new Point(2, 2))
 
                 .addRaisedSquare(new Point(0, 2))
                 .addRaisedSquare(new Point(2, 0))

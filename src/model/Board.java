@@ -18,7 +18,7 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
             raisedSquares = new HashSet<>();
         }
 
-        public Builder addTunnel(Point loc) {
+        public Builder addHole(Point loc) {
             hole.add(loc);
             return this;
         }

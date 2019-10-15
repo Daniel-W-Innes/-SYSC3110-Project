@@ -16,25 +16,25 @@ public enum Piece {
     FOX_PLUS_X {
         @Override
         public String toString() {
-            return "Fox";
+            return "FoxPX";
         }
     },
     FOX_MINUS_X {
         @Override
         public String toString() {
-            return "Fox";
+            return "FoxMX";
         }
     },
     FOX_PLUS_Y {
         @Override
         public String toString() {
-            return "Fox";
+            return "FoxPY";
         }
     },
     FOX_MINUS_Y {
         @Override
         public String toString() {
-            return "Fox";
+            return "FoxMY";
         }
     },
 }
