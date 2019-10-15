@@ -5,6 +5,11 @@
       <item index="0" class="java.lang.String" itemvalue="controller.Game.UserCommand" />
     </list>
   </component>
+  <component name="JavadocGenerationManager">
+    <option name="OUTPUT_DIRECTORY" value="$PROJECT_DIR$/docs" />
+    <option name="OPTION_SCOPE" value="private" />
+    <option name="OPTION_INCLUDE_LIBS" value="true" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_13_PREVIEW" default="false" project-jdk-name="13" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/bin" />
   </component>

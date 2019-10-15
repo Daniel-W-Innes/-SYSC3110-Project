@@ -11,7 +11,7 @@ interface Observable {
 
     /**
      * Set the Observer to notify whenever notifyObserver is called
-     * @param observer
+     * @param observer The new observer
      */
     void setObserver(Observer observer);
 
