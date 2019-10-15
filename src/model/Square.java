@@ -73,7 +73,7 @@ public class Square {
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append('{');
         if (isHole) {
-            stringBuilder.append("Tunnel");
+            stringBuilder.append("Hole");
         } else if (isRaised) {
             stringBuilder.append("Raised");
         } else {
