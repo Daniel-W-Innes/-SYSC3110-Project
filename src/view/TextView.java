@@ -32,7 +32,7 @@ public class TextView implements Observer {
         game.setUp(this);
         Scanner in = new Scanner(System.in);
         Method[] gameMethods = Arrays.stream(game.getClass().getMethods())
-                .filter(method -> method.getAnnotation(Game.Reflected.class) != null)
+                .filter(method -> method.getAnnotation(Game.UserCommand.class) != null)
                 .toArray(Method[]::new);
         c = true;
 
@@ -67,7 +67,7 @@ public class TextView implements Observer {
             if (inputStrings[0].equals("help") && inputStrings.length == 1) {
                 System.out.println("exit");
                 for (Method method : gameMethods) {
-                    System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.Reflected.class).description());
+                    System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
                 }
             } else {
                 System.out.println("Bad command");
