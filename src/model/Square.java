@@ -43,7 +43,7 @@ public class Square {
         this.piece = null;
     }
 
-    public boolean isRaised() {
+    boolean isRaised() {
         return isRaised;
     }
 

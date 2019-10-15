@@ -21,10 +21,6 @@ public class Move {
         return end;
     }
 
-    public Move getReverseMove(){
-        return new Move(end, start);
-    }
-
     public boolean isPlusY() {
         return start.x == end.x && start.y < end.y;
     }
