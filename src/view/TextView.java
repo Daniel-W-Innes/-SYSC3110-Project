@@ -26,6 +26,8 @@ public class TextView implements Observer {
         Scanner in = new Scanner(System.in);
 
         while (true) {
+
+            //converts the input strings delimited by spaces into an array
             String[] inputStrings = Arrays.stream(in.nextLine().split("[\\s{},]")).parallel().map(String::toLowerCase).filter(x -> !x.equals("")).toArray(String[]::new);
             if (inputStrings[0].equalsIgnoreCase("move") && inputStrings.length == 5) {
                 if (!game.move(new Move(new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])), new Point(Integer.parseInt(inputStrings[3]), Integer.parseInt(inputStrings[4]))))) {
@@ -33,7 +35,7 @@ public class TextView implements Observer {
                 }
             } else if (inputStrings[0].equalsIgnoreCase("exit") && inputStrings.length == 1) {
                 System.out.println("Exiting Game");
-                System.exit(0);
+                break;
             } else {
                 System.out.println("Bad command");
             }

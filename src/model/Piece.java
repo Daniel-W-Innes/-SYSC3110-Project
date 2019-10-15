@@ -1,5 +1,12 @@
 package model;
 
+/**
+ * A enum Representing the various types of Pieces
+ *
+ * FOX_PLUS_X -> A part of the fox facing the positive x direction
+ * FOX_MINUS_X -> A part of the fox facing the negative x direction
+ * etc.
+ */
 public enum Piece {
     MUSHROOM {
         @Override
