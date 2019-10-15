@@ -58,6 +58,11 @@ public class Game {
     }
 
     @Reflected(description = "description")
+    public void exit() {
+        textView.exit();
+    }
+
+    @Reflected(description = "description")
     public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {

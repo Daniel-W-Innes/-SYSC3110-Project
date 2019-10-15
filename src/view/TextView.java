@@ -13,6 +13,7 @@ import java.util.Scanner;
 public class TextView implements Observer {
     private final Game game;
     private final String REFLECTED_PREFIX = "reflected";
+    private boolean c;
 
     private TextView(Game game) {
         this.game = game;
@@ -23,13 +24,17 @@ public class TextView implements Observer {
         textView.run();
     }
 
+    public void exit() {
+        c = false;
+    }
+
     private void run() {
         game.setUp(this);
         Scanner in = new Scanner(System.in);
         Method[] gameMethods = Arrays.stream(game.getClass().getMethods())
-                .filter(method -> Arrays.stream(method.getDeclaredAnnotations()).anyMatch(x -> x instanceof Game.Reflected))
+                .filter(method -> method.getAnnotation(Game.Reflected.class) != null)
                 .toArray(Method[]::new);
-        boolean c = true;
+        c = true;
 
         mainLoop:
         while (c) {
@@ -59,10 +64,7 @@ public class TextView implements Observer {
                     }
                 }
             }
-
-            if (inputStrings[0].equals("exit") && inputStrings.length == 1) {
-                c = false;
-            } else if (inputStrings[0].equals("help") && inputStrings.length == 1) {
+            if (inputStrings[0].equals("help") && inputStrings.length == 1) {
                 System.out.println("exit");
                 for (Method method : gameMethods) {
                     System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.Reflected.class).description());
