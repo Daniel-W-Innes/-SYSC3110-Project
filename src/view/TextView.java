@@ -10,10 +10,18 @@ import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.Scanner;
 
+/**
+ * A text implementation of the GUI.
+ * To run the game using the TextView, run the main method in this file
+ */
 public class TextView implements Observer {
     private final Game game;
     private boolean c;
 
+    /**
+     * Starts up an instance of the TextView GUI
+     * @param game - The Central controller to interact with
+     */
     private TextView(Game game) {
         this.game = game;
     }
@@ -84,6 +92,16 @@ public class TextView implements Observer {
         }
     }
 
+    /**
+     * Main method - Used to start the game with a TextView
+     * @param args - These arguments are not used
+     */
+    public static void main(String[] args) {
+        TextView textView = new TextView(new Game());
+
+    }
+
+    @Override
     public void update(Board board) {
         System.out.println(board.toString());
     }

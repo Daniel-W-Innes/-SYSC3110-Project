@@ -1,8 +1,12 @@
 package model;
-import java.awt.*;
+import java.awt.Point;
 import java.util.Arrays;
 
-public class Move {
+/**
+ * Immutable class Move
+ * Contains the final variables: start (Point) and end (Point), which represents the start and the end Points of a given move
+ */
+public final class Move {
     private final Point start;
     private final Point end;
     private final int hashcode;
@@ -53,6 +57,9 @@ public class Move {
         return start.y == end.y && start.x > end.x + offset;
     }
 
+    /**
+     * Two moves are equal when startPoint and the endPoint are equivalent
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

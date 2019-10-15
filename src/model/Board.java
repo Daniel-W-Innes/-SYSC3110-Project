@@ -5,6 +5,9 @@ import view.Observer;
 import java.awt.*;
 import java.util.*;
 
+/**
+ *
+ */
 public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
 
     public static class Builder {
@@ -106,10 +109,18 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
         return board;
     }
 
+    /**
+     * Returns the Max Point located on this board
+     * The max x point is- getMax().x, and the max y point is - getMax().y
+     * @return Max Point located on this board
+     */
     public Point getMax() {
         return max;
     }
 
+    /**
+     * Returns a toString of all the squares in the board separated by a "|"
+     */
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
