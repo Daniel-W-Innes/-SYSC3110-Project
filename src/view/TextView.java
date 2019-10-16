@@ -25,7 +25,7 @@ public class TextView implements Observer {
      */
     private TextView(Game game) {
         this.game = game;
-        game.setUp(this);
+        game.setUp(this, 1);
     }
 
     /**
@@ -53,7 +53,7 @@ public class TextView implements Observer {
         while (keepSuffering) {
             if (game.isVictory()) {
                 System.out.println("YOU WON");
-                keepSuffering = false;
+                break;
             }
             String[] inputStrings = Arrays.stream(in.nextLine().split("[\\s{},]"))
                     .filter(x -> !x.equals(""))
@@ -75,6 +75,12 @@ public class TextView implements Observer {
                                 && method.getReturnType().equals(void.class)
                                 && inputStrings.length == 3) {
                             method.invoke(game, new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])));
+                            continue mainLoop;
+                        } else if (method.getParameters().length == 1
+                                && method.getParameters()[0].getType().equals(int.class)
+                                && method.getReturnType().equals(void.class)
+                                && inputStrings.length == 2) {
+                            method.invoke(game, Integer.parseInt(inputStrings[1]));
                             continue mainLoop;
                         } else if (method.getParameters().length == 0
                                 && method.getReturnType().equals(void.class)
