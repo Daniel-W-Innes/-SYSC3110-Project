@@ -4,8 +4,7 @@ import java.awt.*;
 import java.util.Arrays;
 
 /**
- * Immutable class Move
- * Contains the final variables: start (Point) and end (Point), which represents the start and the end Points of a given move
+ * Immutable class Move represents a move from one point to anther.
  */
 public final class Move {
     /**
@@ -17,7 +16,7 @@ public final class Move {
      */
     private final Point end;
     /**
-     * The hashcode for the move generated with "Arrays.hashCode()" when the move is initialized.
+     * The hashcode for the move generated with {@code Arrays.hashCode()} when the move is initialized.
      */
     private final int hashcode;
 
@@ -142,9 +141,11 @@ public final class Move {
 
     /**
      * Two moves are equal when startPoint and the endPoint are equal.
+     *
      * @param obj The object to test against
      * @return If obj is the same as this
      */
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -158,7 +159,7 @@ public final class Move {
     }
 
     /**
-     * Get the hashcode for the move. This hashcode is generated with "Arrays.hashCode()" when the move is initialized.
+     * Get the hashcode for the move. This hashcode is generated with {@code Arrays.hashCode()} when the move is initialized.
      *
      * @return The hashcode
      */
@@ -169,7 +170,7 @@ public final class Move {
     }
 
     /**
-     * Get a string representation of the move. This method dose not delegate to Point's to toString because in to verbose e.g. "getClass().getName() + "[x=" + x + ",y=" + y + "]"".
+     * Get a string representation of the move. This method dose not delegate to Point's to toString because in to verbose e.g. {@code getClass().getName() + "[x=" + x + ",y=" + y + "]"}.
      *
      * @return The representative string
      */

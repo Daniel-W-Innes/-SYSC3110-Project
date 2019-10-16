@@ -2,26 +2,47 @@ package model;
 
 /**
  * The Square class represents one square in the Board.
- * Each square will store the properties isHole?, isRaised?, and the current piece that is located on it
  */
 public class Square {
+    /**
+     * If the square is a hole.
+     */
     private final boolean isHole;
+    /**
+     * If the square is a raised.
+     */
     private final boolean isRaised;
+    /**
+     * The piece located on the square, nullable.
+     */
     private Piece piece;
-    private final int hashCode;
 
     /**
-     * Creates a piece instance with the given properties
-     * @param isHole - true if the Square contains a Rabbit hole
-     * @param isRaised - true if the Square is raised
-     * @param piece - the Piece that is Currently located on it (Either an instance of Piece enum or null)
+     * The hashcode for the move generated with stringBuilders when the move is initialized.
+     * The hashcode is regenerated when {@code setPiece} or {@code removePiece} is called.
+     */
+    private int hashCode;
+
+    /**
+     * Initialize a new piece with the given properties.
+     *
+     * @param isHole If the square is a rabbit hole
+     * @param isRaised If the square is raised
+     * @param piece The Piece that is located on it, nullable
      */
     public Square(boolean isHole, boolean isRaised, Piece piece) {
         this.isHole = isHole;
         this.isRaised = isRaised;
         this.piece = piece;
+        hashCode = genHashCode();
+    }
 
-        //create Hashcode as Square is used intensively in HashMaps
+    /**
+     * Generated a hashcode for the square.
+     *
+     * @return The new hashcode
+     */
+    private int genHashCode() {
         StringBuilder stringBuilder = new StringBuilder();
         if (isHole) {
             stringBuilder.append(2);
@@ -36,62 +57,70 @@ public class Square {
             stringBuilder.append(2);
             stringBuilder.append(piece.hashCode());
         }
-        hashCode = stringBuilder.toString().hashCode();
+        return stringBuilder.toString().hashCode();
     }
 
     /**
-     * Returns true whether the current square contains a piece
-     * @return true - if current square contains a piece
-     *         false - otherwise
+     * Get if the square contains a piece.
+     *
+     * @return If square contains a piece
      */
     public boolean hasPiece() {
         return piece != null;
     }
 
     /**
-     * Returns the Piece that is currently on this square
-     * @return The piece that is currently on this Square or
-     *         null if there is no piece
+     * Get the Piece that is on the square.
+     *
+     * @return The piece that is on the square or null if there is no piece
      */
     public Piece getPiece() {
         return piece;
     }
 
     /**
-     * Change the piece that is on this Square
-     * @param piece - The piece that is on this square or null if the square is to have no pieces
+     * Change the piece that is on the square and regenerated the hashCode.
+     *
+     * @param piece The new piece
      */
     public void setPiece(Piece piece) {
         this.piece = piece;
+        hashCode = genHashCode();
     }
 
     /**
-     * Removes the piece that is on this square
+     * Removes the piece that is on this square and regenerated the hashCode.
      */
     public void removePiece() {
         this.piece = null;
+        hashCode = genHashCode();
     }
 
     /**
-     * Returns if the current square is raised
-     * @return true - if the current square is raised
-     *         false - otherwise
+     * Get if the square is a raised.
+     * Note: All holes are raised.
+     *
+     * @return If the square is a raised
      */
     boolean isRaised() {
         return isRaised;
     }
 
     /**
-     * Returns if the current square contains a hole
-     * @return true - if the current square contains a hole
-     *         false - otherwise
+     * Get if the square is a hole.
+     * Note: All holes are raised.
+     *
+     * @return If the square is a hole
      */
     boolean isHole() {
         return isHole;
     }
 
     /**
-     * Two squares are equal when they both contain the same square properties (isHole?, isRaised?) and contains the same piece
+     * Two squares are equal when they both contain the same square properties {@code isHole} and {@code isRaised} and contains the same piece.
+     *
+     * @param obj The object to test against
+     * @return If obj is the same as this
      */
     @Override
     public boolean equals(Object obj) {
@@ -105,13 +134,21 @@ public class Square {
         return hasPiece() != square.hasPiece() || isHole() != square.isHole() || isRaised() != square.isRaised() || !hasPiece() || getPiece().equals(square.getPiece());
     }
 
+    /**
+     * Get the hashcode for the square. This hashcode is generated with stringBuilders when the move is initialized. The hashcode is regenerated when {@code setPiece} or {@code removePiece} is called.
+     *
+     * @return The hashcode
+     */
+
     @Override
     public int hashCode() {
         return hashCode;
     }
 
     /**
-     * Returns the String of format "{Square type} {Piece that is on the square}"
+     * Get a string representation of the square. The String is formatted as follows {square type \s Piece that is on the square} e.g. {Hole Rabbit}.
+     *
+     * @return The representative string
      */
     @Override
     public String toString() {
