@@ -1,7 +1,6 @@
 package view;
 
 import controller.Game;
-import model.Board;
 import model.Move;
 import model.UserCommand;
 
@@ -9,6 +8,7 @@ import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.Arrays;
+import java.util.EventObject;
 import java.util.Scanner;
 
 /**
@@ -109,7 +109,7 @@ public class TextView implements Observer {
     }
 
     @Override
-    public void update(Board board) {
-        System.out.println(board.toString());
+    public void update(EventObject eventObject) {
+        System.out.println(eventObject.getSource().toString());
     }
 }

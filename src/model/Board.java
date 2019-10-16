@@ -3,10 +3,7 @@ package model;
 import view.Observer;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 /**
@@ -80,7 +77,9 @@ public class Board implements Observable {
     }
 
     public Board(Board board) {
-        this.board = board.getBoard().entrySet().stream().map(entry -> Map.entry(entry.getKey(), new Square(entry.getValue().isHole(), entry.getValue().isRaised(), entry.getValue().getPiece()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.board = board.getBoard().entrySet().stream()
+                .map(entry -> Map.entry(entry.getKey(), new Square(entry.getValue().isHole(), entry.getValue().isRaised(), entry.getValue().getPiece())))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         this.max = board.getMax();
         this.observer = board.getObserver();
     }
@@ -93,7 +92,7 @@ public class Board implements Observable {
     @Override
     public void notifyObserver() {
         if (this.observer != null){
-            this.observer.update(this);
+            this.observer.update(new EventObject(this));
         }
     }
 
