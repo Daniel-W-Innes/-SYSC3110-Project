@@ -3,13 +3,16 @@ package model;
 import view.Observer;
 
 import java.awt.*;
-import java.util.*;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
  *
  */
-public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
+public class Board implements Observable {
 
     public static class Builder {
         private final Set<Point> hole;
@@ -164,10 +167,5 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
     @Override
     public int hashCode() {
         return getBoard().hashCode();
-    }
-
-    @Override
-    public Iterator<Map.Entry<Point, Square>> iterator() {
-        return board.entrySet().iterator();
     }
 }
