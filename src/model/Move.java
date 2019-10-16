@@ -1,5 +1,6 @@
 package model;
-import java.awt.Point;
+
+import java.awt.*;
 import java.util.Arrays;
 
 /**
@@ -26,7 +27,7 @@ public final class Move {
     }
 
     public boolean isPlusY() {
-        return start.x == end.x && start.y < end.y;
+        return isPlusY(0);
     }
 
     public boolean isPlusY(int offset) {
@@ -34,7 +35,7 @@ public final class Move {
     }
 
     public boolean isPlusX() {
-        return start.y == end.y && start.x < end.x;
+        return isPlusX(0);
     }
 
     public boolean isPlusX(int offset) {
@@ -42,7 +43,7 @@ public final class Move {
     }
 
     public boolean isMinusY() {
-        return start.x == end.x && start.y > end.y;
+        return isMinusY(0);
     }
 
     public boolean isMinusY(int offset) {
@@ -50,7 +51,7 @@ public final class Move {
     }
 
     public boolean isMinusX() {
-        return start.y == end.y && start.x > end.x;
+        return isMinusX(0);
     }
 
     public boolean isMinusX(int offset) {

@@ -21,7 +21,7 @@ public class Square {
         this.isRaised = isRaised;
         this.piece = piece;
 
-        //create Hashcode as Square is used intensively in Hashmaps
+        //create Hashcode as Square is used intensively in HashMaps
         StringBuilder stringBuilder = new StringBuilder();
         if (isHole) {
             stringBuilder.append(2);
