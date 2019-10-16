@@ -3,7 +3,7 @@ package controller;
 import model.Board;
 import model.Move;
 import model.Piece;
-import view.TextView;
+import view.Observer;
 
 import java.awt.*;
 import java.lang.annotation.ElementType;
@@ -15,17 +15,15 @@ import java.util.Map;
 
 public class Game {
     private Board board;
-    private TextView textView;
 
 
-    private void addView(TextView textView) {
-        this.textView = textView;
+    private void addView(Observer observer) {
         if (board != null) {
-            board.setObserver(textView);
+            board.setObserver(observer);
         }
     }
 
-    public void setUp(TextView textView) {
+    public void setUp(Observer observer) {
         board = new Board.Builder()
                 .addHole(new Point(0, 0))
                 .addHole(new Point(4, 4))
@@ -50,18 +48,18 @@ public class Game {
                 .addPieces(new Point(4, 3), Piece.FOX_PLUS_X)
                 .addPieces(new Point(3, 3), Piece.FOX_MINUS_X)
                 .build();
-        addView(textView);
+        addView(observer);
         draw();
     }
 
     @UserCommand(description = "Reset the game board")
     public void reset() {
-        setUp(textView);
+        setUp(board.getObserver());
     }
 
     @UserCommand(description = "Exit the game")
     public void exit() {
-        textView.exit();
+        board.getObserver().exit();
     }
 
     @UserCommand(description = "Move a game piece from one location to another")

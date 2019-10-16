@@ -14,4 +14,6 @@ public interface Observer {
      * @param board - The updated Board Model
      */
     void update(Board board);
+
+    void exit();
 }
