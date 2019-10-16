@@ -3,13 +3,10 @@ package controller;
 import model.Board;
 import model.Move;
 import model.Piece;
+import model.UserCommand;
 import view.Observer;
 
 import java.awt.*;
-import java.lang.annotation.ElementType;
-import java.lang.annotation.Retention;
-import java.lang.annotation.RetentionPolicy;
-import java.lang.annotation.Target;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -77,12 +74,12 @@ public class Game {
         return false;
     }
 
-    @UserCommand(description = "redraw the game board")
+    @UserCommand(description = "Redraw the game board")
     public void draw() {
         board.notifyObserver();
     }
 
-    @UserCommand(description = "draw all possible move for a piece")
+    @UserCommand(description = "Draw all possible move for a piece")
     public void getMoves(Point point) {
         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
             Map<Move, Board> moves = new HashMap<>();
@@ -94,9 +91,5 @@ public class Game {
         }
     }
 
-    @Retention(RetentionPolicy.RUNTIME)
-    @Target(ElementType.METHOD)
-    public @interface UserCommand {
-        String description();
-    }
+
 }

@@ -3,6 +3,7 @@ package view;
 import controller.Game;
 import model.Board;
 import model.Move;
+import model.UserCommand;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
@@ -44,7 +45,7 @@ public class TextView implements Observer {
     private void run() {
         Scanner in = new Scanner(System.in);
         Method[] userCommands = Arrays.stream(game.getClass().getMethods())
-                .filter(method -> method.getAnnotation(Game.UserCommand.class) != null)
+                .filter(method -> method.getAnnotation(UserCommand.class) != null)
                 .toArray(Method[]::new);
         c = true;
 
@@ -85,14 +86,14 @@ public class TextView implements Observer {
             if (inputStrings[0].equals("help")) {
                 if (inputStrings.length == 1) {
                     for (Method method : userCommands) {
-                        System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
+                        System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(UserCommand.class).description());
                     }
                     continue;
                 } else {
                     for (Method method : userCommands) {
                         for (String inputString : Arrays.copyOfRange(inputStrings, 1, inputStrings.length)) {
                             if (method.getName().toLowerCase().equals(inputString)) {
-                                System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(Game.UserCommand.class).description());
+                                System.out.printf("%s: %s\n", method.getName().toLowerCase(), method.getAnnotation(UserCommand.class).description());
                             }
                         }
                     }
