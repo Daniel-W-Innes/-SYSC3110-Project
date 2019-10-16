@@ -10,6 +10,8 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.HashMap;
+import java.util.Map;
 
 public class Game {
     private Board board;
@@ -66,13 +68,12 @@ public class Game {
     public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
             switch (board.getSquare(move.getStartPoint()).getPiece()) {
-                case RABBIT:
+                case RABBIT -> {
                     return Rabbits.checkAndMove(board, move);
-                case FOX_PLUS_X:
-                case FOX_PLUS_Y:
-                case FOX_MINUS_X:
-                case FOX_MINUS_Y:
+                }
+                case FOX_PLUS_X, FOX_PLUS_Y, FOX_MINUS_X, FOX_MINUS_Y -> {
                     return Foxes.checkAndMove(board, move);
+                }
             }
         }
         return false;
@@ -81,6 +82,18 @@ public class Game {
     @UserCommand(description = "redraw the game board")
     public void draw() {
         board.notifyObserver();
+    }
+
+    @UserCommand(description = "draw all possible move for a piece")
+    public void getMoves(Point point) {
+        if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
+            Map<Move, Board> moves = new HashMap<>();
+            switch (board.getSquare(point).getPiece()) {
+                case RABBIT -> moves = Rabbits.getMoves(board, point);
+                case FOX_PLUS_X, FOX_PLUS_Y, FOX_MINUS_X, FOX_MINUS_Y -> moves = Foxes.getMoves(board, point);
+            }
+            moves.values().forEach(Board::notifyObserver);
+        }
     }
 
     @Retention(RetentionPolicy.RUNTIME)

@@ -4,6 +4,7 @@ import view.Observer;
 
 import java.awt.*;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  *
@@ -75,6 +76,12 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
         this.max = max;
     }
 
+    public Board(Board board) {
+        this.board = board.getBoard().entrySet().stream().map(entry -> Map.entry(entry.getKey(), new Square(entry.getValue().isHole(), entry.getValue().isRaised(), entry.getValue().getPiece()))).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
+        this.max = board.getMax();
+        this.observer = board.getObserver();
+    }
+
     @Override
     public void setObserver(Observer observer) {
         this.observer = observer;
@@ -85,6 +92,11 @@ public class Board implements Iterable<Map.Entry<Point, Square>>, Observable{
         if (this.observer != null){
             this.observer.update(this);
         }
+    }
+
+    @Override
+    public Observer getObserver() {
+        return observer;
     }
 
     public Square getSquare(Point loc) {

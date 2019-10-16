@@ -5,6 +5,8 @@ import model.Move;
 import model.Square;
 
 import java.awt.*;
+import java.util.HashMap;
+import java.util.Map;
 
 class Foxes {
     private static void move(Board board, Move move) {
@@ -126,5 +128,72 @@ class Foxes {
                 }
         }
         return false;
+    }
+
+    static Map<Move, Board> getMoves(Board board, Point start) {
+        boolean c = true;
+        Map<Move, Board> moves = new HashMap<>();
+        Board newBoard;
+        Move move;
+        Point point = new Point(start);
+        switch (board.getSquare(start).getPiece()) {
+            case FOX_PLUS_Y -> {
+                while (c) {
+                    if (!start.equals(point)) {
+                        newBoard = new Board(board);
+                        move = new Move(start, point);
+                        move(newBoard, move);
+                        move(newBoard, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
+                        moves.put(move, newBoard);
+                    }
+                    point = new Point(point.x, point.y + 1);
+                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y > board.getMax().y);
+                }
+                return moves;
+            }
+            case FOX_MINUS_Y -> {
+                while (c) {
+                    if (!start.equals(point)) {
+                        newBoard = new Board(board);
+                        move = new Move(start, point);
+                        move(newBoard, move);
+                        move(newBoard, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
+                        moves.put(move, newBoard);
+                    }
+                    point = new Point(point.x, point.y - 1);
+                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y < 0);
+                }
+                return moves;
+            }
+            case FOX_PLUS_X -> {
+                while (c) {
+                    if (!start.equals(point)) {
+                        newBoard = new Board(board);
+                        move = new Move(start, point);
+                        move(newBoard, move);
+                        move(newBoard, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
+                        moves.put(move, newBoard);
+                    }
+                    point = new Point(point.x + 1, point.y);
+                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x > board.getMax().x);
+                }
+                return moves;
+            }
+            case FOX_MINUS_X -> {
+                while (c) {
+                    if (!start.equals(point)) {
+                        newBoard = new Board(board);
+                        move = new Move(start, point);
+                        move(newBoard, move);
+                        move(newBoard, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
+                        moves.put(move, newBoard);
+                    }
+                    point = new Point(point.x - 1, point.y);
+                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x < 0);
+                }
+                return moves;
+            }
+        }
+        return moves;
     }
 }

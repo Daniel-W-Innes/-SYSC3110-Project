@@ -65,6 +65,12 @@ public class TextView implements Observer {
                                 System.out.println("Bad move");
                             }
                             continue mainLoop;
+                        } else if (method.getParameters().length == 1
+                                && method.getParameters()[0].getType().equals(Point.class)
+                                && method.getReturnType().equals(void.class)
+                                && inputStrings.length == 3) {
+                            method.invoke(game, new Point(Integer.parseInt(inputStrings[1]), Integer.parseInt(inputStrings[2])));
+                            continue mainLoop;
                         } else if (method.getParameters().length == 0
                                 && method.getReturnType().equals(void.class)
                                 && inputStrings.length == 1) {
@@ -99,6 +105,6 @@ public class TextView implements Observer {
 
     @Override
     public void update(Board board) {
-        System.out.print(board.toString());
+        System.out.println(board.toString());
     }
 }

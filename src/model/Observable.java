@@ -20,4 +20,6 @@ interface Observable {
      * This should only be called after changing the data in this Observable Object
      */
     void notifyObserver();
+
+    Observer getObserver();
 }
