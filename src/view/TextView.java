@@ -17,7 +17,7 @@ import java.util.Scanner;
  */
 public class TextView implements Observer {
     private final Game game;
-    private boolean c;
+    private boolean keepSuffering;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -39,7 +39,7 @@ public class TextView implements Observer {
     }
 
     public void exit() {
-        c = false;
+        keepSuffering = false;
     }
 
     private void run() {
@@ -47,13 +47,13 @@ public class TextView implements Observer {
         Method[] userCommands = Arrays.stream(game.getClass().getMethods())
                 .filter(method -> method.getAnnotation(UserCommand.class) != null)
                 .toArray(Method[]::new);
-        c = true;
+        keepSuffering = true;
 
         mainLoop:
-        while (c) {
+        while (keepSuffering) {
             if (game.isVictory()) {
                 System.out.println("YOU WON");
-                c = false;
+                keepSuffering = false;
             }
             String[] inputStrings = Arrays.stream(in.nextLine().split("[\\s{},]"))
                     .filter(x -> !x.equals(""))
