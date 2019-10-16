@@ -133,6 +133,14 @@ public class Board implements Observable {
         return max;
     }
 
+
+    public boolean isVictory() {
+        return board.values().parallelStream()
+                .filter(Square::hasPiece)
+                .filter(square -> square.getPiece().equals(Piece.RABBIT))
+                .allMatch(Square::isHole);
+    }
+
     /**
      * Returns a toString of all the squares in the board separated by a "|"
      */

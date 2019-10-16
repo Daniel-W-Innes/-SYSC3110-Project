@@ -51,6 +51,10 @@ public class TextView implements Observer {
 
         mainLoop:
         while (c) {
+            if (game.isVictory()) {
+                System.out.println("YOU WON");
+                c = false;
+            }
             String[] inputStrings = Arrays.stream(in.nextLine().split("[\\s{},]"))
                     .filter(x -> !x.equals(""))
                     .map(String::toLowerCase)

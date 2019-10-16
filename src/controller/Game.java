@@ -91,5 +91,8 @@ public class Game {
         }
     }
 
+    public boolean isVictory() {
+        return board.isVictory();
+    }
 
 }
