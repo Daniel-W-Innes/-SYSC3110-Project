@@ -15,18 +15,6 @@ public class Board implements Observable {
      * The Board map containing all squares.
      */
     private final Map<Point, Square> board;
-
-    /**
-     * Initialize from the builder.
-     *
-     * @param board The board map
-     * @param max   The Max Point located on the board
-     */
-    private Board(Map<Point, Square> board, Point max) {
-        this.board = new HashMap<>(board);
-        this.max = max;
-    }
-
     private final Point max;
     private Observer observer;
 
@@ -42,6 +30,18 @@ public class Board implements Observable {
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         this.max = board.getMax();
         this.observer = board.getObserver();
+    }
+
+    /**
+     * Initialize from the builder.
+     *
+     * @param board The board map
+     * @param max   The Max Point located on the board
+     */
+
+    private Board(Map<Point, Square> board, Point max) {
+        this.board = new HashMap<>(board);
+        this.max = max;
     }
 
     /**
@@ -146,7 +146,7 @@ public class Board implements Observable {
             for (int y = 0; y <= max.y; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
-                stringBuilder.append(String.format("%1$" + 17 + "s", hasSquare(point) ? getSquare(point).toString() : "Empty"));
+                stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "__");
             }
             stringBuilder.append('|');
             stringBuilder.append("\n");

@@ -153,21 +153,18 @@ public class Square {
     @Override
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append('{');
         if (isHole) {
-            stringBuilder.append("Hole");
+            stringBuilder.append("H");
         } else if (isRaised) {
-            stringBuilder.append("Raised");
+            stringBuilder.append("R");
         } else {
-            stringBuilder.append("Normal");
+            stringBuilder.append("_");
         }
-        stringBuilder.append(' ');
         if (hasPiece()) {
             stringBuilder.append(piece.toString());
         } else {
-            stringBuilder.append("Empty");
+            stringBuilder.append("_");
         }
-        stringBuilder.append('}');
         return stringBuilder.toString();
     }
 }

@@ -10,7 +10,7 @@ public enum Piece {
     MUSHROOM {
         @Override
         public String toString() {
-            return "Mushroom";
+            return "\uD83C\uDF44";
         }
     },
     /**
@@ -19,7 +19,7 @@ public enum Piece {
     RABBIT {
         @Override
         public String toString() {
-            return "Rabbit";
+            return "\uD83D\uDC30";
         }
     },
     /**
@@ -28,7 +28,7 @@ public enum Piece {
     FOX_PLUS_X {
         @Override
         public String toString() {
-            return "Fox";
+            return "\uD83E\uDD8A";
         }
     },
     /**
@@ -37,7 +37,7 @@ public enum Piece {
     FOX_MINUS_X {
         @Override
         public String toString() {
-            return "Fox";
+            return "\uD83E\uDD8A";
         }
     },
     /**
@@ -46,7 +46,7 @@ public enum Piece {
     FOX_PLUS_Y {
         @Override
         public String toString() {
-            return "Fox";
+            return "\uD83E\uDD8A";
         }
     },
     /**
@@ -55,7 +55,7 @@ public enum Piece {
     FOX_MINUS_Y {
         @Override
         public String toString() {
-            return "Fox";
+            return "\uD83E\uDD8A";
         }
     },
 }
