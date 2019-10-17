@@ -43,8 +43,8 @@ class Foxes {
                             return false;
                         }
                     }
-                    move(board, move);
                     move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
+                    move(board, move);
                     board.notifyObserver();
                     return true;
                 }
@@ -57,8 +57,8 @@ class Foxes {
                             return false;
                         }
                     }
-                    move(board, move);
                     move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
+                    move(board, move);
                     board.notifyObserver();
                     return true;
                 } else if (move.isMinusY()) {
@@ -95,8 +95,8 @@ class Foxes {
                             return false;
                         }
                     }
-                    move(board, move);
                     move(board, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
+                    move(board, move);
                     board.notifyObserver();
                     return true;
                 }
@@ -109,8 +109,8 @@ class Foxes {
                             return false;
                         }
                     }
-                    move(board, move);
                     move(board, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
+                    move(board, move);
                     board.notifyObserver();
                     return true;
                 } else if (move.isMinusX()) {
