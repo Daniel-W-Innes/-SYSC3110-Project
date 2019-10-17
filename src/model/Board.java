@@ -156,7 +156,7 @@ public class Board implements Observable {
 
 
     public boolean isVictory() {
-        return board.values().parallelStream()
+        return board.values().stream()
                 .filter(Square::hasPiece)
                 .filter(square -> square.getPiece().equals(Piece.RABBIT))
                 .allMatch(Square::isHole);
