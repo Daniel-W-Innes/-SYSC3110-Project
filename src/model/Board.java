@@ -236,21 +236,27 @@ public class Board implements Observable {
         public Board build() {
             Map<Point, Square> board = new HashMap<>();
             Point max = new Point(0, 0);
-            pieces.entrySet().removeIf(entry ->
-                    (entry.getValue().equals(Piece.FOX_MINUS_X) ||
-                            entry.getValue().equals(Piece.FOX_MINUS_Y) ||
-                            entry.getValue().equals(Piece.FOX_PLUS_X) ||
-                            entry.getValue().equals(Piece.FOX_PLUS_Y)) && (
-                            hole.contains(entry.getKey()) ||
-                                    raisedSquares.contains(entry.getKey()) || (
-                                    (entry.getValue() == Piece.FOX_MINUS_X && (hole.contains(new Point(entry.getKey().x + 1, entry.getKey().y)) || raisedSquares.contains(new Point(entry.getKey().x + 1, entry.getKey().y))) ||
-                                            (entry.getValue() == Piece.FOX_MINUS_Y && (hole.contains(new Point(entry.getKey().x, entry.getKey().y + 1)) || raisedSquares.contains(new Point(entry.getKey().x, entry.getKey().y + 1)))) ||
-                                            (entry.getValue() == Piece.FOX_PLUS_X && (hole.contains(new Point(entry.getKey().x - 1, entry.getKey().y)) || raisedSquares.contains(new Point(entry.getKey().x - 1, entry.getKey().y)))) ||
-                                            (entry.getValue() == Piece.FOX_PLUS_Y && (hole.contains(new Point(entry.getKey().x, entry.getKey().y - 1)) || raisedSquares.contains(new Point(entry.getKey().x, entry.getKey().y - 1))))
-                                    ))
-                    )
-            );
             Set<Point> badFoxLocs = new HashSet<>();
+            pieces.entrySet().stream()
+                    .filter(entry -> {
+                        switch (entry.getValue()) {
+                            case FOX_MINUS_X -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x + 1, entry.getKey().y));
+                            }
+                            case FOX_MINUS_Y -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y + 1));
+                            }
+                            case FOX_PLUS_X -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x - 1, entry.getKey().y));
+                            }
+                            case FOX_PLUS_Y -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y - 1));
+                            }
+                            default -> {
+                                return false;
+                            }
+                        }
+                    }).forEach(entry -> badFoxLocs.add(entry.getKey()));
             pieces.entrySet().stream()
                     .filter(entry -> entry.getValue().equals(Piece.FOX_MINUS_X) ||
                             entry.getValue().equals(Piece.FOX_MINUS_Y) ||
