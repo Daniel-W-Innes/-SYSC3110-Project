@@ -7,7 +7,8 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 /**
- *
+ * A class representing the state of the Board.
+ * The board is the only class observed by a view.
  */
 public class Board implements Observable {
 
@@ -192,9 +193,18 @@ public class Board implements Observable {
         return getBoard().hashCode();
     }
 
+    /**
+     * A class used to build a board using the Builder design pattern.
+     */
     public static class Builder {
+
+        /** A set of Points that contain a hole */
         private final Set<Point> hole;
+
+        /** A set of Points that contain a raised square */
         private final Set<Point> raisedSquares;
+
+        /** A set of Points that contain a piece */
         private final Map<Point, Piece> pieces;
 
         public Builder(boolean useDefaultMap) {
@@ -209,22 +219,44 @@ public class Board implements Observable {
             }
         }
 
+        /**
+         * Adds a hole at the given location
+         * @param loc a location (Point)
+         * @return this builder instance
+         */
         public Builder addHole(Point loc) {
             hole.add(loc);
             return this;
         }
 
+        /**
+         * Adds a raised square at the given location
+         * @param loc a location (Point)
+         * @return this builder instance
+         */
         public Builder addRaisedSquare(Point loc) {
             raisedSquares.add(loc);
             return this;
         }
 
+        /**
+         * Adds a Piece at the given location
+         * @param loc a location (Point)
+         * @param piece the piece to add
+         * @return this builder instance
+         */
         public Builder addPieces(Point loc, Piece piece) {
             pieces.put(loc, piece);
             return this;
         }
 
-        private void updateMax(java.awt.Point max, Point point) {
+        /**
+         * Ensures that the max.x > point.x and max.y > point.y and changes max to according to make the conditions true.
+         * This is called to determine the larges x, y coordinate of the board
+         * @param max the max point of the board
+         * @param point the point to encompass in max
+         */
+        private void updateMax(Point max, Point point) {
             if (point.x > max.x) {
                 max.x = point.x;
             }
@@ -233,6 +265,10 @@ public class Board implements Observable {
             }
         }
 
+        /**
+         *
+         * @return
+         */
         public Board build() {
             Map<Point, Square> board = new HashMap<>();
             Point max = new Point(0, 0);
