@@ -15,6 +15,4 @@ public interface Observer {
      * @param eventObject The a event from the Board Model
      */
     void update(EventObject eventObject);
-
-    void exit();
 }

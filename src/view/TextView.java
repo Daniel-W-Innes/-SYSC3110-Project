@@ -38,20 +38,15 @@ public class TextView implements Observer {
         textView.run();
     }
 
-    public void exit() {
-        keepSuffering = false;
-    }
-
     private void run() {
         Scanner in = new Scanner(System.in);
         //Get all methods in game with the annotation UserCommand.
         Method[] userCommands = Arrays.stream(game.getClass().getMethods())
                 .filter(method -> method.getAnnotation(UserCommand.class) != null)
                 .toArray(Method[]::new);
-        keepSuffering = true;
 
         mainLoop:
-        while (keepSuffering) {
+        while (true) {
             //Check if the game is over
             if (game.isVictory()) {
                 System.out.println("YOU WON");

@@ -10,16 +10,26 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * The main controller of the program.
+ * Each of the functions in the game function similar to a "in game command"
+ */
 public class Game {
+    /**
+     * A reference to the board modal
+     */
     private Board board;
+
+    /**
+     * The level number of the game
+     */
     private int levelNumber;
 
-    private void addView(Observer observer) {
-        if (board != null) {
-            board.setObserver(observer);
-        }
-    }
-
+    /**
+     * Sets up the board with the given observer, and level
+     * @param observer a view
+     * @param levelNumber an int between 1 to 6
+     */
     public void setUp(Observer observer, int levelNumber) {
         this.levelNumber = levelNumber;
         switch (levelNumber) {
@@ -82,25 +92,40 @@ public class Game {
             default -> board = new Board.Builder(true)
                     .build();
         }
-        addView(observer);
+        board.setObserver(observer);
         draw();
     }
 
+    /**
+     * Resets the game board
+     */
     @UserCommand(description = "Reset the game board")
     public void reset() {
         setUp(board.getObserver(), levelNumber);
     }
 
+    /**
+     * Changes the level number and resets the game board
+     * @param levelNumber - the level number
+     */
     @UserCommand(description = "Change the game level")
     public void changeLevel(int levelNumber) {
         setUp(board.getObserver(), levelNumber);
     }
 
+    /**
+     * Exits the game
+     */
     @UserCommand(description = "Exit the game")
     public void exit() {
-        board.getObserver().exit();
+        System.exit(0);
     }
 
+    /**
+     * Processes the game with the given move. If the move is invalid, the method will do nothing and return false.
+     * @param move move to process
+     * @return true if the move is valid
+     */
     @UserCommand(description = "Move a game piece from one location to another")
     public boolean move(Move move) {
         if (board.hasSquare(move.getStartPoint()) && board.getSquare(move.getStartPoint()).hasPiece()) {
@@ -116,11 +141,18 @@ public class Game {
         return false;
     }
 
+    /**
+     * Re-updates the view through board.notifyObserver()
+     */
     @UserCommand(description = "Redraw the game board")
     public void draw() {
         board.notifyObserver();
     }
 
+    /**
+     * Draws all possible moves for a given piece at a given point
+     * @param point the location of the piece
+     */
     @UserCommand(description = "Draw all possible move for a piece")
     public void getMoves(Point point) {
         if (board.hasSquare(point) && board.getSquare(point).hasPiece()) {
@@ -133,6 +165,10 @@ public class Game {
         }
     }
 
+    /**
+     * Returns if the user has won
+     * @return true if the user has won
+     */
     public boolean isVictory() {
         return board.isVictory();
     }
