@@ -11,7 +11,7 @@ Design Decisions with Rationale
 ## Introduction
 The design of the program revolves around the MVC pattern. The MVC design used resembles an archery target, in the following sense.
  
-![Image](C:\Users\BinyBrion\Pictures\MVC.png "ICON")
+![alt text](https://github.com/Daniel-W-Innes/SYSC3110-Project/blob/Milestone1/docs/MVC.PNG)
 
 
 With the design above, the link between the View and the Model is through the controller; the two never directly modify one another. This allows clear separation of the parts of the program that:
