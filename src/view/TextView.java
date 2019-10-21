@@ -53,6 +53,7 @@ public class TextView implements Observer {
                 System.out.println("YOU WON");
                 break;
             }
+            System.out.println("Input a command: ");
             /*wait for user input then parse with the folding steps:
                 1. Convert the input string to lowercase letters.
                 2. Split the input string in to a array of string by all whitespace character, called braces, and commas.
