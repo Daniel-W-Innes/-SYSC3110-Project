@@ -1,6 +1,4 @@
-package model;
-
-import view.Observer;
+package helpers;
 
 /**
  * The Observable interface of the observer pattern (which is normally implemented by a Model).
@@ -8,7 +6,7 @@ import view.Observer;
  * This is because this project is small and does not require multiple observers.
  * @author frank liu
  */
-interface Observable {
+public interface Observable {
 
     /**
      * Notify the Observer of this Observable Object.

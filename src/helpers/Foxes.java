@@ -1,14 +1,12 @@
-package controller;
+package helpers;
 
 import model.Board;
-import model.Move;
-import model.Square;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-class Foxes {
+public class Foxes {
     /**
      * Move a fox.
      *
@@ -32,7 +30,7 @@ class Foxes {
      * @param move  The move to check
      * @return If the move was executed
      */
-    static boolean checkAndMove(Board board, Move move) {
+    public static boolean checkAndMove(Board board, Move move) {
         Point point;
         switch (board.getSquare(move.getStartPoint()).getPiece()) {
             case FOX_PLUS_Y:
@@ -150,7 +148,7 @@ class Foxes {
      * @param start The location of the fox
      * @return The possible moves
      */
-    static Map<Move, Board> getMoves(Board board, Point start) {
+    public static Map<Move, Board> getMoves(Board board, Point start) {
         boolean c = true;
         Map<Move, Board> moves = new HashMap<>();
         Board newBoard;

@@ -1,4 +1,4 @@
-package model;
+package helpers;
 
 /**
  * The Square class represents one square in the Board.
@@ -92,7 +92,7 @@ public class Square {
     /**
      * Removes the piece that is on this square and regenerated the hashCode.
      */
-    public void removePiece() {
+    void removePiece() {
         this.piece = null;
         hashCode = genHashCode();
     }
@@ -103,7 +103,7 @@ public class Square {
      *
      * @return If the square is a raised
      */
-    boolean isRaised() {
+    public boolean isRaised() {
         return isRaised;
     }
 
@@ -113,7 +113,7 @@ public class Square {
      *
      * @return If the square is a hole
      */
-    boolean isHole() {
+    public boolean isHole() {
         return isHole;
     }
 

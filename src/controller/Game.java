@@ -1,10 +1,7 @@
 package controller;
 
+import helpers.*;
 import model.Board;
-import model.Move;
-import model.Piece;
-import model.UserCommand;
-import view.Observer;
 
 import java.awt.*;
 import java.util.HashMap;

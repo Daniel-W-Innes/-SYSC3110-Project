@@ -1,4 +1,4 @@
-package model;
+package helpers;
 
 /**
  * A enum Representing the various types of Pieces.

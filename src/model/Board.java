@@ -1,6 +1,8 @@
 package model;
 
-import view.Observer;
+import helpers.Observer;
+import helpers.Piece;
+import helpers.Square;
 
 import java.awt.*;
 import java.util.*;
@@ -11,7 +13,7 @@ import java.util.stream.Collectors;
  * The board is the only class observed by a view.
  * @author frank liu, daniel innes
  */
-public class Board implements Observable {
+public class Board implements helpers.Observable {
 
     /**
      * The Board map containing all squares.
@@ -258,7 +260,7 @@ public class Board implements Observable {
         }
 
         /**
-         * Ensures that the max.x > point.x and max.y > point.y and changes max to according to make the conditions true.
+         * Ensures that the max.x is less then point.x and max.y is less then point.y and changes max to according to make the conditions true.
          * This is called to determine the larges x, y coordinate of the board
          * @param max the max point of the board
          * @param point the point to encompass in max

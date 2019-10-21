@@ -1,16 +1,13 @@
-package controller;
+package helpers;
 
 import model.Board;
-import model.Move;
-import model.Piece;
-import model.Square;
 
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
 
-class Rabbits {
+public class Rabbits {
     /**
      * Move a rabbit.
      *
@@ -35,7 +32,7 @@ class Rabbits {
      * @param move  The move to check
      * @return If the move was executed
      */
-    static boolean checkAndMove(Board board, Move move) {
+    public static boolean checkAndMove(Board board, Move move) {
         Point point;
         if (move.isMinusY(1)) {
             for (int y = move.getEndPoint().y + 1; y <= move.getStartPoint().y - 1; y++) {
@@ -88,7 +85,7 @@ class Rabbits {
      * @param start The location of the rabbit
      * @return The possible moves
      */
-    static Map<Move, Board> getMoves(Board board, Point start) {
+    public static Map<Move, Board> getMoves(Board board, Point start) {
         boolean c = true;
         Map<Move, Board> moves = new HashMap<>();
         Board newBoard;

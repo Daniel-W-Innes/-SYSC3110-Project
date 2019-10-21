@@ -1,4 +1,4 @@
-package model;
+package helpers;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -49,7 +49,7 @@ public final class Move {
      * @return the end point
      */
 
-    public Point getEndPoint(){
+    Point getEndPoint() {
         return end;
     }
 
@@ -59,7 +59,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isPlusY() {
+    boolean isPlusY() {
         return isPlusY(0);
     }
 
@@ -70,7 +70,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isPlusY(int offset) {
+    boolean isPlusY(int offset) {
         return start.x == end.x && start.y < end.y + offset;
     }
 
@@ -80,7 +80,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isPlusX() {
+    boolean isPlusX() {
         return isPlusX(0);
     }
 
@@ -91,7 +91,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isPlusX(int offset) {
+    boolean isPlusX(int offset) {
         return start.y == end.y && start.x < end.x + offset;
     }
 
@@ -102,7 +102,7 @@ public final class Move {
      */
 
 
-    public boolean isMinusY() {
+    boolean isMinusY() {
         return isMinusY(0);
     }
 
@@ -113,7 +113,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isMinusY(int offset) {
+    boolean isMinusY(int offset) {
         return start.x == end.x && start.y > end.y + offset;
     }
 
@@ -124,7 +124,7 @@ public final class Move {
      */
 
 
-    public boolean isMinusX() {
+    boolean isMinusX() {
         return isMinusX(0);
     }
 
@@ -135,7 +135,7 @@ public final class Move {
      * @return If the move satisfies the conditions
      */
 
-    public boolean isMinusX(int offset) {
+    boolean isMinusX(int offset) {
         return start.y == end.y && start.x > end.x + offset;
     }
 

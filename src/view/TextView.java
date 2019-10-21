@@ -1,8 +1,9 @@
 package view;
 
 import controller.Game;
-import model.Move;
-import model.UserCommand;
+import helpers.Move;
+import helpers.Observer;
+import helpers.UserCommand;
 
 import java.awt.*;
 import java.lang.reflect.InvocationTargetException;
