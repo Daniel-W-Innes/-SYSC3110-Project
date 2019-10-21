@@ -47,7 +47,7 @@ Game:
 The Game class is the interface connecting the TextView to the Board class. It takes in the result of user input and calls the correct game logic to advance the game. For example, determining if the user is moving a Rabbit to a different location. It also services the entire game by providing critical functionality such as creating the initial board.
 There is additional functionality not yet implemented, but will be in future milestones: move, undo, serialize, and possibly others. 
 
-**_View_**
+**_View(s)_**
 
 ---
 
@@ -59,7 +59,7 @@ Within this class is an infinite game loop that constantly takes in user input, 
 
 Each possible game command is a function in the Game class. By marking each function there with the UserCommand annotation, that command is automatically added to the list of available commands. This allows the “Help” command to have loose coupling with the list of available command as that list is not hard coded.
 
-**_Helper_**
+**_Helper(s)_**
 
 ---
 
