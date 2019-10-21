@@ -1,10 +1,10 @@
 typeSearchIndex = [{"l": "All Classes", "url": "allclasses-index.html"}, {"p": "model", "l": "Board"}, {
     "p": "model",
     "l": "Board.Builder"
-}, {"p": "controller", "l": "Foxes"}, {"p": "controller", "l": "Game"}, {"p": "model", "l": "Move"}, {
-    "p": "model",
+}, {"p": "helpers", "l": "Foxes"}, {"p": "controller", "l": "Game"}, {"p": "helpers", "l": "Move"}, {
+    "p": "helpers",
     "l": "Observable"
-}, {"p": "view", "l": "Observer"}, {"p": "model", "l": "Piece"}, {"p": "controller", "l": "Rabbits"}, {
-    "p": "model",
+}, {"p": "helpers", "l": "Observer"}, {"p": "helpers", "l": "Piece"}, {"p": "helpers", "l": "Rabbits"}, {
+    "p": "helpers",
     "l": "Square"
-}, {"p": "view", "l": "TextView"}, {"p": "model", "l": "UserCommand"}];
+}, {"p": "view", "l": "TextView"}, {"p": "helpers", "l": "UserCommand"}];
