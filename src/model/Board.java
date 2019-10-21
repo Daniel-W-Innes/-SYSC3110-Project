@@ -157,6 +157,12 @@ public class Board implements Observable {
     }
 
 
+    /**
+     * Check if all rabbit are in holes.
+     *
+     * @return If the board is victory
+     */
+    //Check if there are any rabbit
     public boolean isVictory() {
         return board.values().stream()
                 .filter(Square::hasPiece)
@@ -267,13 +273,16 @@ public class Board implements Observable {
         }
 
         /**
+         * Check if the foxes are positioned correctly then build a Board from the Builder.
          *
-         * @return
+         * @return The game board.
          */
         public Board build() {
             Map<Point, Square> board = new HashMap<>();
             Point max = new Point(0, 0);
+            //Check if the foxes positions
             Set<Point> badFoxLocs = new HashSet<>();
+            //Check for lone foxes
             pieces.entrySet().stream()
                     .filter(entry -> {
                         switch (entry.getValue()) {
@@ -294,6 +303,7 @@ public class Board implements Observable {
                             }
                         }
                     }).forEach(entry -> badFoxLocs.add(entry.getKey()));
+            //Check for Foxes on raised squares
             pieces.entrySet().stream()
                     .filter(entry -> entry.getValue().equals(Piece.FOX_MINUS_X) ||
                             entry.getValue().equals(Piece.FOX_MINUS_Y) ||
@@ -310,17 +320,21 @@ public class Board implements Observable {
                             case FOX_PLUS_Y -> badFoxLocs.add(new Point(entry.getKey().x, entry.getKey().y - 1));
                         }
                     });
+            //Remove foxes that are not positioned correctly
             badFoxLocs.forEach(pieces::remove);
+            //Add holes to the map
             for (Point point : hole) {
                 board.put(point, new Square(true, true, pieces.get(point)));
                 pieces.remove(point);
                 updateMax(max, point);
             }
+            //Add raised squares to the map
             for (Point point : raisedSquares) {
                 board.put(point, new Square(false, true, pieces.get(point)));
                 pieces.remove(point);
                 updateMax(max, point);
             }
+            //Add pieces to the map
             for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
                 board.put(entry.getKey(), new Square(false, false, entry.getValue()));
                 updateMax(max, entry.getKey());
