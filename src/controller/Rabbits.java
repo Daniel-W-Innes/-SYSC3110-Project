@@ -11,6 +11,12 @@ import java.util.Map;
 
 
 class Rabbits {
+    /**
+     * Move a rabbit.
+     *
+     * @param board The board the rabbit on
+     * @param move  The move to execute
+     */
     private static void move(Board board, Move move) {
         board.getSquare(move.getStartPoint()).removePiece();
         if (board.hasSquare(move.getEndPoint())) {
@@ -21,6 +27,14 @@ class Rabbits {
         board.removeSquareIfEmpty(move.getStartPoint());
     }
 
+
+    /**
+     * Check if a move is valid, if so execute it.
+     *
+     * @param board The board to check against
+     * @param move  The move to check
+     * @return If the move was executed
+     */
     static boolean checkAndMove(Board board, Move move) {
         Point point;
         if (move.isMinusY(1)) {
@@ -67,6 +81,13 @@ class Rabbits {
         return false;
     }
 
+    /**
+     * Get all possible moves for a rabbit.
+     *
+     * @param board The board the rabbit on
+     * @param start The location of the rabbit
+     * @return The possible moves
+     */
     static Map<Move, Board> getMoves(Board board, Point start) {
         boolean c = true;
         Map<Move, Board> moves = new HashMap<>();

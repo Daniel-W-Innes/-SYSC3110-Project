@@ -9,6 +9,12 @@ import java.util.HashMap;
 import java.util.Map;
 
 class Foxes {
+    /**
+     * Move a fox.
+     *
+     * @param board The board the fox on
+     * @param move  The move to execute
+     */
     private static void move(Board board, Move move) {
         if (board.hasSquare(move.getEndPoint())) {
             board.getSquare(move.getEndPoint()).setPiece(board.getSquare(move.getStartPoint()).getPiece());
@@ -19,6 +25,13 @@ class Foxes {
         board.removeSquareIfEmpty(move.getStartPoint());
     }
 
+    /**
+     * Check if a move is valid, if so execute it.
+     *
+     * @param board The board to check against
+     * @param move  The move to check
+     * @return If the move was executed
+     */
     static boolean checkAndMove(Board board, Move move) {
         Point point;
         switch (board.getSquare(move.getStartPoint()).getPiece()) {
@@ -130,6 +143,13 @@ class Foxes {
         return false;
     }
 
+    /**
+     * Get all possible moves for a fox.
+     *
+     * @param board The board the fox on
+     * @param start The location of the fox
+     * @return The possible moves
+     */
     static Map<Move, Board> getMoves(Board board, Point start) {
         boolean c = true;
         Map<Move, Board> moves = new HashMap<>();
