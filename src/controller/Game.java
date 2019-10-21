@@ -27,8 +27,8 @@ public class Game {
 
     /**
      * Sets up the board with the given observer, and level
-     * @param observer a view
-     * @param levelNumber an int between 1 to 6
+     * @param observer A view
+     * @param levelNumber A level number from the book. Note: not all of those are available.
      */
     public void setUp(Observer observer, int levelNumber) {
         this.levelNumber = levelNumber;
