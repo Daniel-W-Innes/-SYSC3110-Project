@@ -10,8 +10,8 @@ public enum Piece {
     MUSHROOM {
         @Override
         public String toString() {
-            return "\uD83C\uDF44";
-        }
+            return "M";
+        }//🍄
     },
     /**
      * The rabbit game piece.
@@ -19,8 +19,8 @@ public enum Piece {
     RABBIT {
         @Override
         public String toString() {
-            return "\uD83D\uDC30";
-        }
+            return "R";
+        }//🐰
     },
     /**
      * A part of the fox facing the plus x direction
@@ -28,8 +28,8 @@ public enum Piece {
     FOX_PLUS_X {
         @Override
         public String toString() {
-            return "\uD83E\uDD8A";
-        }
+            return "F";
+        }//🦊
     },
     /**
      * A part of the fox facing the minus x direction
@@ -37,8 +37,8 @@ public enum Piece {
     FOX_MINUS_X {
         @Override
         public String toString() {
-            return "\uD83E\uDD8A";
-        }
+            return "F";
+        }//🦊
     },
     /**
      * A part of the fox facing the plus y direction
@@ -46,8 +46,8 @@ public enum Piece {
     FOX_PLUS_Y {
         @Override
         public String toString() {
-            return "\uD83E\uDD8A";
-        }
+            return "F";
+        }//🦊
     },
     /**
      * A part of the fox facing the minus y direction
@@ -55,7 +55,7 @@ public enum Piece {
     FOX_MINUS_Y {
         @Override
         public String toString() {
-            return "\uD83E\uDD8A";
-        }
+            return "F";
+        }//🦊
     },
 }
