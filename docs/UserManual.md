@@ -9,7 +9,7 @@ There are three steps to playing the game:
 		 - Suitable JVM implementations can be had from directly from Oracle. However, due to recent changes, an Oracle account is required to obtain a JVM from them. Thus, to obtain a JVM implementation without having to create an account, visit [openjdk](https://adoptopenjdk.net/)
  3.  
 	- Download the JAR file found in this repository.
-	-  Navigate to the downloaded the folder containing the JAR file in the operating system and invoke the following command: java -jar --enable-preview SYSC3110-Project.jar	
+	-  Navigate to the downloaded the folder containing the JAR file in the operating system terminal and invoke the following command: java -jar --enable-preview SYSC3110-Project.jar	
 		- The suitable JVM implementation must be globally defined (i.e. in the PATH variable on Microsoft Windows) in order for the program to automatically launch from the file explorer.
  4. 
 	*  Upon first launching the game, the initial board is presented.
