@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 /**
  * A class representing the state of the Board.
  * The board is the only class observed by a view.
+ * @author frank liu, daniel innes
  */
 public class Board implements Observable {
 

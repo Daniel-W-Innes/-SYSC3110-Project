@@ -6,6 +6,7 @@ import view.Observer;
  * The Observable interface of the observer pattern (which is normally implemented by a Model).
  * Contrary to a normal observer pattern, The Observable object is only observed by one other object (1:1 ratio of Observers and Observables).
  * This is because this project is small and does not require multiple observers.
+ * @author frank liu
  */
 interface Observable {
 
@@ -16,7 +17,7 @@ interface Observable {
     void notifyObserver();
 
     /**
-     * Get Observer attached Observable Object.
+     * Get the Observer attached this Observable Object.
      *
      * @return The Observer
      */

@@ -5,6 +5,7 @@ import java.util.EventObject;
 /**
  * The observer interface following Observer pattern (which is normally implemented by a view).
  * The observer is notified via the method: update(instance of the new updated model).
+ * @author frankliu197
  */
 public interface Observer {
 

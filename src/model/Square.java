@@ -2,6 +2,7 @@ package model;
 
 /**
  * The Square class represents one square in the Board.
+ * @author frank liu
  */
 public class Square {
     /**
