@@ -9,8 +9,9 @@ import java.util.Set;
 
 public class Graph {
     private final Map<Board, Map<Move, Set<Move>>> graph;
+    private final Map<Board, Boolean> isVictories;
 
-    private Graph(Map<Board, Map<Move, Set<Move>>> graph) {
+    private Graph(Map<Board, Map<Move, Set<Move>>> graph, Map<Board, Boolean> isVictories) {
         Map<Board, Map<Move, Set<Move>>> boards = new HashMap<>();
         Map<Move, Set<Move>> moves;
         for (Map.Entry<Board, Map<Move, Set<Move>>> move : graph.entrySet()) {
@@ -21,6 +22,7 @@ public class Graph {
             boards.put(move.getKey(), Collections.unmodifiableMap(moves));
         }
         this.graph = Collections.unmodifiableMap(boards);
+        this.isVictories = Collections.unmodifiableMap(isVictories);
     }
 
     boolean containsMove(Board board, Move move) {
@@ -54,9 +56,11 @@ public class Graph {
 
     public static class Builder {
         private final Map<Board, Map<Move, Set<Move>>> graph;
+        private final Map<Board, Boolean> isVictories;
 
         public Builder() {
             graph = new HashMap<>();
+            isVictories = new HashMap<>();
         }
 
         public Builder addMoves(Board board, Move move, Set<Move> moves) {
@@ -67,8 +71,13 @@ public class Graph {
             return this;
         }
 
+        public Builder addIsVictory(Board board, boolean isVictory) {
+            isVictories.put(board, isVictory);
+            return this;
+        }
+
         public Graph build() {
-            return new Graph(graph);
+            return new Graph(graph, isVictories);
         }
     }
 }

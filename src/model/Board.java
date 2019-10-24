@@ -2,6 +2,7 @@ package model;
 
 import helpers.Move;
 import helpers.Piece;
+import helpers.Rabbit;
 import helpers.Square;
 
 import java.awt.*;
@@ -101,6 +102,12 @@ public class Board {
         }
     }
 
+    public boolean isVictory() {
+        return pieces.entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Rabbit)
+                .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
+    }
+
     public static class Builder {
         private final Set<Point> holes;
         private final Set<Point> raisedSquares;
@@ -146,12 +153,11 @@ public class Board {
             Point max = new Point(0, 0);
             Map<Point, Square> board = new HashMap<>();
             for (Point point : raisedSquares) {
-                board.put(point, new Square(true, true));
+                board.put(point, new Square(false, true));
                 updateMax(max, point);
             }
-
             for (Point point : holes) {
-                board.put(point, new Square(false, true));
+                board.put(point, new Square(true, true));
                 updateMax(max, point);
             }
             pieces.keySet().forEach(point -> updateMax(max, point));

@@ -43,6 +43,7 @@ public class Game {
         for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
             for (Map.Entry<Move, Set<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
                 graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
+                graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
                 newBoard = new Board(board);
                 newBoard.movePieces(moves.getValue());
                 graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toSet()));
