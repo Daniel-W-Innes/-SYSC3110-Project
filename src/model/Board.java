@@ -36,14 +36,9 @@ public class Board {
         return pieces;
     }
 
-    public void movePiece(Move move) {
-        if (pieces.containsKey(move.getStart())) {
-            pieces.put(move.getEnd(), pieces.get(move.getStart()));
-            pieces.remove(move.getStart());
-        } else if (pieces.containsKey(move.getEnd())) {
-            pieces.put(move.getStart(), pieces.get(move.getEnd()));
-            pieces.remove(move.getEnd());
-        }
+    private void movePiece(Move move) {
+        pieces.put(move.getEnd(), pieces.get(move.getStart()));
+        pieces.remove(move.getStart());
     }
 
     public boolean hasPiece(Point point) {
@@ -92,12 +87,18 @@ public class Board {
         return pieces.get(point);
     }
 
-    public boolean hasSquare(Point point) {
+    private boolean hasSquare(Point point) {
         return board.containsKey(point);
     }
 
-    public Square getSquare(Point point) {
+    private Square getSquare(Point point) {
         return board.get(point);
+    }
+
+    public void movePieces(Set<Move> moves) {
+        for (Move move : moves) {
+            movePiece(move);
+        }
     }
 
     public static class Builder {

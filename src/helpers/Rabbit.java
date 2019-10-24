@@ -5,13 +5,13 @@ import model.Board;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Rabbit implements Piece {
     @Override
-    public Map<Move, Board> getMoves(Board board, Point start) {
+    public Map<Move, Set<Move>> getMoves(Board board, Point start) {
         boolean c = true;
-        Map<Move, Board> moves = new HashMap<>();
-        Board newBoard;
+        Map<Move, Set<Move>> moves = new HashMap<>();
         Move move;
         Point point = new Point(start);
         while (c) {
@@ -19,10 +19,8 @@ public class Rabbit implements Piece {
             c = board.hasPiece(point);
         }
         if (point.y <= board.getMax().y && !start.equals(new Point(point.x, point.y - 1))) {
-            newBoard = new Board(board);
             move = new Move(start, point);
-            newBoard.movePiece(move);
-            moves.put(move, newBoard);
+            moves.put(move, Set.of(move));
         }
         point = new Point(start);
         c = true;
@@ -31,10 +29,8 @@ public class Rabbit implements Piece {
             c = board.hasPiece(point);
         }
         if (point.y >= 0 && !start.equals(new Point(point.x, point.y + 1))) {
-            newBoard = new Board(board);
             move = new Move(start, point);
-            newBoard.movePiece(move);
-            moves.put(move, newBoard);
+            moves.put(move, Set.of(move));
         }
         point = new Point(start);
         c = true;
@@ -43,10 +39,8 @@ public class Rabbit implements Piece {
             c = board.hasPiece(point);
         }
         if (point.x <= board.getMax().x && !start.equals(new Point(point.x - 1, point.y))) {
-            newBoard = new Board(board);
             move = new Move(start, point);
-            newBoard.movePiece(move);
-            moves.put(move, newBoard);
+            moves.put(move, Set.of(move));
         }
         point = new Point(start);
         c = true;
@@ -55,10 +49,8 @@ public class Rabbit implements Piece {
             c = board.hasPiece(point);
         }
         if (point.x >= 0 && !start.equals(new Point(point.x + 1, point.y))) {
-            newBoard = new Board(board);
             move = new Move(start, point);
-            newBoard.movePiece(move);
-            moves.put(move, newBoard);
+            moves.put(move, Set.of(move));
         }
         return moves;
     }

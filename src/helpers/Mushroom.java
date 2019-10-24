@@ -5,10 +5,11 @@ import model.Board;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Set;
 
 public class Mushroom implements Piece {
     @Override
-    public Map<Move, Board> getMoves(Board board, Point point) {
+    public Map<Move, Set<Move>> getMoves(Board board, Point point) {
         return new HashMap<>();
     }
 

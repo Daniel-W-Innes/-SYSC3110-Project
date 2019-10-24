@@ -6,20 +6,16 @@ import java.util.Arrays;
 
 public class Level {
     private final Board board;
-    private Node currentNode;
+    private final Graph graph;
 
-    public Level(Node currentNode, Board board) {
-        this.currentNode = currentNode;
+    public Level(Graph graph, Board board) {
+        this.graph = graph;
         this.board = board;
     }
 
     public boolean move(Move key) {
-        if (currentNode.containsMove(key)) {
-            Edge edge = currentNode.getEdge(key);
-            for (Move move : edge.getMoves()) {
-                board.movePiece(move);
-            }
-            currentNode = edge.getNode();
+        if (graph.containsMove(board, key)) {
+            board.movePieces(graph.getMoves(board, key));
             return true;
         } else {
             return false;
@@ -35,16 +31,16 @@ public class Level {
             return false;
         }
         Level level = (Level) obj;
-        return getBoard() == level.getBoard() && getCurrentNode() == level.getCurrentNode();
+        return getBoard() == level.getBoard() && getGraph() == level.getGraph();
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{board.hashCode(), currentNode.hashCode()});
+        return Arrays.hashCode(new int[]{board.hashCode(), graph.hashCode()});
     }
 
-    private Node getCurrentNode() {
-        return currentNode;
+    private Graph getGraph() {
+        return graph;
     }
 
     private Board getBoard() {

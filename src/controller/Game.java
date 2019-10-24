@@ -5,7 +5,10 @@ import model.Board;
 
 import java.awt.*;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 public class Game {
     private final Map<Integer, Level> levels;
@@ -31,26 +34,24 @@ public class Game {
     }
 
     private Level genLevel(Board start) {
-        Map<Board, Node.Builder> boards = new HashMap<>(genLevel(new HashMap<>(), start));
-        return new Level(boards.get(start).build(), start);
+        Graph.Builder graphBuilder = genLevel(new Graph.Builder(), new HashSet<>(), start);
+        return new Level(graphBuilder.build(), start);
     }
 
-    private Map<Board, Node.Builder> genLevel(Map<Board, Node.Builder> boards, Board board) {
+    private Graph.Builder genLevel(Graph.Builder graphBuilder, Set<Board> expanded, Board board) {
+        Board newBoard;
         for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
-            for (Map.Entry<Move, Board> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
-                if (!boards.containsKey(board)) {
-                    boards.put(board, new Node.Builder(board.getPieces().entrySet().stream()
-                            .filter(entry -> entry.getValue() instanceof Rabbit)
-                            .allMatch((entry -> board.hasSquare(entry.getKey()) && board.getSquare(entry.getKey()).isHole()))));
-                }
-                Node.Builder nodeBuilder = boards.containsKey(moves.getValue()) ? boards.get(moves.getValue()) : new Node.Builder(board.getPieces().entrySet().stream().filter(entry -> entry.getValue() instanceof Rabbit).allMatch((entry -> board.hasSquare(entry.getKey()) && board.getSquare(entry.getKey()).isHole())));
-                boards.put(board, boards.get(board).addEdgeBuilder(moves.getKey(), new Edge.Builder(nodeBuilder)));
-                nodeBuilder.addEdgeBuilder(moves.getKey().getReverse(), new Edge.Builder(boards.get(board)));
-                if (!boards.containsKey(moves.getValue())) {
-                    boards.putAll(genLevel(boards, moves.getValue()));
+            for (Map.Entry<Move, Set<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
+                graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
+                newBoard = new Board(board);
+                newBoard.movePieces(moves.getValue());
+                graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toSet()));
+                expanded.add(board);
+                if (!expanded.contains(newBoard)) {
+                    graphBuilder = genLevel(graphBuilder, expanded, newBoard);
                 }
             }
         }
-        return boards;
+        return graphBuilder;
     }
 }
