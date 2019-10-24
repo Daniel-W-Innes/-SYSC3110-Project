@@ -43,7 +43,9 @@ public class Game {
                             .filter(entry -> entry.getValue() instanceof Rabbit)
                             .allMatch((entry -> board.hasSquare(entry.getKey()) && board.getSquare(entry.getKey()).isHole()))));
                 }
-                boards.put(board, boards.get(board).addEdgeBuilder(moves.getKey(), boards.containsKey(moves.getValue()) ? new Edge.Builder(boards.get(moves.getValue())) : new Edge.Builder(new Node.Builder(board.getPieces().entrySet().stream().filter(entry -> entry.getValue() instanceof Rabbit).allMatch((entry -> board.hasSquare(entry.getKey()) && board.getSquare(entry.getKey()).isHole()))))));
+                Node.Builder nodeBuilder = boards.containsKey(moves.getValue()) ? boards.get(moves.getValue()) : new Node.Builder(board.getPieces().entrySet().stream().filter(entry -> entry.getValue() instanceof Rabbit).allMatch((entry -> board.hasSquare(entry.getKey()) && board.getSquare(entry.getKey()).isHole())));
+                boards.put(board, boards.get(board).addEdgeBuilder(moves.getKey(), new Edge.Builder(nodeBuilder)));
+                nodeBuilder.addEdgeBuilder(moves.getKey().getReverse(), new Edge.Builder(boards.get(board)));
                 if (!boards.containsKey(moves.getValue())) {
                     boards.putAll(genLevel(boards, moves.getValue()));
                 }

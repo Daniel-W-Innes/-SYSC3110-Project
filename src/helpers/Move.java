@@ -22,6 +22,10 @@ public class Move {
         return start;
     }
 
+    public Move getReverse() {
+        return new Move(getEnd(), getStart());
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
