@@ -39,7 +39,7 @@ public class Level {
         return Arrays.hashCode(new int[]{board.hashCode(), graph.hashCode()});
     }
 
-    private Graph getGraph() {
+    public Graph getGraph() {
         return graph;
     }
 

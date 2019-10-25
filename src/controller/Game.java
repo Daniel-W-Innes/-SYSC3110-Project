@@ -4,10 +4,8 @@ import helpers.*;
 import model.Board;
 
 import java.awt.*;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -31,6 +29,25 @@ public class Game {
                 .addPieces(new Point(1, 3), new Mushroom())
                 .build()
         ));
+        levels.put(20, genLevel(new Board.Builder(true)
+                .addPieces(new Point(1, 4), new Rabbit())
+                .addPieces(new Point(4, 2), new Rabbit())
+                .addPieces(new Point(3, 0), new Rabbit())
+
+                .addPieces(new Point(2, 4), new Mushroom())
+                .addPieces(new Point(3, 1), new Mushroom())
+
+                .addPieces(new Point(1, 1), new Fox(Direction.PLUS_Y))
+                .addPieces(new Point(1, 0), new Fox(Direction.MINUS_Y))
+                .addPieces(new Point(4, 3), new Fox(Direction.PLUS_X))
+                .addPieces(new Point(3, 3), new Fox(Direction.MINUS_X))
+                .build()
+        ));
+        for (Level level : levels.values()) {
+            for (Board board : level.getGraph().getGraph().keySet()) {
+                System.out.println(board.toString());
+            }
+        }
     }
 
     private Level genLevel(Board start) {
@@ -41,12 +58,12 @@ public class Game {
     private Graph.Builder genLevel(Graph.Builder graphBuilder, Set<Board> expanded, Board board) {
         Board newBoard;
         for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
-            for (Map.Entry<Move, Set<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
+            for (Map.Entry<Move, List<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
                 graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
                 graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
                 newBoard = new Board(board);
                 newBoard.movePieces(moves.getValue());
-                graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toSet()));
+                graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toList()));
                 expanded.add(board);
                 if (!expanded.contains(newBoard)) {
                     graphBuilder = genLevel(graphBuilder, expanded, newBoard);

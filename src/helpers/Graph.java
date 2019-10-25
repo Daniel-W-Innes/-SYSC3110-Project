@@ -4,20 +4,20 @@ import model.Board;
 
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import java.util.Set;
 
 public class Graph {
-    private final Map<Board, Map<Move, Set<Move>>> graph;
+    private final Map<Board, Map<Move, List<Move>>> graph;
     private final Map<Board, Boolean> isVictories;
 
-    private Graph(Map<Board, Map<Move, Set<Move>>> graph, Map<Board, Boolean> isVictories) {
-        Map<Board, Map<Move, Set<Move>>> boards = new HashMap<>();
-        Map<Move, Set<Move>> moves;
-        for (Map.Entry<Board, Map<Move, Set<Move>>> move : graph.entrySet()) {
+    private Graph(Map<Board, Map<Move, List<Move>>> graph, Map<Board, Boolean> isVictories) {
+        Map<Board, Map<Move, List<Move>>> boards = new HashMap<>();
+        Map<Move, List<Move>> moves;
+        for (Map.Entry<Board, Map<Move, List<Move>>> move : graph.entrySet()) {
             moves = new HashMap<>();
-            for (Map.Entry<Move, Set<Move>> entry : move.getValue().entrySet()) {
-                moves.put(entry.getKey(), Collections.unmodifiableSet(entry.getValue()));
+            for (Map.Entry<Move, List<Move>> entry : move.getValue().entrySet()) {
+                moves.put(entry.getKey(), Collections.unmodifiableList(entry.getValue()));
             }
             boards.put(move.getKey(), Collections.unmodifiableMap(moves));
         }
@@ -29,7 +29,7 @@ public class Graph {
         return graph.containsKey(board) && graph.get(board).containsKey(move);
     }
 
-    Set<Move> getMoves(Board board, Move move) {
+    List<Move> getMoves(Board board, Move move) {
         return graph.get(board).get(move);
     }
 
@@ -45,7 +45,7 @@ public class Graph {
         return getGraph().equals(graph.getGraph());
     }
 
-    private Map<Board, Map<Move, Set<Move>>> getGraph() {
+    public Map<Board, Map<Move, List<Move>>> getGraph() {
         return graph;
     }
 
@@ -55,7 +55,7 @@ public class Graph {
     }
 
     public static class Builder {
-        private final Map<Board, Map<Move, Set<Move>>> graph;
+        private final Map<Board, Map<Move, List<Move>>> graph;
         private final Map<Board, Boolean> isVictories;
 
         public Builder() {
@@ -63,7 +63,7 @@ public class Graph {
             isVictories = new HashMap<>();
         }
 
-        public Builder addMoves(Board board, Move move, Set<Move> moves) {
+        public Builder addMoves(Board board, Move move, List<Move> moves) {
             if (!graph.containsKey(board)) {
                 graph.put(board, new HashMap<>());
             }

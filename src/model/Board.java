@@ -6,6 +6,7 @@ import helpers.Rabbit;
 import helpers.Square;
 
 import java.awt.*;
+import java.util.List;
 import java.util.*;
 
 public class Board {
@@ -62,7 +63,7 @@ public class Board {
                 stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
             }
             stringBuilder.append('|');
-            stringBuilder.append("\n");
+//            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }
@@ -96,7 +97,7 @@ public class Board {
         return board.get(point);
     }
 
-    public void movePieces(Set<Move> moves) {
+    public void movePieces(List<Move> moves) {
         for (Move move : moves) {
             movePiece(move);
         }
