@@ -45,6 +45,19 @@ public class Game {
                 .addPieces(new Point(3, 3), new Fox(Direction.MINUS_X))
                 .build()
         ));
+        levels.put(60, genLevel(new Board.Builder(true)
+                .addPieces(new Point(1, 3), new Rabbit())
+                .addPieces(new Point(2, 4), new Rabbit())
+                .addPieces(new Point(4, 3), new Rabbit())
+
+                .addPieces(new Point(0, 3), new Mushroom())
+                .addPieces(new Point(2, 2), new Mushroom())
+                .addPieces(new Point(3, 0), new Mushroom())
+
+                .addPieces(new Point(1, 1), new Fox(Direction.PLUS_Y))
+                .addPieces(new Point(1, 0), new Fox(Direction.MINUS_Y))
+                .build()
+        ));
     }
 
     private Level genLevel(Board start) {

@@ -15,19 +15,18 @@ public class Fox implements Piece {
         this.direction = direction;
     }
 
-
-    private Map<Move, List<Move>> getMovesPlusY(Board board, Point start) {
+    private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {
         Map<Move, List<Move>> moveListMap = new HashMap<>();
         Move move;
         Point point = new Point(start);
         List<Move> moves;
         while (true) {
-            point = new Point(point.x, point.y + 1);
-            if (!board.hasPiece(point) && point.y < board.getMax().y) {
+            point = new Point(point.x + offset.x, point.y + offset.y);
+            if (!board.hasPiece(point) && point.y < board.getMax().y && point.x < board.getMax().x && point.y > 0 && point.x > 0) {
                 moves = new ArrayList<>();
                 move = new Move(start, point);
                 moves.add(move);
-                moves.add(new Move(new Point(start.x, start.y - 1), new Point(point.x, point.y - 1)));
+                moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
                 moveListMap.put(move, moves);
             } else {
                 break;
@@ -36,85 +35,26 @@ public class Fox implements Piece {
         return moveListMap;
     }
 
-    private Map<Move, List<Move>> getMovesPlusX(Board board, Point start) {
-        Map<Move, List<Move>> moveListMap = new HashMap<>();
-        Move move;
-        Point point = new Point(start);
-        List<Move> moves;
-        while (true) {
-            point = new Point(point.x + 1, point.y);
-            if (!board.hasPiece(point) && point.x < board.getMax().x) {
-                moves = new ArrayList<>();
-                move = new Move(start, point);
-                moves.add(move);
-                moves.add(new Move(new Point(start.x - 1, start.y), new Point(point.x - 1, point.y)));
-                moveListMap.put(move, moves);
-            } else {
-                break;
-            }
-        }
-        return moveListMap;
-    }
-
-    private Map<Move, List<Move>> getMovesMinusY(Board board, Point start) {
-        Map<Move, List<Move>> moveListMap = new HashMap<>();
-        Move move;
-        Point point = new Point(start);
-        List<Move> moves;
-        while (true) {
-            point = new Point(point.x, point.y - 1);
-            if (!board.hasPiece(point) && point.y > 0) {
-                moves = new ArrayList<>();
-                move = new Move(start, point);
-                moves.add(move);
-                moves.add(new Move(new Point(start.x, start.y + 1), new Point(point.x, point.y + 1)));
-                moveListMap.put(move, moves);
-            } else {
-                break;
-            }
-        }
-        return moveListMap;
-    }
-
-    private Map<Move, List<Move>> getMovesMinusX(Board board, Point start) {
-        Map<Move, List<Move>> moveListMap = new HashMap<>();
-        Move move;
-        Point point = new Point(start);
-        List<Move> moves;
-        while (true) {
-            point = new Point(point.x - 1, point.y);
-            if (!board.hasPiece(point) && point.x > 0) {
-                moves = new ArrayList<>();
-                move = new Move(start, point);
-                moves.add(move);
-                moves.add(new Move(new Point(start.x + 1, start.y), new Point(point.x + 1, point.y)));
-                moveListMap.put(move, moves);
-            } else {
-                break;
-            }
-        }
-        return moveListMap;
-    }
 
     @Override
     public Map<Move, List<Move>> getMoves(Board board, Point start) {
         Map<Move, List<Move>> moveListMap = new HashMap<>();
         switch (direction) {
             case PLUS_Y -> {
-                moveListMap.putAll(getMovesPlusY(board, start));
-                moveListMap.putAll(getMovesMinusY(board, new Point(start.x, start.y - 1)));
+                moveListMap.putAll(getMoves(board, start, new Point(0, 1)));
+                moveListMap.putAll(getMoves(board, new Point(start.x, start.y - 1), new Point(0, -1)));
             }
             case MINUS_Y -> {
-                moveListMap.putAll(getMovesPlusY(board, new Point(start.x, start.y + 1)));
-                moveListMap.putAll(getMovesMinusY(board, start));
+                moveListMap.putAll(getMoves(board, new Point(start.x, start.y + 1), new Point(0, 1)));
+                moveListMap.putAll(getMoves(board, start, new Point(0, -1)));
             }
             case PLUS_X -> {
-                moveListMap.putAll(getMovesPlusX(board, start));
-                moveListMap.putAll(getMovesMinusX(board, new Point(start.x - 1, start.y)));
+                moveListMap.putAll(getMoves(board, start, new Point(1, 0)));
+                moveListMap.putAll(getMoves(board, new Point(start.x - 1, start.y), new Point(-1, 0)));
             }
             case MINUS_X -> {
-                moveListMap.putAll(getMovesPlusX(board, new Point(start.x + 1, start.y)));
-                moveListMap.putAll(getMovesMinusX(board, start));
+                moveListMap.putAll(getMoves(board, new Point(start.x + 1, start.y), new Point(1, 0)));
+                moveListMap.putAll(getMoves(board, start, new Point(-1, 0)));
             }
         }
         return moveListMap;
