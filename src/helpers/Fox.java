@@ -75,7 +75,7 @@ public class Fox implements Piece {
         return 1;
     }
 
-    private Direction getDirection() {
+    public Direction getDirection() {
         return direction;
     }
 }

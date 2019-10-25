@@ -1,9 +1,6 @@
 package model;
 
-import helpers.Move;
-import helpers.Piece;
-import helpers.Rabbit;
-import helpers.Square;
+import helpers.*;
 
 import java.awt.*;
 import java.util.List;
@@ -161,6 +158,44 @@ public class Board {
                 board.put(point, new Square(true, true));
                 updateMax(max, point);
             }
+            Set<Point> badFoxLocations = new HashSet<>();
+            pieces.entrySet().stream()
+                    .filter(entry -> entry.getValue() instanceof Fox)
+                    .map(entry -> Map.entry(entry.getKey(), (Fox) entry.getValue()))
+                    .filter(entry -> {
+                        switch (entry.getValue().getDirection()) {
+                            case MINUS_X -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x + 1, entry.getKey().y));
+                            }
+                            case MINUS_Y -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y + 1));
+                            }
+                            case PLUS_X -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x - 1, entry.getKey().y));
+                            }
+                            case PLUS_Y -> {
+                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y - 1));
+                            }
+                            default -> {
+                                return false;
+                            }
+                        }
+                    }).forEach(entry -> badFoxLocations.add(entry.getKey()));
+            pieces.entrySet().stream()
+                    .filter(entry -> entry.getValue() instanceof Fox)
+                    .map(entry -> Map.entry(entry.getKey(), (Fox) entry.getValue()))
+                    .filter(entry -> holes.contains(entry.getKey()) ||
+                            raisedSquares.contains(entry.getKey()))
+                    .forEach(entry -> {
+                        badFoxLocations.add(entry.getKey());
+                        switch (entry.getValue().getDirection()) {
+                            case MINUS_X -> badFoxLocations.add(new Point(entry.getKey().x + 1, entry.getKey().y));
+                            case MINUS_Y -> badFoxLocations.add(new Point(entry.getKey().x, entry.getKey().y + 1));
+                            case PLUS_X -> badFoxLocations.add(new Point(entry.getKey().x - 1, entry.getKey().y));
+                            case PLUS_Y -> badFoxLocations.add(new Point(entry.getKey().x, entry.getKey().y - 1));
+                        }
+                    });
+            badFoxLocations.forEach(pieces::remove);
             pieces.keySet().forEach(point -> updateMax(max, point));
             return new Board(board, pieces, max);
         }
