@@ -5,7 +5,9 @@ import model.Board;
 
 import java.awt.*;
 import java.util.List;
+import java.util.Queue;
 import java.util.*;
+import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class Game {
@@ -43,33 +45,30 @@ public class Game {
                 .addPieces(new Point(3, 3), new Fox(Direction.MINUS_X))
                 .build()
         ));
-        for (Level level : levels.values()) {
-            for (Board board : level.getGraph().getGraph().keySet()) {
-                System.out.println(board.toString());
-            }
-        }
     }
 
     private Level genLevel(Board start) {
-        Graph.Builder graphBuilder = genLevel(new Graph.Builder(), new HashSet<>(), start);
-        return new Level(graphBuilder.build(), start);
-    }
-
-    private Graph.Builder genLevel(Graph.Builder graphBuilder, Set<Board> expanded, Board board) {
+        Graph.Builder graphBuilder = new Graph.Builder();
         Board newBoard;
-        for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
-            for (Map.Entry<Move, List<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
-                graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
-                graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
-                newBoard = new Board(board);
-                newBoard.movePieces(moves.getValue());
-                graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toList()));
-                expanded.add(board);
-                if (!expanded.contains(newBoard)) {
-                    graphBuilder = genLevel(graphBuilder, expanded, newBoard);
+        Set<Board> expanded = new HashSet<>();
+        Queue<Board> queue = new ConcurrentLinkedQueue<>();
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            Board board = queue.poll();
+            for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
+                for (Map.Entry<Move, List<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
+                    graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
+                    graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
+                    newBoard = new Board(board);
+                    newBoard.movePieces(moves.getValue());
+                    graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toList()));
+                    expanded.add(board);
+                    if (!expanded.contains(newBoard) && !queue.contains(newBoard)) {
+                        queue.add(newBoard);
+                    }
                 }
             }
         }
-        return graphBuilder;
+        return new Level(graphBuilder.build(), start);
     }
 }
