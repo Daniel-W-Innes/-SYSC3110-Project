@@ -26,11 +26,11 @@ public class Graph {
     }
 
     boolean containsMove(Board board, Move move) {
-        return graph.containsKey(board) && graph.get(board).containsKey(move);
+        return getGraph().containsKey(board) && getGraph().get(board).containsKey(move);
     }
 
     List<Move> getMoves(Board board, Move move) {
-        return graph.get(board).get(move);
+        return getGraph().get(board).get(move);
     }
 
     @Override
@@ -51,7 +51,11 @@ public class Graph {
 
     @Override
     public int hashCode() {
-        return graph.hashCode();
+        return getGraph().hashCode();
+    }
+
+    public boolean IsVictory(Board board) {
+        return isVictories.get(board);
     }
 
     public static class Builder {

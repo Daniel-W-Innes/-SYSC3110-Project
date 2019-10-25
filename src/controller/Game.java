@@ -23,7 +23,7 @@ public class Game {
     }
 
     public void setUp() {
-        levels.put(1, genLevel(new Board.Builder(true)
+        getLevels().put(1, genLevel(new Board.Builder(true)
                 .addPieces(new Point(2, 3), new Rabbit())
 
                 .addPieces(new Point(0, 1), new Mushroom())
@@ -31,7 +31,7 @@ public class Game {
                 .addPieces(new Point(1, 3), new Mushroom())
                 .build()
         ));
-        levels.put(20, genLevel(new Board.Builder(true)
+        getLevels().put(20, genLevel(new Board.Builder(true)
                 .addPieces(new Point(1, 4), new Rabbit())
                 .addPieces(new Point(4, 2), new Rabbit())
                 .addPieces(new Point(3, 0), new Rabbit())
@@ -45,7 +45,7 @@ public class Game {
                 .addPieces(new Point(3, 3), new Fox(Direction.MINUS_X))
                 .build()
         ));
-        levels.put(60, genLevel(new Board.Builder(true)
+        getLevels().put(60, genLevel(new Board.Builder(true)
                 .addPieces(new Point(1, 3), new Rabbit())
                 .addPieces(new Point(2, 4), new Rabbit())
                 .addPieces(new Point(4, 3), new Rabbit())
@@ -83,5 +83,9 @@ public class Game {
             }
         }
         return new Level(graphBuilder.build(), start);
+    }
+
+    private Map<Integer, Level> getLevels() {
+        return levels;
     }
 }

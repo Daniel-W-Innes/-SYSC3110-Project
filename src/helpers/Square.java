@@ -35,9 +35,9 @@ public class Square {
 
     @Override
     public String toString() {
-        if (isHole) {
+        if (isHole()) {
             return "H";
-        } else if (isRaised) {
+        } else if (isRaised()) {
             return "R";
         } else {
             return "_";

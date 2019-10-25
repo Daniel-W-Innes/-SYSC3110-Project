@@ -45,6 +45,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return "{" + start.x + " , " + start.y + "} -> {" + end.x + " , " + end.y + "}";
+        return "{" + getStart().x + " , " + getStart().y + "} -> {" + getEnd().x + " , " + getEnd().y + "}";
     }
 }

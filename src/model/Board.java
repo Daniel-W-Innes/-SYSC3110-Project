@@ -31,7 +31,7 @@ public class Board {
     }
 
     public void addPiece(Point point, Piece piece) {
-        pieces.put(point, piece);
+        getPieces().put(point, piece);
     }
 
     public Map<Point, Piece> getPieces() {
@@ -39,12 +39,12 @@ public class Board {
     }
 
     private void movePiece(Move move) {
-        pieces.put(move.getEnd(), pieces.get(move.getStart()));
-        pieces.remove(move.getStart());
+        getPieces().put(move.getEnd(), getPieces().get(move.getStart()));
+        getPieces().remove(move.getStart());
     }
 
     public boolean hasPiece(Point point) {
-        return pieces.containsKey(point);
+        return getPieces().containsKey(point);
     }
 
     public Point getMax() {
@@ -55,8 +55,8 @@ public class Board {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         Point point;
-        for (int x = 0; x <= max.x; x++) {
-            for (int y = 0; y <= max.y; y++) {
+        for (int x = 0; x <= getMax().x; x++) {
+            for (int y = 0; y <= getMax().y; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
                 stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "_");
@@ -82,19 +82,19 @@ public class Board {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{board.hashCode(), pieces.hashCode()});
+        return Arrays.hashCode(new int[]{getBoard().hashCode(), getPieces().hashCode()});
     }
 
     private Piece getPiece(Point point) {
-        return pieces.get(point);
+        return getPieces().get(point);
     }
 
     private boolean hasSquare(Point point) {
-        return board.containsKey(point);
+        return getBoard().containsKey(point);
     }
 
     private Square getSquare(Point point) {
-        return board.get(point);
+        return getBoard().get(point);
     }
 
     public void movePieces(List<Move> moves) {
@@ -104,7 +104,7 @@ public class Board {
     }
 
     public boolean isVictory() {
-        return pieces.entrySet().stream()
+        return getPieces().entrySet().stream()
                 .filter(entry -> entry.getValue() instanceof Rabbit)
                 .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
     }

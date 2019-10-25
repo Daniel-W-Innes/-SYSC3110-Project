@@ -39,7 +39,7 @@ public class Fox implements Piece {
     @Override
     public Map<Move, List<Move>> getMoves(Board board, Point start) {
         Map<Move, List<Move>> moveListMap = new HashMap<>();
-        switch (direction) {
+        switch (getDirection()) {
             case PLUS_Y -> {
                 moveListMap.putAll(getMoves(board, start, new Point(0, 1)));
                 moveListMap.putAll(getMoves(board, new Point(start.x, start.y - 1), new Point(0, -1)));
@@ -73,5 +73,9 @@ public class Fox implements Piece {
     @Override
     public int hashCode() {
         return 1;
+    }
+
+    private Direction getDirection() {
+        return direction;
     }
 }

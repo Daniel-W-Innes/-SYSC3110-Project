@@ -14,8 +14,8 @@ public class Level {
     }
 
     public boolean move(Move key) {
-        if (graph.containsMove(board, key)) {
-            board.movePieces(graph.getMoves(board, key));
+        if (getGraph().containsMove(getBoard(), key)) {
+            getBoard().movePieces(getGraph().getMoves(getBoard(), key));
             return true;
         } else {
             return false;
@@ -36,7 +36,7 @@ public class Level {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{board.hashCode(), graph.hashCode()});
+        return Arrays.hashCode(new int[]{getBoard().hashCode(), getGraph().hashCode()});
     }
 
     private Graph getGraph() {
