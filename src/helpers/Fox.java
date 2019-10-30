@@ -22,11 +22,16 @@ public class Fox implements Piece {
         List<Move> moves;
         while (true) {
             point = new Point(point.x + offset.x, point.y + offset.y);
-            if (!board.hasPiece(point) && point.y < board.getMax().y && point.x < board.getMax().x && point.y > 0 && point.x > 0) {
+            if (!board.hasPiece(point) && point.y <= board.getMax().y && point.x <= board.getMax().x && point.y >= 0 && point.x >= 0) {
                 moves = new ArrayList<>();
                 move = new Move(start, point);
-                moves.add(move);
-                moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
+                if (move.getEnd().x == start.x - offset.x && move.getEnd().y == start.y - offset.y) {
+                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
+                    moves.add(move);
+                } else {
+                    moves.add(move);
+                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
+                }
                 moveListMap.put(move, moves);
             } else {
                 break;
