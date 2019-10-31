@@ -11,6 +11,7 @@ public class Level {
     public Level(Graph graph, Board board) {
         this.graph = graph;
         this.board = board;
+        //System.out.println(graph.BFS(board).toString());
     }
 
     public boolean move(Move key) {
@@ -39,7 +40,7 @@ public class Level {
         return Arrays.hashCode(new int[]{getBoard().hashCode(), getGraph().hashCode()});
     }
 
-    private Graph getGraph() {
+    public Graph getGraph() {
         return graph;
     }
 

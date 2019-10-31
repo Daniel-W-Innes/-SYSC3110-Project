@@ -2,10 +2,7 @@ package helpers;
 
 import model.Board;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class Graph {
     private final Map<Board, Map<Move, List<Move>>> graph;
@@ -83,5 +80,39 @@ public class Graph {
         public Graph build() {
             return new Graph(graph, isVictories);
         }
+    }
+
+    List<Move> BFS(Board start) {
+        Queue<Board> queue = new LinkedList<>();
+        Set<Board> expanded = new HashSet<>();
+        expanded.add(start);
+        Map<Board, List<Move>> listOfStepsPerBoard = new HashMap<>();
+        queue.add(start);
+        while (!queue.isEmpty()) {
+            Board board = queue.poll();
+            if (isVictories.get(board)) {
+                return listOfStepsPerBoard.get(board);
+            }
+            for (List<Move> moves : graph.get(board).values()) {
+                Board newBoard = new Board(board);
+                newBoard.movePieces(moves);
+                if (!expanded.contains(newBoard)) {
+                    expanded.add(newBoard);
+                    if (listOfStepsPerBoard.containsKey(board)) {
+                        List<Move> newMoves = new ArrayList<>(listOfStepsPerBoard.get(board));
+                        newMoves.addAll(moves);
+                        if (!isVictories.containsKey(newBoard)) {
+                            System.out.println(moves);
+                            System.out.println(newBoard.toString());
+                        }
+                        listOfStepsPerBoard.put(newBoard, newMoves);
+                    } else {
+                        listOfStepsPerBoard.put(newBoard, moves);
+                    }
+                    queue.add(newBoard);
+                }
+            }
+        }
+        return null;
     }
 }
