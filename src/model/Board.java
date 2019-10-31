@@ -1,15 +1,17 @@
 package model;
 
 import helpers.*;
+import view.View;
 
 import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class Board {
+public class Board implements Model {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
+    private List<View> views;
 
     private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         this.board = Collections.unmodifiableMap(board);
@@ -21,6 +23,11 @@ public class Board {
         this.board = board.getBoard();
         pieces = new HashMap<>(board.getPieces());
         max = board.getMax();
+        views = new ArrayList<>(board.getViews());
+    }
+
+    private List<View> getViews() {
+        return views;
     }
 
     private Map<Point, Square> getBoard() {
@@ -37,7 +44,13 @@ public class Board {
 
     private void movePiece(Move move) {
         getPieces().put(move.getEnd(), getPieces().get(move.getStart()));
+        for (View view : views) {
+            view.addPiece(move.getEnd(), getPieces().get(move.getStart()));
+        }
         getPieces().remove(move.getStart());
+        for (View view : views) {
+            view.removePiece(move.getStart());
+        }
     }
 
     public boolean hasPiece(Point point) {
@@ -104,6 +117,16 @@ public class Board {
         return getPieces().entrySet().stream()
                 .filter(entry -> entry.getValue() instanceof Rabbit)
                 .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
+    }
+
+    @Override
+    public void addView(View view) {
+        views.add(view);
+    }
+
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
     }
 
     public static class Builder {
