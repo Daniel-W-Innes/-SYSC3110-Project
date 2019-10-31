@@ -42,7 +42,7 @@ public class Graph {
         return getGraph().equals(graph.getGraph());
     }
 
-    private Map<Board, Map<Move, List<Move>>> getGraph() {
+    public Map<Board, Map<Move, List<Move>>> getGraph() {
         return graph;
     }
 

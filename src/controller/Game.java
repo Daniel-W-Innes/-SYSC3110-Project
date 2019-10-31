@@ -12,6 +12,7 @@ import java.util.stream.Collectors;
 
 public class Game {
     private final Map<Integer, Level> levels;
+    private int levelNumber;
 
     private Game() {
         levels = new HashMap<>();
@@ -20,6 +21,14 @@ public class Game {
     public static void main(String[] args) {
         Game game = new Game();
         game.setUp();
+    }
+
+    public void move(Move move) {
+        levels.get(levelNumber).move(move);
+    }
+
+    public List<Move> getMoves(Point point) {
+        return levels.get(levelNumber).getMove(point);
     }
 
     public void setUp() {
@@ -58,6 +67,7 @@ public class Game {
                 .addPieces(new Point(1, 0), new Fox(Direction.MINUS_Y))
                 .build()
         ));
+        levelNumber = 1;
     }
 
     private Level genLevel(Board start) {

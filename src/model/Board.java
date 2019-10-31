@@ -82,7 +82,7 @@ public class Board {
         return Arrays.hashCode(new int[]{getBoard().hashCode(), getPieces().hashCode()});
     }
 
-    private Piece getPiece(Point point) {
+    public Piece getPiece(Point point) {
         return getPieces().get(point);
     }
 

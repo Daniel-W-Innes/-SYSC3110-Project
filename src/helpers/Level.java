@@ -2,7 +2,10 @@ package helpers;
 
 import model.Board;
 
+import java.awt.*;
 import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class Level {
     private final Board board;
@@ -46,5 +49,9 @@ public class Level {
 
     private Board getBoard() {
         return board;
+    }
+
+    public List<Move> getMove(Point point) {
+        return getBoard().getPiece(point).getMoves(getBoard(), point).values().stream().flatMap(List::stream).collect(Collectors.toList()); //FIXME This is crap and I need to find a better way of doing it.
     }
 }
