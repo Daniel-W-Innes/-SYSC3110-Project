@@ -1,6 +1,7 @@
 package controller;
 
 import helpers.*;
+import helpers.Fox.FoxType;
 import model.Board;
 
 import java.awt.*;
@@ -23,8 +24,8 @@ public class Game {
         game.setUp();
     }
 
-    public void move(Move move) {
-        levels.get(levelNumber).move(move);
+    public boolean move(Move move) {
+        return levels.get(levelNumber).move(move);
     }
 
     public List<Move> getMoves(Point point) {
@@ -33,7 +34,7 @@ public class Game {
 
     public void setUp() {
         getLevels().put(1, genLevel(new Board.Builder(true)
-                .addPieces(new Point(2, 3), new Rabbit())
+                .addPieces(new Point(2, 3), new Rabbit(new Color(0xCD853F)))
 
                 .addPieces(new Point(0, 1), new Mushroom())
                 .addPieces(new Point(0, 2), new Mushroom())
@@ -41,30 +42,30 @@ public class Game {
                 .build()
         ));
         getLevels().put(20, genLevel(new Board.Builder(true)
-                .addPieces(new Point(1, 4), new Rabbit())
-                .addPieces(new Point(4, 2), new Rabbit())
-                .addPieces(new Point(3, 0), new Rabbit())
+                .addPieces(new Point(1, 4), new Rabbit(new Color(0xCD853F)))
+                .addPieces(new Point(4, 2), new Rabbit(new Color(0x808080)))
+                .addPieces(new Point(3, 0), new Rabbit(new Color(0xFFFFFF)))
 
                 .addPieces(new Point(2, 4), new Mushroom())
                 .addPieces(new Point(3, 1), new Mushroom())
 
-                .addPieces(new Point(1, 1), new Fox(Direction.PLUS_Y))
-                .addPieces(new Point(1, 0), new Fox(Direction.MINUS_Y))
-                .addPieces(new Point(4, 3), new Fox(Direction.PLUS_X))
-                .addPieces(new Point(3, 3), new Fox(Direction.MINUS_X))
+                .addPieces(new Point(1, 1), new Fox(FoxType.HEAD, Direction.PLUS_Y))
+                .addPieces(new Point(1, 0), new Fox(FoxType.TAIL, Direction.MINUS_Y))
+                .addPieces(new Point(4, 3), new Fox(FoxType.HEAD, Direction.PLUS_X))
+                .addPieces(new Point(3, 3), new Fox(FoxType.TAIL, Direction.MINUS_X))
                 .build()
         ));
         getLevels().put(60, genLevel(new Board.Builder(true)
-                .addPieces(new Point(1, 3), new Rabbit())
-                .addPieces(new Point(2, 4), new Rabbit())
-                .addPieces(new Point(4, 3), new Rabbit())
+                .addPieces(new Point(1, 3), new Rabbit(new Color(0xCD853F)))
+                .addPieces(new Point(2, 4), new Rabbit(new Color(0x808080)))
+                .addPieces(new Point(4, 3), new Rabbit(new Color(0xFFFFFF)))
 
                 .addPieces(new Point(0, 3), new Mushroom())
                 .addPieces(new Point(2, 2), new Mushroom())
                 .addPieces(new Point(3, 0), new Mushroom())
 
-                .addPieces(new Point(1, 1), new Fox(Direction.PLUS_Y))
-                .addPieces(new Point(1, 0), new Fox(Direction.MINUS_Y))
+                .addPieces(new Point(1, 1), new Fox(FoxType.HEAD, Direction.PLUS_Y))
+                .addPieces(new Point(1, 0), new Fox(FoxType.TAIL, Direction.MINUS_Y))
                 .build()
         ));
         levelNumber = 1;

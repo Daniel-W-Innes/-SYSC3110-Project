@@ -9,6 +9,12 @@ import java.util.Map;
 
 public class Rabbit implements Piece {
 
+    private final Color color;
+
+    public Rabbit(Color color) {
+        this.color = color;
+    }
+
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {
         boolean c = true;
         Map<Move, List<Move>> moves = new HashMap<>();
@@ -48,5 +54,9 @@ public class Rabbit implements Piece {
     @Override
     public int hashCode() {
         return 1;
+    }
+
+    public Color getColor() {
+        return color;
     }
 }

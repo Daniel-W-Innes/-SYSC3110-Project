@@ -9,10 +9,22 @@ import java.util.List;
 import java.util.Map;
 
 public class Fox implements Piece {
+
+    private final FoxType foxType;
+
+    public Fox(FoxType foxType, Direction direction) {
+        this.foxType = foxType;
+        this.direction = direction;
+    }
+
     private final Direction direction;
 
-    public Fox(Direction direction) {
-        this.direction = direction;
+    public FoxType getFoxType() {
+        return foxType;
+    }
+
+    public enum FoxType {
+        HEAD, TAIL
     }
 
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {
