@@ -8,7 +8,7 @@ public class Move {
     private final Point end;
     private final int hashcode;
 
-    Move(Point start, Point end) {
+    public Move(Point start, Point end) {
         this.start = start;
         this.end = end;
         hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
