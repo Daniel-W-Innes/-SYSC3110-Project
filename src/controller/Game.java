@@ -28,6 +28,15 @@ public class Game {
         return levels.get(levelNumber).move(move);
     }
 
+    public boolean changeLevel(int levelNumber) {
+        if (getLevels().containsKey(levelNumber)) {
+            this.levelNumber = levelNumber;
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public List<Move> getMoves(Point point) {
         return levels.get(levelNumber).getMove(point);
     }

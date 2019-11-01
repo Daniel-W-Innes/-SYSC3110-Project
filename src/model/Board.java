@@ -17,6 +17,7 @@ public class Board implements Model {
         this.board = Collections.unmodifiableMap(board);
         this.pieces = new HashMap<>(pieces);
         this.max = max;
+        views = new ArrayList<>();
     }
 
     public Board(Board board) {
