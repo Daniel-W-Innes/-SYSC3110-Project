@@ -3,7 +3,9 @@ package controller;
 import helpers.*;
 import helpers.Fox.FoxType;
 import model.Board;
+import view.GameGUI;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.List;
 import java.util.Queue;
@@ -12,19 +14,35 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class Game {
-    private final Map<Integer, Level> levels;
+    //Each "Level" contains the board and the graph
+    private final Map<Integer, Level> levels; //The Model
     private int levelNumber;
 
-    private Game() {
+    private final GameGUI gameGui; //The View
+
+    private Game() throws ClassNotFoundException, UnsupportedLookAndFeelException, InstantiationException, IllegalAccessException {
         levels = new HashMap<>();
+        this.gameGui = new GameGUI(this);
+
+        this.setUp();
     }
 
     public static void main(String[] args) {
-        Game game = new Game();
-        game.setUp();
+        try {
+            Game game = new Game();
+        } catch (ClassNotFoundException e) {
+            e.printStackTrace();
+        } catch (UnsupportedLookAndFeelException e) {
+            e.printStackTrace();
+        } catch (InstantiationException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+        }
     }
 
     public boolean move(Move move) {
+        System.out.printf("Attempting move from %s to %s\n", move.getStart(), move.getEnd());
         return levels.get(levelNumber).move(move);
     }
 
@@ -41,16 +59,22 @@ public class Game {
         return levels.get(levelNumber).getMove(point);
     }
 
+    /**
+     * Use the Builder helper class to set up the available levels. This takes like 5 seconds to run...
+     */
     public void setUp() {
-        getLevels().put(1, genLevel(new Board.Builder(true)
+        long start = System.currentTimeMillis();
+        Board b1 = new Board.Builder(true)
                 .addPieces(new Point(2, 3), new Rabbit(new Color(0xCD853F)))
 
                 .addPieces(new Point(0, 1), new Mushroom())
                 .addPieces(new Point(0, 2), new Mushroom())
                 .addPieces(new Point(1, 3), new Mushroom())
-                .build()
-        ));
-        getLevels().put(20, genLevel(new Board.Builder(true)
+                .build();
+        b1.addView(this.gameGui);
+        getLevels().put(1, genLevel(b1));
+
+        /*getLevels().put(20, genLevel(new Board.Builder(true)
                 .addPieces(new Point(1, 4), new Rabbit(new Color(0xCD853F)))
                 .addPieces(new Point(4, 2), new Rabbit(new Color(0x808080)))
                 .addPieces(new Point(3, 0), new Rabbit(new Color(0xFFFFFF)))
@@ -76,8 +100,9 @@ public class Game {
                 .addPieces(new Point(1, 1), new Fox(FoxType.HEAD, Direction.PLUS_Y))
                 .addPieces(new Point(1, 0), new Fox(FoxType.TAIL, Direction.MINUS_Y))
                 .build()
-        ));
-        levelNumber = 1;
+        ));*/
+        this.levelNumber = 1;
+        System.out.println("Game.setup() takes: " + (System.currentTimeMillis()-start));
     }
 
     private Level genLevel(Board start) {

@@ -2,6 +2,7 @@ package helpers;
 
 import model.Board;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,6 +26,13 @@ public class Fox implements Piece {
 
     public enum FoxType {
         HEAD, TAIL
+    }
+
+    private static final ImageIcon icon = new ImageIcon("./resources/Fox_up.jpg");
+
+    @Override
+    public ImageIcon getIcon() {
+        return icon;
     }
 
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {

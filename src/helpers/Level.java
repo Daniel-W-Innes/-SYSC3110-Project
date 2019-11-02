@@ -3,6 +3,7 @@ package helpers;
 import model.Board;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -17,6 +18,7 @@ public class Level {
         //System.out.println(graph.BFS(board).toString());
     }
 
+    //Called by the Game controller to change the Board model
     public boolean move(Move key) {
         if (getGraph().containsMove(getBoard(), key)) {
             getBoard().movePieces(getGraph().getMoves(getBoard(), key));
@@ -52,6 +54,15 @@ public class Level {
     }
 
     public List<Move> getMove(Point point) {
-        return getBoard().getPiece(point).getMoves(getBoard(), point).values().stream().flatMap(List::stream).collect(Collectors.toList()); //FIXME This is crap and I need to find a better way of doing it.
+        if(this.board.hasPiece(point)) {
+            return getBoard().getPiece(point).getMoves(getBoard(), point)
+                    .values()
+                    .stream()
+                    .flatMap(List::stream)
+                    .collect(Collectors.toList()); //FIXME This is crap and I need to find a better way of doing it.
+        } else {
+            //TODO: there is no piece... It shouldn't be a button?
+            return new ArrayList<Move>();
+        }
     }
 }

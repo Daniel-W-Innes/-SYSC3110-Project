@@ -2,6 +2,7 @@ package helpers;
 
 import model.Board;
 
+import javax.swing.*;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.List;
@@ -13,6 +14,13 @@ public class Rabbit implements Piece {
 
     public Rabbit(Color color) {
         this.color = color;
+    }
+
+    private static final ImageIcon icon = new ImageIcon("./resources/Rabbit_brown.jpg");
+
+    @Override
+    public ImageIcon getIcon() {
+        return icon;
     }
 
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {

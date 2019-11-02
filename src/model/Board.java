@@ -35,14 +35,18 @@ public class Board implements Model {
         return board;
     }
 
-    public void addPiece(Point point, Piece piece) {
-        getPieces().put(point, piece);
-    }
+//    public void addPiece(Point point, Piece piece) {
+//        getPieces().put(point, piece);
+//        for (View view : views) {
+//            view.addPiece(point, piece);
+//        }
+//    }
 
     public Map<Point, Piece> getPieces() {
         return pieces;
     }
 
+    //This is the only place that communicates with the View
     private void movePiece(Move move) {
         getPieces().put(move.getEnd(), getPieces().get(move.getStart()));
         for (View view : views) {
@@ -108,6 +112,10 @@ public class Board implements Model {
         return getBoard().get(point);
     }
 
+    /**
+     * Why does this exist???
+     * @param moves
+     */
     public void movePieces(List<Move> moves) {
         for (Move move : moves) {
             movePiece(move);
@@ -122,6 +130,10 @@ public class Board implements Model {
 
     @Override
     public void addView(View view) {
+        //Update the initial board state with the pieces
+        this.pieces.forEach((point, piece) -> {
+            view.addPiece(point, piece);
+        });
         views.add(view);
     }
 
@@ -130,12 +142,17 @@ public class Board implements Model {
         views.remove(view);
     }
 
+    /**
+     * Helper static class that fills in the Board model with pieces and squares
+     */
     public static class Builder {
         private final Set<Point> holes;
         private final Set<Point> raisedSquares;
         private final Map<Point, Piece> pieces;
 
-
+        /**
+         * @param useDefaultMap if you want to use the default board layout in terms of holes and raised squares
+         */
         public Builder(boolean useDefaultMap) {
             if (useDefaultMap) {
                 holes = Set.of(new Point(0, 0), new Point(4, 4), new Point(0, 4), new Point(4, 0), new Point(2, 2));
@@ -162,6 +179,11 @@ public class Board implements Model {
             return this;
         }
 
+        /**
+         * Accounts for varying board sizes...
+         * @param max
+         * @param point
+         */
         private void updateMax(Point max, Point point) {
             if (point.x > max.x) {
                 max.x = point.x;
@@ -171,6 +193,10 @@ public class Board implements Model {
             }
         }
 
+        /**
+         * Builds and returns a Board model after the Builder is configured
+         * @return
+         */
         public Board build() {
             Point max = new Point(0, 0);
             Map<Point, Square> board = new HashMap<>();
@@ -183,6 +209,9 @@ public class Board implements Model {
                 updateMax(max, point);
             }
             Set<Point> badFoxLocations = new HashSet<>();
+
+            //Not readable. TODO: refactor
+            //
             pieces.entrySet().stream()
                     .filter(entry -> entry.getValue() instanceof Fox)
                     .map(entry -> Map.entry(entry.getKey(), (Fox) entry.getValue()))
@@ -205,6 +234,7 @@ public class Board implements Model {
                             }
                         }
                     }).forEach(entry -> badFoxLocations.add(entry.getKey()));
+
             pieces.entrySet().stream()
                     .filter(entry -> entry.getValue() instanceof Fox)
                     .map(entry -> Map.entry(entry.getKey(), (Fox) entry.getValue()))
@@ -221,6 +251,7 @@ public class Board implements Model {
                     });
             badFoxLocations.forEach(pieces::remove);
             pieces.keySet().forEach(point -> updateMax(max, point));
+
             return new Board(board, pieces, max);
         }
     }
