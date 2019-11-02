@@ -1,17 +1,17 @@
 package view;
 
 import helpers.Move;
+import helpers.Piece;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.util.List;
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.HashMap;
 
-public class Board extends JPanel implements ActionListener {
+public class Board extends JPanel implements ActionListener, View {
     private Point clickedSquare;
-    private HashMap<Point, Square> b = new HashMap<>();
+    private final HashMap<Point, Square> board = new HashMap<>();
 
     public Board(){
         setLayout(new GridLayout(5, 5));
@@ -21,21 +21,17 @@ public class Board extends JPanel implements ActionListener {
                 Point p = new Point(x, y);
                 Square s = new Square(p);
                 s.addActionListener(this);
-                b.put(p, s);
+                board.put(p, s);
                 add(s);
             }
         }
     }
 
-    public void update(Board b) {
+    public void set(Board b) {
         //update everything in board
     }
 
-    public void update(List<Move> l){
-
-    }
-
-    public void move(Move move){
+    private void move(Move move) {
         System.out.println("Moved from " + move);
     }
 
@@ -48,5 +44,15 @@ public class Board extends JPanel implements ActionListener {
             move(new Move(clickedSquare, p));
             clickedSquare = null;
         }
+    }
+
+    @Override
+    public void addPiece(Point point, Piece piece) {
+
+    }
+
+    @Override
+    public void removePiece(Point point) {
+
     }
 }

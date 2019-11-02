@@ -5,13 +5,14 @@ import model.Board;
 import java.awt.*;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Level {
     private final Board board;
     private final Graph graph;
 
-    public Level(Graph graph, Board board) {
+    Level(Graph graph, Board board) {
         this.graph = graph;
         this.board = board;
         //System.out.println(graph.BFS(board).toString());
@@ -43,12 +44,16 @@ public class Level {
         return Arrays.hashCode(new int[]{getBoard().hashCode(), getGraph().hashCode()});
     }
 
-    public Graph getGraph() {
+    private Graph getGraph() {
         return graph;
     }
 
     private Board getBoard() {
         return board;
+    }
+
+    public void resetPieces(Map<Point, Piece> piece) {
+        board.setPieces(piece);
     }
 
     public List<Move> getMove(Point point) {

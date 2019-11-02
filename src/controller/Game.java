@@ -1,15 +1,17 @@
 package controller;
 
-import helpers.*;
-import helpers.Fox.FoxType;
-import model.Board;
+import helpers.Level;
+import helpers.Move;
+import view.Frame;
+import view.View;
 
 import java.awt.*;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Queue;
-import java.util.*;
-import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.stream.Collectors;
+import java.util.Map;
+
+import static helpers.GameBuilder.buildLevel;
+import static helpers.GameBuilder.getStartingBoard;
 
 public class Game {
     private final Map<Integer, Level> levels;
@@ -21,7 +23,8 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp();
+        Frame frame = new Frame();
+        game.setUp(frame.getBoard());
     }
 
     public boolean move(Move move) {
@@ -41,70 +44,14 @@ public class Game {
         return levels.get(levelNumber).getMove(point);
     }
 
-    public void setUp() {
-        getLevels().put(1, genLevel(new Board.Builder(true)
-                .addPieces(new Point(2, 3), new Rabbit(new Color(0xCD853F)))
+    public void resetLevel() {
+        getLevels().get(levelNumber).resetPieces(getStartingBoard(levelNumber).getPieces());
+    }
 
-                .addPieces(new Point(0, 1), new Mushroom())
-                .addPieces(new Point(0, 2), new Mushroom())
-                .addPieces(new Point(1, 3), new Mushroom())
-                .build()
-        ));
-        getLevels().put(20, genLevel(new Board.Builder(true)
-                .addPieces(new Point(1, 4), new Rabbit(new Color(0xCD853F)))
-                .addPieces(new Point(4, 2), new Rabbit(new Color(0x808080)))
-                .addPieces(new Point(3, 0), new Rabbit(new Color(0xFFFFFF)))
-
-                .addPieces(new Point(2, 4), new Mushroom())
-                .addPieces(new Point(3, 1), new Mushroom())
-
-                .addPieces(new Point(1, 1), new Fox(FoxType.HEAD, Direction.PLUS_Y))
-                .addPieces(new Point(1, 0), new Fox(FoxType.TAIL, Direction.MINUS_Y))
-                .addPieces(new Point(4, 3), new Fox(FoxType.HEAD, Direction.PLUS_X))
-                .addPieces(new Point(3, 3), new Fox(FoxType.TAIL, Direction.MINUS_X))
-                .build()
-        ));
-        getLevels().put(60, genLevel(new Board.Builder(true)
-                .addPieces(new Point(1, 3), new Rabbit(new Color(0xCD853F)))
-                .addPieces(new Point(2, 4), new Rabbit(new Color(0x808080)))
-                .addPieces(new Point(4, 3), new Rabbit(new Color(0xFFFFFF)))
-
-                .addPieces(new Point(0, 3), new Mushroom())
-                .addPieces(new Point(2, 2), new Mushroom())
-                .addPieces(new Point(3, 0), new Mushroom())
-
-                .addPieces(new Point(1, 1), new Fox(FoxType.HEAD, Direction.PLUS_Y))
-                .addPieces(new Point(1, 0), new Fox(FoxType.TAIL, Direction.MINUS_Y))
-                .build()
-        ));
+    public void setUp(View view) {
         levelNumber = 1;
+        levels.putAll(buildLevel(view));
     }
-
-    private Level genLevel(Board start) {
-        Graph.Builder graphBuilder = new Graph.Builder();
-        Board newBoard;
-        Set<Board> expanded = new HashSet<>();
-        Queue<Board> queue = new ConcurrentLinkedQueue<>();
-        queue.add(start);
-        while (!queue.isEmpty()) {
-            Board board = queue.poll();
-            for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
-                for (Map.Entry<Move, List<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
-                    graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
-                    graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
-                    newBoard = new Board(board);
-                    newBoard.movePieces(moves.getValue());
-                    graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toList()));
-                    expanded.add(board);
-                    if (!expanded.contains(newBoard) && !queue.contains(newBoard)) {
-                        queue.add(newBoard);
-                    }
-                }
-            }
-        }
-        return new Level(graphBuilder.build(), start);
-    }
-
     private Map<Integer, Level> getLevels() {
         return levels;
     }

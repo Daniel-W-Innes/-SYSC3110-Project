@@ -42,7 +42,7 @@ public class Graph {
         return getGraph().equals(graph.getGraph());
     }
 
-    public Map<Board, Map<Move, List<Move>>> getGraph() {
+    private Map<Board, Map<Move, List<Move>>> getGraph() {
         return graph;
     }
 
@@ -55,16 +55,16 @@ public class Graph {
         return isVictories.get(board);
     }
 
-    public static class Builder {
+    static class Builder {
         private final Map<Board, Map<Move, List<Move>>> graph;
         private final Map<Board, Boolean> isVictories;
 
-        public Builder() {
+        Builder() {
             graph = new HashMap<>();
             isVictories = new HashMap<>();
         }
 
-        public Builder addMoves(Board board, Move move, List<Move> moves) {
+        Builder addMoves(Board board, Move move, List<Move> moves) {
             if (!graph.containsKey(board)) {
                 graph.put(board, new HashMap<>());
             }
@@ -72,12 +72,12 @@ public class Graph {
             return this;
         }
 
-        public Builder addIsVictory(Board board, boolean isVictory) {
+        Builder addIsVictory(Board board, boolean isVictory) {
             isVictories.put(board, isVictory);
             return this;
         }
 
-        public Graph build() {
+        Graph build() {
             return new Graph(graph, isVictories);
         }
     }

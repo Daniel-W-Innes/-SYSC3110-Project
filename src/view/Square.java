@@ -3,10 +3,10 @@ package view;
 import javax.swing.*;
 import java.awt.*;
 
-public class Square extends JButton {
-    private Point p;
+class Square extends JButton {
+    private final Point p;
 
-    public Square(Point p){
+    Square(Point p) {
         this.p = p;
         setText(p.toString());
     }

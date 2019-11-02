@@ -11,7 +11,7 @@ public class Board implements Model {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
-    private List<View> views;
+    private final List<View> views;
 
     private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         this.board = Collections.unmodifiableMap(board);
@@ -35,8 +35,9 @@ public class Board implements Model {
         return board;
     }
 
-    public void addPiece(Point point, Piece piece) {
-        getPieces().put(point, piece);
+    public void setPieces(Map<Point, Piece> piece) {
+        getPieces().clear();
+        getPieces().putAll(piece);
     }
 
     public Map<Point, Piece> getPieces() {

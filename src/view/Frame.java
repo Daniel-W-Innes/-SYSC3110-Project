@@ -1,14 +1,14 @@
 package view;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import java.awt.*;
 
 public class Frame extends JFrame {
-    view.Board board;
+    private Board board;
 
-    public static void main(String[] args){
-        new Frame();
+
+    public Board getBoard() {
+        return board;
     }
 
     public Frame(){
