@@ -1,51 +1,212 @@
 package model;
 
-import helpers.Observer;
+import helpers.Foxes;
+import helpers.Move;
 import helpers.Piece;
 import helpers.Square;
+import view.View;
 
 import java.awt.*;
 import java.util.*;
-import java.util.stream.Collectors;
-
+import java.util.List;
+// TODO: add a move method that checks for a victory and if there is one, notify the view of that victory
 /**
  * A class representing the state of the Board.
  * The board is the only class observed by a view.
  * @author frank liu, daniel innes
  */
-public class Board implements helpers.Observable {
+public class Board {
 
     /**
      * The Board map containing all squares.
      */
-    private final Map<Point, Square> board;
-    private final Point max;
-    private Observer observer;
+    private Map<Point, Square> terrain;
+    private Map<Point, Piece> pieces;
+    public static final int maxBoardLength = 5;
+    View view;
 
-    /**
-     * Initialize a new with to a defensive copy of the given board.
-     *
-     * @param board The board to copy
-     */
+    public Board() {
+        terrain = new HashMap<>();
+        pieces = new HashMap<>();
+    }
 
-    public Board(Board board) {
-        this.board = board.getBoard().entrySet().stream()
-                .map(entry -> Map.entry(entry.getKey(), new Square(entry.getValue().isHole(), entry.getValue().isRaised(), entry.getValue().getPiece())))
-                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
-        this.max = board.getMax();
-        this.observer = board.getObserver();
+    public void setView(View view) {
+        this.view = view;
     }
 
     /**
-     * Initialize from the builder.
+     * Add a square to board at the given point.
      *
-     * @param board The board map
-     * @param max   The Max Point located on the board
+     * @param location The location on the board to add to
+     * @param square The square to add
+     *
+     * @throws IllegalArgumentException If trying to add a new square to a location with an existing square
      */
 
-    private Board(Map<Point, Square> board, Point max) {
-        this.board = new HashMap<>(board);
-        this.max = max;
+    public void addSquare(Point location, Square square)
+    {
+
+        checkValidLocation(location);
+
+        // Once a terrain square has been placed, it is considered an error to try to replace it with something else.
+        if(terrain.containsKey(location))
+        {
+            String errorMessage = "Trying to overwrite a Terrain square at: " + location.toString();
+            errorMessage += "Original square: " + terrain.get(location).toString();
+            errorMessage += "Attempting to replace with: " + square.toString();
+
+            throw new IllegalArgumentException(errorMessage);
+        }
+
+        terrain.put(location, square);
+    }
+
+    /**
+     * Adds a game piece to the board at the given point.
+     *
+     * @param location The location on the board to add to
+     * @param piece The piece to add
+     *
+     * @throws IllegalArgumentException If trying to add a new piece to a location with an existing piece
+     */
+
+    public void addPiece(Point location, Piece piece)
+    {
+        checkValidLocation(location);
+
+        // Once a piece has been placed, it is considered an error to try to replace it with something else.
+        if(pieces.containsKey(location))
+        {
+            String errorMessage = "Trying to overwrite a Terrain square at: " + location.toString();
+            errorMessage += "Original square: " + pieces.get(location).toString();
+            errorMessage += "Attempting to replace with: " + piece.toString();
+
+            throw new IllegalArgumentException(errorMessage);
+        }
+
+        /*
+            If the piece being added is a fox, then it takes up two points. Both points must refer to the same
+            object. Hence there is a need to loop over all of the board spots of the piece to ensure that all of
+            the piece locations refer to the same object.
+         */
+
+        for(Point occupiedPoint : piece.boardSpotsUsed()) {
+            if(pieces.containsKey(occupiedPoint) || terrain.containsKey(occupiedPoint)) {
+                throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
+            }
+
+            pieces.put(occupiedPoint, piece);
+        }
+    }
+
+    public boolean hasPiece(Point location) {
+        return pieces.containsKey(location);
+    }
+
+    /**
+     * Get if the board has a square at the given point.
+     *
+     * @param location The location on the square to check
+     * @return If the board has the square
+     */
+
+    public boolean hasSquare(Point location) {
+        return terrain.containsKey(location);
+    }
+
+    public Map<Point, Piece> getPieces() {
+        return pieces;
+    }
+
+    /**
+     * Get the Board map containing all squares.
+     *
+     * @return The Board map
+     */
+
+    public Map<Point, Square> getTerrain() {
+        return terrain;
+    }
+
+    public void movePiece(Piece piece, Point newLocation) {
+
+        /* When moving a piece, the fox has to be dealt with separately in the following way:
+         *  > When removing the fox, the head is removed. This is done through the getHeadLocation() method
+         *  > After removing the head, and knowing the direction of the fox, the tail location can be found and removed
+         *  > This process is repeated to remove the pieces from the view
+         *
+         *  > When adding a fox, the opposite is done. The head is added to the new location, and knowing the direction
+         *   of the fox the respective location of the tail can be found. Both of these new locations are added to the
+         *   piece map in addition to the view.
+         *
+         *  Remember that the tail is always on one side of the head!
+         */
+
+        if(piece instanceof Foxes) {
+            Foxes removedPiece = (Foxes)piece;
+
+            if(removedPiece.getDirection() == Foxes.Direction.X_AXIS){
+                pieces.remove(removedPiece.getHeadLocation()); // Remove fox head
+                pieces.remove(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail
+                view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
+                view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
+
+                pieces.put(newLocation, removedPiece); // Add new fox head
+                pieces.put(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail
+                view.addPiece(newLocation, removedPiece); // Add new fox head to view
+                view.addPiece(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail to view
+            }
+            else{
+                pieces.remove(removedPiece.getHeadLocation());
+                pieces.remove(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
+                view.removePiece(removedPiece.getHeadLocation());
+                view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
+
+                pieces.put(newLocation, removedPiece);
+                pieces.put(new Point(newLocation.x, newLocation.y - 1), removedPiece);
+                view.addPiece(newLocation, removedPiece);
+                view.addPiece(new Point(newLocation.x, newLocation.y - 1), removedPiece);
+            }
+        }
+        else
+        {
+            // Since every piece that is not a fox takes only one board square, the collection returned by boardSpotsUsed()
+            // can only have one result, which corresponds to the location of the piece
+            for(Point point : piece.boardSpotsUsed()) {
+                pieces.remove(point);
+                view.removePiece(point);
+            }
+
+            pieces.put(newLocation, piece);
+            view.addPiece(newLocation, piece);
+        }
+
+        // Since the piece has moved, its internal representation has to be updated as well to match the new location
+        // of it stored in the board
+        piece.updateBoardSpotUsed(newLocation);
+    }
+
+    /**
+     *  Checks to make sure that the passed in location is within the size of the board.
+     *
+     * @param location The location to check if it is within the board space
+     *
+     * @throws IllegalArgumentException If the point is NOT within the board space
+     */
+
+    private void checkValidLocation(Point location)
+    {
+        if(location.x < 0 || location.y < 0)
+        {
+            throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location.toString());
+        }
+
+        // Index for points start at 0, meaning that even though the max board length is 5, any value above 4 leads
+        // to an invalid index. Hence the minus 1 in the if statement.
+        if(location.x > (maxBoardLength - 1) || location.y > (maxBoardLength - 1))
+        {
+            throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location.toString() + ".\nMax Board length = 5");
+        }
     }
 
     /**
@@ -56,86 +217,10 @@ public class Board implements helpers.Observable {
      * @return The square, nullable
      */
 
-    public Square getSquare(Point loc) {
-        return board.get(loc);
+    private Square getSquare(Point loc) {
+        return terrain.get(loc);
     }
 
-    @Override
-    public void setObserver(Observer observer) {
-        this.observer = observer;
-    }
-
-    @Override
-    public void notifyObserver() {
-        if (this.observer != null){
-            this.observer.update(new EventObject(this));
-        }
-    }
-
-    @Override
-    public Observer getObserver() {
-        return observer;
-    }
-
-    /**
-     * Add a square to board at the given point.
-     *
-     * @param loc    The location on the square to add
-     * @param square Ths square to add
-     */
-
-    public void addSquare(Point loc, Square square) {
-        board.put(loc, square);
-        if (loc.x > max.x) {
-            max.x = loc.x;
-        }
-        if (loc.y > max.y) {
-            max.y = loc.y;
-        }
-    }
-
-    /**
-     * Get if the board has a square at the given point.
-     *
-     * @param loc The location on the square to check
-     * @return If the board has the square
-     */
-
-    public boolean hasSquare(Point loc) {
-        return board.containsKey(loc);
-    }
-
-    /**
-     * Remove the square at a point if it is empty.
-     *
-     * @param loc The location on the square to check
-     */
-
-    public void removeSquareIfEmpty(Point loc) {
-        if (board.containsKey(loc) && !(board.get(loc).hasPiece()) || board.get(loc).isRaised() || board.get(loc).isHole()) {
-            board.remove(loc);
-        }
-    }
-
-    /**
-     * Get the Board map containing all squares.
-     *
-     * @return The Board map
-     */
-
-    private Map<Point, Square> getBoard() {
-        return board;
-    }
-
-    /**
-     * Get the Max Point located on the board.
-     * The max x point is {@code getMax().x}, and the max y point is {@code getMax().y}.
-     *
-     * @return Max Point located on the board
-     */
-    public Point getMax() {
-        return max;
-    }
 
     /**
      * Get a string representation of the board. The String is formatted as squares separated by a "|".
@@ -146,8 +231,8 @@ public class Board implements helpers.Observable {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         Point point;
-        for (int x = 0; x <= max.x; x++) {
-            for (int y = 0; y <= max.y; y++) {
+        for (int x = 0; x <= maxBoardLength; x++) {
+            for (int y = 0; y <= maxBoardLength; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
                 stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "__");
@@ -166,10 +251,11 @@ public class Board implements helpers.Observable {
      */
     //Check if there are any rabbit
     public boolean isVictory() {
-        return board.values().stream()
-                .filter(Square::hasPiece)
-                .filter(square -> square.getPiece().equals(Piece.RABBIT))
-                .allMatch(Square::isHole);
+        return false;
+//        return terrain.values().stream()
+//                .filter(Square::hasPiece)
+//                .filter(square -> square.getPiece().equals(Piece.RABBIT))
+//                .allMatch(Square::isHole);
     }
 
     /**
@@ -188,7 +274,7 @@ public class Board implements helpers.Observable {
             return false;
         }
         Board board = (Board) obj;
-        return getBoard().equals(board.getBoard());
+        return getTerrain().equals(board.getTerrain());
     }
 
     /**
@@ -199,149 +285,6 @@ public class Board implements helpers.Observable {
 
     @Override
     public int hashCode() {
-        return getBoard().hashCode();
-    }
-
-    /**
-     * A class used to build a board using the Builder design pattern.
-     */
-    public static class Builder {
-
-        /** A set of Points that contain a hole */
-        private final Set<Point> hole;
-
-        /** A set of Points that contain a raised square */
-        private final Set<Point> raisedSquares;
-
-        /** A set of Points that contain a piece */
-        private final Map<Point, Piece> pieces;
-
-        public Builder(boolean useDefaultMap) {
-            if (useDefaultMap) {
-                hole = Set.of(new Point(0, 0), new Point(4, 4), new Point(0, 4), new Point(4, 0), new Point(2, 2));
-                raisedSquares = Set.of(new Point(0, 2), new Point(2, 0), new Point(2, 4), new Point(4, 2));
-                pieces = new HashMap<>();
-            } else {
-                hole = new HashSet<>();
-                pieces = new HashMap<>();
-                raisedSquares = new HashSet<>();
-            }
-        }
-
-        /**
-         * Adds a hole at the given location
-         * @param loc a location (Point)
-         * @return this builder instance
-         */
-        public Builder addHole(Point loc) {
-            hole.add(loc);
-            return this;
-        }
-
-        /**
-         * Adds a raised square at the given location
-         * @param loc a location (Point)
-         * @return this builder instance
-         */
-        public Builder addRaisedSquare(Point loc) {
-            raisedSquares.add(loc);
-            return this;
-        }
-
-        /**
-         * Adds a Piece at the given location
-         * @param loc a location (Point)
-         * @param piece the piece to add
-         * @return this builder instance
-         */
-        public Builder addPieces(Point loc, Piece piece) {
-            pieces.put(loc, piece);
-            return this;
-        }
-
-        /**
-         * Ensures that the max.x is less then point.x and max.y is less then point.y and changes max to according to make the conditions true.
-         * This is called to determine the larges x, y coordinate of the board
-         * @param max the max point of the board
-         * @param point the point to encompass in max
-         */
-        private void updateMax(Point max, Point point) {
-            if (point.x > max.x) {
-                max.x = point.x;
-            }
-            if (point.y > max.y) {
-                max.y = point.y;
-            }
-        }
-
-        /**
-         * Check if the foxes are positioned correctly then build a Board from the Builder.
-         *
-         * @return The game board.
-         */
-        public Board build() {
-            Map<Point, Square> board = new HashMap<>();
-            Point max = new Point(0, 0);
-            //Check if the foxes positions
-            Set<Point> badFoxLocs = new HashSet<>();
-            //Check for lone foxes
-            pieces.entrySet().stream()
-                    .filter(entry -> {
-                        switch (entry.getValue()) {
-                            case FOX_MINUS_X -> {
-                                return !pieces.containsKey(new Point(entry.getKey().x + 1, entry.getKey().y));
-                            }
-                            case FOX_MINUS_Y -> {
-                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y + 1));
-                            }
-                            case FOX_PLUS_X -> {
-                                return !pieces.containsKey(new Point(entry.getKey().x - 1, entry.getKey().y));
-                            }
-                            case FOX_PLUS_Y -> {
-                                return !pieces.containsKey(new Point(entry.getKey().x, entry.getKey().y - 1));
-                            }
-                            default -> {
-                                return false;
-                            }
-                        }
-                    }).forEach(entry -> badFoxLocs.add(entry.getKey()));
-            //Check for Foxes on raised squares
-            pieces.entrySet().stream()
-                    .filter(entry -> entry.getValue().equals(Piece.FOX_MINUS_X) ||
-                            entry.getValue().equals(Piece.FOX_MINUS_Y) ||
-                            entry.getValue().equals(Piece.FOX_PLUS_X) ||
-                            entry.getValue().equals(Piece.FOX_PLUS_Y))
-                    .filter(entry -> hole.contains(entry.getKey()) ||
-                            raisedSquares.contains(entry.getKey()))
-                    .forEach(entry -> {
-                        badFoxLocs.add(entry.getKey());
-                        switch (entry.getValue()) {
-                            case FOX_MINUS_X -> badFoxLocs.add(new Point(entry.getKey().x + 1, entry.getKey().y));
-                            case FOX_MINUS_Y -> badFoxLocs.add(new Point(entry.getKey().x, entry.getKey().y + 1));
-                            case FOX_PLUS_X -> badFoxLocs.add(new Point(entry.getKey().x - 1, entry.getKey().y));
-                            case FOX_PLUS_Y -> badFoxLocs.add(new Point(entry.getKey().x, entry.getKey().y - 1));
-                        }
-                    });
-            //Remove foxes that are not positioned correctly
-            badFoxLocs.forEach(pieces::remove);
-            //Add holes to the map
-            for (Point point : hole) {
-                board.put(point, new Square(true, true, pieces.get(point)));
-                pieces.remove(point);
-                updateMax(max, point);
-            }
-            //Add raised squares to the map
-            for (Point point : raisedSquares) {
-                board.put(point, new Square(false, true, pieces.get(point)));
-                pieces.remove(point);
-                updateMax(max, point);
-            }
-            //Add pieces to the map
-            for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
-                board.put(entry.getKey(), new Square(false, false, entry.getValue()));
-                updateMax(max, entry.getKey());
-            }
-            return new Board(board, new Point(max));
-        }
+        return getTerrain().hashCode();
     }
 }

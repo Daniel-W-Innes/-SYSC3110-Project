@@ -2,216 +2,166 @@ package helpers;
 
 import model.Board;
 
+import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
-public class Foxes {
-    /**
-     * Move a fox.
-     *
-     * @param board The board the fox on
-     * @param move  The move to execute
-     */
-    private static void move(Board board, Move move) {
-        if (board.hasSquare(move.getEndPoint())) {
-            board.getSquare(move.getEndPoint()).setPiece(board.getSquare(move.getStartPoint()).getPiece());
-        } else {
-            board.addSquare(move.getEndPoint(), new Square(false, false, board.getSquare(move.getStartPoint()).getPiece()));
-        }
-        board.getSquare(move.getStartPoint()).removePiece();
-        board.removeSquareIfEmpty(move.getStartPoint());
+public class Foxes implements Piece {
+
+    Set<Point> occupiedBoardSpots = null;
+    Point headLocation;
+    Point tailLocation;
+    Direction direction;
+
+    public enum Direction
+    {
+        X_AXIS,
+        Y_AXIS
     }
 
-    /**
-     * Check if a move is valid, if so execute it.
-     *
-     * @param board The board to check against
-     * @param move  The move to check
-     * @return If the move was executed
-     */
-    public static boolean checkAndMove(Board board, Move move) {
-        Point point;
-        switch (board.getSquare(move.getStartPoint()).getPiece()) {
-            case FOX_PLUS_Y:
-                if (move.isPlusY()) {
-                    //Debug: System.out.println("FOX_PLUS_Y move.isPlusY");
-                    for (int y = move.getStartPoint().y + 1; y <= move.getEndPoint().y; y++) {
-                        point = new Point(move.getStartPoint().x, y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y > board.getMax().y) {
-                            return false;
-                        }
-                    }
-                    move(board, move);
-                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
-                    board.notifyObserver();
-                    return true;
-                } else if (move.isMinusY()) {
-                    //Debug: System.out.println("FOX_PLUS_Y move.isMinusY");
-                    for (int y = move.getEndPoint().y - 1; y <= move.getStartPoint().y - 2; y++) {
-                        point = new Point(move.getStartPoint().x, y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y < 0) {
-                            return false;
-                        }
-                    }
-                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
-                    move(board, move);
-                    board.notifyObserver();
-                    return true;
-                }
-            case FOX_MINUS_Y:
-                if (move.isPlusY()) {
-                    //Debug: System.out.println("FOX_MINUS_Y move.isPlusY");
-                    for (int y = move.getStartPoint().y + 2; y <= move.getEndPoint().y + 1; y++) {
-                        point = new Point(move.getStartPoint().x, y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y > board.getMax().y) {
-                            return false;
-                        }
-                    }
-                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
-                    move(board, move);
-                    board.notifyObserver();
-                    return true;
-                } else if (move.isMinusY()) {
-                    //Debug: System.out.println("FOX_MINUS_Y move.isMinusY");
-                    for (int y = move.getEndPoint().y; y < move.getStartPoint().y - 1; y++) {
-                        point = new Point(move.getStartPoint().x, y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y < 0) {
-                            return false;
-                        }
-                    }
-                    move(board, move);
-                    move(board, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
-                    board.notifyObserver();
-                    return true;
-                }
-            case FOX_PLUS_X:
-                if (move.isPlusX()) {
-                    //Debug: System.out.println("FOX_PLUS_X move.isPlusX");
-                    for (int x = move.getStartPoint().x + 1; x <= move.getEndPoint().x; x++) {
-                        point = new Point(x, move.getStartPoint().y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x > board.getMax().x) {
-                            return false;
-                        }
-                    }
-                    move(board, move);
-                    move(board, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
-                    board.notifyObserver();
-                    return true;
-                } else if (move.isMinusX()) {
-                    //Debug: System.out.println("FOX_PLUS_X move.isMinusX");
-                    for (int x = move.getEndPoint().x - 1; x <= move.getStartPoint().x - 2; x++) {
-                        point = new Point(x, move.getStartPoint().y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x < 0) {
-                            return false;
-                        }
-                    }
-                    move(board, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
-                    move(board, move);
-                    board.notifyObserver();
-                    return true;
-                }
-            case FOX_MINUS_X:
-                if (move.isPlusX()) {
-                    //Debug: System.out.println("FOX_MINUS_X move.isPlusX");
-                    for (int x = move.getStartPoint().x + 2; x <= move.getEndPoint().x + 1; x++) {
-                        point = new Point(x, move.getStartPoint().y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x > board.getMax().x) {
-                            return false;
-                        }
-                    }
-                    move(board, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
-                    move(board, move);
-                    board.notifyObserver();
-                    return true;
-                } else if (move.isMinusX()) {
-                    //Debug: System.out.println("FOX_MINUS_X move.isMinusX");
-                    for (int x = move.getEndPoint().x; x <= move.getStartPoint().x - 1; x++) {
-                        point = new Point(x, move.getStartPoint().y);
-                        if (board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x < 0) {
-                            return false;
-                        }
-                    }
-                    move(board, move);
-                    move(board, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
-                    board.notifyObserver();
-                    return true;
-                }
+    public Foxes(Direction direction, Point headLocation) {
+
+        /* Functionally, it does not matter the order of the fox's tail and head, as it can move both directions along its axis.
+         * Because of this, and due to the images available, the tail of the fox is either:
+         *
+         *  > To the left of the head, if the direction of the fox is along the x-axis
+         *  > To the bottom of the head (with the origin being the top-left corner. If the origin was the bottom left, then the
+         *    tail would be to the top of the head).
+         *
+         * Due to this tail placement, if the head was along the first row or column, the index of the tail would be -1 along the respective
+         * axis, which is not a valid index.
+         */
+
+
+        if(direction == Direction.X_AXIS && headLocation.x == 0)
+        {
+            throw new IllegalArgumentException("The head of the fox must not be along the first row or column!");
         }
-        return false;
+
+        if(direction == Direction.Y_AXIS && headLocation.y == 0)
+        {
+            throw new IllegalArgumentException("The head of the fox must not be along the first row or column!");
+        }
+
+        this.direction = direction;
+        this.headLocation = headLocation;
+
+       calculateTailLocation();
     }
 
-    /**
-     * Get all possible moves for a fox.
-     *
-     * @param board The board the fox on
-     * @param start The location of the fox
-     * @return The possible moves
-     */
-    public static Map<Move, Board> getMoves(Board board, Point start) {
-        boolean c = true;
-        Map<Move, Board> moves = new HashMap<>();
-        Board newBoard;
-        Move move;
-        Point point = new Point(start);
-        switch (board.getSquare(start).getPiece()) {
-            case FOX_PLUS_Y -> {
-                while (c) {
-                    if (!start.equals(point)) {
-                        newBoard = new Board(board);
-                        move = new Move(start, point);
-                        move(newBoard, move);
-                        move(newBoard, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y - 1), new Point(move.getEndPoint().x, move.getEndPoint().y - 1)));
-                        moves.put(move, newBoard);
+    @Override
+    public void updateBoardSpotUsed(Point newLocation) {
+        this.headLocation = new Point(newLocation);
+        calculateTailLocation();
+    }
+
+
+    @Override
+    public Set<Point> boardSpotsUsed() {
+        return occupiedBoardSpots;
+    }
+
+    public Point getHeadLocation() {
+        return headLocation;
+    }
+
+    public Direction getDirection() {
+        return direction;
+    }
+
+    @Override
+    public List<Move> getMoves(Board board) {
+
+        Point headPointCopy = new Point(headLocation);
+        List<Move> possibleMoves = new ArrayList<>();
+
+        /*
+            To find valid moves for the fox, a loop is done in both directions along the fox's direction.
+            For example, if the fox is facing positive X, and the head is located at (3, 0), then the squares
+             (4, 0) are checked for pieces and squares. While there are no obstacles, a valid move is found and stored.
+
+            Continuing with the above example, when searching in the other direction, to the negative X, the search
+            begins from the tail. Thus the squares (1, 0) and (0, 0) are checked in that order, as the tail is located
+            at (2, 0). For each move that is found, however, the move must be translated so that it is relative to the head.
+            Thus, if the square (1, 0) is a valid move, then the move would contain an end point of (2, 0), as this would
+            result in the tail being at (1, 0) and the head at (2, 0), which was found to be clear of any pieces and squares.
+         */
+
+        switch (direction)
+        {
+            case X_AXIS:
+                headPointCopy.x += 1;
+                while(headPointCopy.x != Board.maxBoardLength) {
+                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                        break;
                     }
-                    point = new Point(point.x, point.y + 1);
-                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y > board.getMax().y);
+                    possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
+                    headPointCopy.x += 1;
                 }
-                return moves;
-            }
-            case FOX_MINUS_Y -> {
-                while (c) {
-                    if (!start.equals(point)) {
-                        newBoard = new Board(board);
-                        move = new Move(start, point);
-                        move(newBoard, move);
-                        move(newBoard, new Move(new Point(move.getStartPoint().x, move.getStartPoint().y + 1), new Point(move.getEndPoint().x, move.getEndPoint().y + 1)));
-                        moves.put(move, newBoard);
+                headPointCopy = new Point(tailLocation);
+                headPointCopy.x -= 1;
+
+                while(headPointCopy.x >= 0) {
+                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                        break;
                     }
-                    point = new Point(point.x, point.y - 1);
-                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.y < 0);
+                    // Note the translation so that the move is relative to the head
+                    headPointCopy.x += 1;
+                    possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
+                    // To continue looping starting at the next square to the left, not only does a '-1' have to be done,
+                    // but so does another '-1' to account for the translation made earlier
+                    headPointCopy.x -= 2;
                 }
-                return moves;
-            }
-            case FOX_PLUS_X -> {
-                while (c) {
-                    if (!start.equals(point)) {
-                        newBoard = new Board(board);
-                        move = new Move(start, point);
-                        move(newBoard, move);
-                        move(newBoard, new Move(new Point(move.getStartPoint().x - 1, move.getStartPoint().y), new Point(move.getEndPoint().x - 1, move.getEndPoint().y)));
-                        moves.put(move, newBoard);
+                break;
+
+            case Y_AXIS: // Same ideas a X_AXIS
+                headPointCopy.y += 1;
+                while(headPointCopy.y != Board.maxBoardLength) {
+                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                        break;
                     }
-                    point = new Point(point.x + 1, point.y);
-                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x > board.getMax().x);
+                    possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
+                    headPointCopy.y += 1;
                 }
-                return moves;
-            }
-            case FOX_MINUS_X -> {
-                while (c) {
-                    if (!start.equals(point)) {
-                        newBoard = new Board(board);
-                        move = new Move(start, point);
-                        move(newBoard, move);
-                        move(newBoard, new Move(new Point(move.getStartPoint().x + 1, move.getStartPoint().y), new Point(move.getEndPoint().x + 1, move.getEndPoint().y)));
-                        moves.put(move, newBoard);
+                headPointCopy = new Point(tailLocation);
+                headPointCopy.y -= 1;
+
+                while(headPointCopy.y >= 0) {
+                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                        break;
                     }
-                    point = new Point(point.x - 1, point.y);
-                    c = !(board.hasSquare(point) && board.getSquare(point).hasPiece() || point.x < 0);
+                    headPointCopy.y += 1;
+                    possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
+                    headPointCopy.y -= 2;
                 }
-                return moves;
-            }
+                break;
         }
-        return moves;
+
+        return possibleMoves;
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        return null;
+    }
+
+    private void calculateTailLocation() {
+        occupiedBoardSpots = new HashSet<>();
+
+        occupiedBoardSpots.add(headLocation);
+
+        switch(direction)
+        {
+            case X_AXIS:
+                tailLocation = new Point(headLocation.x - 1, headLocation.y);
+                break;
+
+            case Y_AXIS:
+                tailLocation = new Point(headLocation.x, headLocation.y - 1);
+                break;
+        }
+
+        occupiedBoardSpots.add(tailLocation);
     }
 }

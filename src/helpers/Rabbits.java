@@ -2,141 +2,79 @@ package helpers;
 
 import model.Board;
 
+import javax.swing.*;
 import java.awt.*;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 
-public class Rabbits {
-    /**
-     * Move a rabbit.
-     *
-     * @param board The board the rabbit on
-     * @param move  The move to execute
-     */
-    private static void move(Board board, Move move) {
-        board.getSquare(move.getStartPoint()).removePiece();
-        if (board.hasSquare(move.getEndPoint())) {
-            board.getSquare(move.getEndPoint()).setPiece(Piece.RABBIT);
-        } else {
-            board.addSquare(move.getEndPoint(), new Square(false, false, Piece.RABBIT));
-        }
-        board.removeSquareIfEmpty(move.getStartPoint());
+public class Rabbits implements Piece  {
+
+    private Point boardSpot;
+
+    public Rabbits(Point boardSpot) {
+        this.boardSpot = boardSpot;
     }
 
-
-    /**
-     * Check if a move is valid, if so execute it.
-     *
-     * @param board The board to check against
-     * @param move  The move to check
-     * @return If the move was executed
-     */
-    public static boolean checkAndMove(Board board, Move move) {
-        Point point;
-        if (move.isMinusY(1)) {
-            for (int y = move.getEndPoint().y + 1; y <= move.getStartPoint().y - 1; y++) {
-                point = new Point(move.getStartPoint().x, y);
-                if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.y - 1 < 0) {
-                    return false;
-                }
-            }
-            move(board, move);
-            board.notifyObserver();
-            return true;
-        } else if (move.isPlusY(1)) {
-            for (int y = move.getStartPoint().y + 1; y <= move.getEndPoint().y - 1; y++) {
-                point = new Point(move.getStartPoint().x, y);
-                if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.y + 1 > board.getMax().y) {
-                    return false;
-                }
-            }
-            move(board, move);
-            board.notifyObserver();
-            return true;
-        } else if (move.isMinusX(1)) {
-            for (int x = move.getEndPoint().x + 1; x <= move.getStartPoint().x - 1; x++) {
-                point = new Point(x, move.getStartPoint().y);
-                if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.x - 1 < 0) {
-                    return false;
-                }
-            }
-            move(board, move);
-            board.notifyObserver();
-            return true;
-        } else if (move.isPlusX(1)) {
-            for (int x = move.getStartPoint().x + 1; x <= move.getEndPoint().x - 1; x++) {
-                point = new Point(x, move.getStartPoint().y);
-                if (!board.hasSquare(point) || !board.getSquare(point).hasPiece() || point.x + 1 > board.getMax().x) {
-                    return false;
-                }
-            }
-            move(board, move);
-            board.notifyObserver();
-            return true;
-        }
-        return false;
+    @Override
+    public void updateBoardSpotUsed(Point newLocation) {
+        boardSpot = new Point(newLocation);
     }
 
-    /**
-     * Get all possible moves for a rabbit.
-     *
-     * @param board The board the rabbit on
-     * @param start The location of the rabbit
-     * @return The possible moves
-     */
-    public static Map<Move, Board> getMoves(Board board, Point start) {
-        boolean c = true;
-        Map<Move, Board> moves = new HashMap<>();
-        Board newBoard;
-        Move move;
-        Point point = new Point(start);
-        while (c) {
-            point = new Point(point.x, point.y + 1);
-            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+    @Override
+    public Set<Point> boardSpotsUsed() {
+        return null;
+    }
+
+    @Override
+    public List<Move> getMoves(Board board) {
+        List<Move> possibleMoves = new ArrayList<>();
+        // Possible moves could exist in any of the four directions depending on the obstacles of the board
+        // Thus all directions have to be checked.
+        possibleMoves.addAll(getMoveDirection(board, boardSpot, new Point(1, 0)));
+        possibleMoves.addAll(getMoveDirection(board, boardSpot, new Point(-1, 0)));
+        possibleMoves.addAll(getMoveDirection(board, boardSpot, new Point(0, 1)));
+        possibleMoves.addAll(getMoveDirection(board, boardSpot, new Point(0, -1)));
+
+        return possibleMoves;
+    }
+
+    private List<Move> getMoveDirection(Board board, Point start, Point direction) {
+
+        /*
+             To find possible moves for the rabbits, search the given direction for obstacles. While
+             there are obstacles, continue searching the next square in the given direction. Once no more
+             obstacles are found, then the end point for a move has been found.
+         */
+
+        Point startingPointCopy = new Point(start);
+        ArrayList<Move> possibleMoves = new ArrayList<>();
+        boolean objectToJump = true;
+        while(objectToJump){
+            startingPointCopy.x += direction.x;
+            startingPointCopy.y += direction.y;
+            objectToJump = board.hasPiece(startingPointCopy);
         }
-        if (point.y <= board.getMax().y && !start.equals(new Point(point.x, point.y - 1))) {
-            newBoard = new Board(board);
-            move = new Move(start, point);
-            move(newBoard, move);
-            moves.put(move, newBoard);
+
+        // If there are no pieces in the immediate square adjacent to the rabbit in the given rabbit, there are no moves
+        if(start.equals(new Point(startingPointCopy.x - direction.x, startingPointCopy.y - direction.y))) {
+            return possibleMoves;
         }
-        point = new Point(start);
-        c = true;
-        while (c) {
-            point = new Point(point.x, point.y - 1);
-            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
+
+        // Make sure that the possible move is within valid coordinates of the game. The '-1' seen is because
+        // the coordinates star at 0, not 1.
+        if(startingPointCopy.x >= 0 && startingPointCopy.x <= Board.maxBoardLength - 1 &&
+           startingPointCopy.y >= 0 && startingPointCopy.y <= Board.maxBoardLength - 1) {
+
+                possibleMoves.add(new Move(new Point(start), new Point(startingPointCopy)));
+                return possibleMoves;
         }
-        if (point.y >= 0 && !start.equals(new Point(point.x, point.y + 1))) {
-            newBoard = new Board(board);
-            move = new Move(start, point);
-            move(newBoard, move);
-            moves.put(move, newBoard);
-        }
-        point = new Point(start);
-        c = true;
-        while (c) {
-            point = new Point(point.x + 1, point.y);
-            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
-        }
-        if (point.x <= board.getMax().x && !start.equals(new Point(point.x - 1, point.y))) {
-            newBoard = new Board(board);
-            move = new Move(start, point);
-            move(newBoard, move);
-            moves.put(move, newBoard);
-        }
-        point = new Point(start);
-        c = true;
-        while (c) {
-            point = new Point(point.x - 1, point.y);
-            c = board.hasSquare(point) && board.getSquare(point).hasPiece();
-        }
-        if (point.x >= 0 && !start.equals(new Point(point.x + 1, point.y))) {
-            newBoard = new Board(board);
-            move = new Move(start, point);
-            move(newBoard, move);
-            moves.put(move, newBoard);
-        }
-        return moves;
+
+        return possibleMoves;
+    }
+
+    @Override
+    public ImageIcon getImageIcon() {
+        return null;
     }
 }

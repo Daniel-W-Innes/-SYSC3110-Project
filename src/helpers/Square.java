@@ -29,12 +29,10 @@ public class Square {
      *
      * @param isHole If the square is a rabbit hole
      * @param isRaised If the square is raised
-     * @param piece The Piece that is located on it, nullable
      */
-    public Square(boolean isHole, boolean isRaised, Piece piece) {
+    public Square(boolean isHole, boolean isRaised) {
         this.isHole = isHole;
         this.isRaised = isRaised;
-        this.piece = piece;
         hashCode = genHashCode();
     }
 
