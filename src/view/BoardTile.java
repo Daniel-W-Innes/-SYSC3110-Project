@@ -33,7 +33,7 @@ public class BoardTile extends JButton {
         this.innerBorder = BorderFactory.createLineBorder(Color.blue, 8);
         this.outerBorder = BorderFactory.createLineBorder(Color.yellow, 8);
     }
-
+    
     public Point getPoint() {
         return this.p;
     }

@@ -3,15 +3,16 @@ package view;
 import controller.Game;
 import helpers.Piece;
 import model.Board;
-import model.Model;
 
 import javax.swing.*;
 import java.awt.*;
 
-public class GuiView extends JFrame implements view.View {
+/**
+ * Gui
+ */
+public class GuiView extends JFrame implements View {
     private final Game game;
     private BoardPanel boardPanel;
-    private boolean keepSuffering;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -27,17 +28,38 @@ public class GuiView extends JFrame implements view.View {
         this.populateBoard();
         this.setVisible(true);
     }
+
+    /**
+     * Creates a toolbar for the gui with the buttons: New game, save game, load game, redo and undo
+     */
     private void createToolbar() {
         JToolBar toolbar = new JToolBar();
 
         JButton newBtn = new JButton("New Game");
-        JButton loadBtn = new JButton("Load Game");
-        JButton saveBtn = new JButton("Save");
-
+        newBtn.addActionListener( e -> {
+            //game.reset() or game.newGame()
+        });
         toolbar.add(newBtn);
-        toolbar.add(loadBtn);
-        toolbar.add(saveBtn);
 
+        JButton loadBtn = new JButton("Load Game");
+        loadBtn.addActionListener( e -> {
+
+        });
+        toolbar.add(loadBtn);
+
+        JButton saveBtn = new JButton("Save");
+        saveBtn.addActionListener( e -> {
+            //game.save()
+        });
+        toolbar.add(saveBtn);
+        toolbar.add(Box.createHorizontalGlue());
+
+
+        JButton undoBtn = new JButton("Undo");
+        JButton redoBtn = new JButton("Redo");
+
+        toolbar.add(undoBtn);
+        toolbar.add(redoBtn);
         this.add(toolbar, BorderLayout.PAGE_START);
     }
 
