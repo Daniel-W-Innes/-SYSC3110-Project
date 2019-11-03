@@ -50,13 +50,8 @@ public class Board extends JPanel implements ActionListener {
         this.boardMap.get(point).setIcon(Board.blankTile);
     }
 
-    /**
-     * What dis do???
-     * @param l
-     */
-    public void update(List<Move> l){
-
-    }
+    //TODO: I don't think we need this method anymore?
+    public void update(List<Move> l){}
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -66,10 +61,19 @@ public class Board extends JPanel implements ActionListener {
             //1st part of the move: update currently selected square
             clickedSquare = p;
             List<Move> availableMoves = this.game.getMoves(p);
+
+            //TODO: remove debug printout
+            System.out.println("Possible moves:");
             availableMoves.forEach(elem -> {
-                System.out.print(elem + " ");
+                System.out.println(elem);
             });
             System.out.println();
+
+            //No available moves, don't count the thingy
+            if(availableMoves.isEmpty()) {
+                this.clickedSquare = null;
+            }
+
         } else {
             //2nd part of the move: do the move
 

@@ -7,29 +7,28 @@ import java.awt.*;
 import java.util.List;
 import java.util.*;
 
-public class Board implements Model {
+public class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
-    private List<View> views;
 
     private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         this.board = Collections.unmodifiableMap(board);
         this.pieces = new HashMap<>(pieces);
         this.max = max;
-        views = new ArrayList<>();
+        //views = new ArrayList<>();
     }
 
     public Board(Board board) {
         this.board = board.getBoard();
         pieces = new HashMap<>(board.getPieces());
         max = board.getMax();
-        views = new ArrayList<>(board.getViews());
+        //views = new ArrayList<>(board.getViews());
     }
 
-    private List<View> getViews() {
-        return views;
-    }
+//    private List<View> getViews() {
+//        return views;
+//    }
 
     private Map<Point, Square> getBoard() {
         return board;
@@ -46,16 +45,16 @@ public class Board implements Model {
         return pieces;
     }
 
-    //This is the only place that communicates with the View
+    //Move the piece and "notify" the View of the changes
     private void movePiece(Move move) {
         getPieces().put(move.getEnd(), getPieces().get(move.getStart()));
-        for (View view : views) {
-            view.addPiece(move.getEnd(), getPieces().get(move.getStart()));
-        }
+//        for (View view : views) {
+//            view.addPiece(move.getEnd(), getPieces().get(move.getStart()));
+//        }
         getPieces().remove(move.getStart());
-        for (View view : views) {
-            view.removePiece(move.getStart());
-        }
+//        for (View view : views) {
+//            view.removePiece(move.getStart());
+//        }
     }
 
     public boolean hasPiece(Point point) {
@@ -78,7 +77,6 @@ public class Board implements Model {
                 stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
             }
             stringBuilder.append('|');
-//            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }
@@ -114,11 +112,13 @@ public class Board implements Model {
 
     /**
      * Why does this exist???
+     * //TODO: Fix this
+     * This is the problem... When the Game build the Graph building it calls this method and it affects the inital Board instance...
      * @param moves
      */
     public void movePieces(List<Move> moves) {
         for (Move move : moves) {
-            movePiece(move);
+            this.movePiece(move);
         }
     }
 
@@ -128,7 +128,7 @@ public class Board implements Model {
                 .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
     }
 
-    @Override
+    /*@Override
     public void addView(View view) {
         //Update the initial board state with the pieces
         this.pieces.forEach((point, piece) -> {
@@ -140,7 +140,7 @@ public class Board implements Model {
     @Override
     public void removeView(View view) {
         views.remove(view);
-    }
+    }*/
 
     /**
      * Helper static class that fills in the Board model with pieces and squares

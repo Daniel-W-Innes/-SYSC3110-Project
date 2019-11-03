@@ -14,7 +14,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class Game {
-    //Each "Level" contains the board and the graph
+    //Each "Level" contains the Board and the Graph
     private final Map<Integer, Level> levels; //The Model
     private int levelNumber;
 
@@ -29,6 +29,7 @@ public class Game {
 
     public static void main(String[] args) {
         try {
+            //Start the game
             Game game = new Game();
         } catch (ClassNotFoundException e) {
             e.printStackTrace();
@@ -71,8 +72,11 @@ public class Game {
                 .addPieces(new Point(0, 2), new Mushroom())
                 .addPieces(new Point(1, 3), new Mushroom())
                 .build();
-        b1.addView(this.gameGui);
-        getLevels().put(1, genLevel(b1));
+        //b1.addView(this.gameGui);
+        Level defaultLevel = genLevel(b1);
+        //Add the view to the level
+        //defaultLevel.addView(this.gameGui);
+        getLevels().put(1, defaultLevel);
 
         /*getLevels().put(20, genLevel(new Board.Builder(true)
                 .addPieces(new Point(1, 4), new Rabbit(new Color(0xCD853F)))
@@ -105,19 +109,32 @@ public class Game {
         System.out.println("Game.setup() takes: " + (System.currentTimeMillis()-start));
     }
 
+    /**
+     * Build and return a graph that represents the possible board states.
+     * TODO: this shouldn't be here...
+     * @param start the initial Board state
+     * @return a Level object that contains a Graph and a Board
+     */
     private Level genLevel(Board start) {
+        //Build the graph that represents the game state transitions
         Graph.Builder graphBuilder = new Graph.Builder();
         Board newBoard;
         Set<Board> expanded = new HashSet<>();
         Queue<Board> queue = new ConcurrentLinkedQueue<>();
         queue.add(start);
+
+        //Build the GraphBuilder ???
         while (!queue.isEmpty()) {
             Board board = queue.poll();
+            //For every Piece
             for (Map.Entry<Point, Piece> pieces : board.getPieces().entrySet()) {
+                //For every move a Piece can do
                 for (Map.Entry<Move, List<Move>> moves : pieces.getValue().getMoves(board, pieces.getKey()).entrySet()) {
+                    //
                     graphBuilder = graphBuilder.addMoves(board, moves.getKey(), moves.getValue());
                     graphBuilder = graphBuilder.addIsVictory(board, board.isVictory());
                     newBoard = new Board(board);
+                    //TODO: Fix this. Causes problems
                     newBoard.movePieces(moves.getValue());
                     graphBuilder = graphBuilder.addMoves(newBoard, moves.getKey().getReverse(), moves.getValue().stream().map(Move::getReverse).collect(Collectors.toList()));
                     expanded.add(board);
@@ -127,7 +144,7 @@ public class Game {
                 }
             }
         }
-        return new Level(graphBuilder.build(), start);
+        return new Level(graphBuilder.build(), start, this.gameGui);
     }
 
     private Map<Integer, Level> getLevels() {

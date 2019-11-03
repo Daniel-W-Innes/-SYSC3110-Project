@@ -23,18 +23,26 @@ public class Rabbit implements Piece {
         return icon;
     }
 
+    /**
+     *
+     * @param board
+     * @param start
+     * @param offset
+     * @return
+     */
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {
         boolean c = true;
         Map<Move, List<Move>> moves = new HashMap<>();
         Move move;
         Point point = new Point(start);
+
         while (c) {
             point = new Point(point.x + offset.x, point.y + offset.y);
             c = board.hasPiece(point);
         }
         if (!start.equals(new Point(point.x - offset.x, point.y - offset.y)) && point.y <= board.getMax().y && point.x <= board.getMax().x && point.y >= 0 && point.x >= 0) {
             move = new Move(start, point);
-            moves.put(move, List.of(move));
+            moves.put(move, List.of(move)); //Hello???
         }
         return moves;
     }
@@ -42,6 +50,7 @@ public class Rabbit implements Piece {
     @Override
     public Map<Move, List<Move>> getMoves(Board board, Point start) {
         Map<Move, List<Move>> moves = new HashMap<>();
+        //Get the possible moves in each direction
         moves.putAll(getMoves(board, start, new Point(0, 1)));
         moves.putAll(getMoves(board, start, new Point(0, -1)));
         moves.putAll(getMoves(board, start, new Point(1, 0)));

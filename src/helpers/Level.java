@@ -1,27 +1,41 @@
 package helpers;
 
 import model.Board;
+import model.Model;
+import view.View;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 public class Level {
     private final Board board;
     private final Graph graph;
+    private final View view;
 
-    public Level(Graph graph, Board board) {
+    public Level(Graph graph, Board board, View view) {
         this.graph = graph;
         this.board = board;
+        this.view = view;
+
+        //TODO: tell the view about the initial board state
+        this.board.getPieces().forEach((point, piece) -> {
+            view.addPiece(point, piece);
+        });
+
         //System.out.println(graph.BFS(board).toString());
     }
 
     //Called by the Game controller to change the Board model
-    public boolean move(Move key) {
-        if (getGraph().containsMove(getBoard(), key)) {
-            getBoard().movePieces(getGraph().getMoves(getBoard(), key));
+    public boolean move(Move move) {
+        if (getGraph().containsMove(getBoard(), move)) {
+            this.view.addPiece(move.getEnd(), this.board.getPiece(move.getStart()));
+            this.view.removePiece(move.getStart());
+
+            getBoard().movePieces(getGraph().getMoves(getBoard(), move));
             return true;
         } else {
             return false;
@@ -53,6 +67,10 @@ public class Level {
         return board;
     }
 
+    public Map<Point, Square> getBoardTerrain() {
+        return null; //TODO: implement
+    }
+
     public List<Move> getMove(Point point) {
         if(this.board.hasPiece(point)) {
             return getBoard().getPiece(point).getMoves(getBoard(), point)
@@ -65,4 +83,14 @@ public class Level {
             return new ArrayList<Move>();
         }
     }
+
+//    @Override
+//    public void addView(View view) {
+//        this.view = view;
+//    }
+//
+//    @Override
+//    public void removeView(View view) {
+//        this.views.remove(view);
+//    }
 }

@@ -4,6 +4,9 @@ import model.Board;
 
 import java.util.*;
 
+/**
+ * Represent the transition of Board states as a graph. Boards are the vertices and Moves are the edges?
+ */
 public class Graph {
     private final Map<Board, Map<Move, List<Move>>> graph;
     private final Map<Board, Boolean> isVictories;
@@ -11,6 +14,8 @@ public class Graph {
     private Graph(Map<Board, Map<Move, List<Move>>> graph, Map<Board, Boolean> isVictories) {
         Map<Board, Map<Move, List<Move>>> boards = new HashMap<>();
         Map<Move, List<Move>> moves;
+
+        //
         for (Map.Entry<Board, Map<Move, List<Move>>> move : graph.entrySet()) {
             moves = new HashMap<>();
             for (Map.Entry<Move, List<Move>> entry : move.getValue().entrySet()) {
@@ -22,10 +27,22 @@ public class Graph {
         this.isVictories = Collections.unmodifiableMap(isVictories);
     }
 
+    /**
+     * Check if the Move is valid given the Board
+     * @param board
+     * @param move
+     * @return
+     */
     boolean containsMove(Board board, Move move) {
         return getGraph().containsKey(board) && getGraph().get(board).containsKey(move);
     }
 
+    /**
+     * Get a list of possible Moves given a Move???
+     * @param board
+     * @param move
+     * @return
+     */
     List<Move> getMoves(Board board, Move move) {
         return getGraph().get(board).get(move);
     }
@@ -51,7 +68,7 @@ public class Graph {
         return getGraph().hashCode();
     }
 
-    public boolean IsVictory(Board board) {
+    public boolean isVictory(Board board) {
         return isVictories.get(board);
     }
 
@@ -95,7 +112,8 @@ public class Graph {
             }
             for (List<Move> moves : graph.get(board).values()) {
                 Board newBoard = new Board(board);
-                newBoard.movePieces(moves);
+                //Why does this call exist?
+                //newBoard.movePieces(moves); //moves is a List<Map<Move, List<Move>>>
                 if (!expanded.contains(newBoard)) {
                     expanded.add(newBoard);
                     if (listOfStepsPerBoard.containsKey(board)) {

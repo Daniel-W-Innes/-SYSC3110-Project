@@ -35,35 +35,51 @@ public class Fox implements Piece {
         return icon;
     }
 
+    /**
+     *
+     * @param board the board state
+     * @param start the point where the move starts
+     * @param offset indicates which direction of moves you're looking at.
+     * @return
+     */
     private Map<Move, List<Move>> getMoves(Board board, Point start, Point offset) {
         Map<Move, List<Move>> moveListMap = new HashMap<>();
         Move move;
         Point point = new Point(start);
         List<Move> moves;
+
+        //Iterate in the offset direction until the fox hits an obstacle
         while (true) {
             point = new Point(point.x + offset.x, point.y + offset.y);
-            if (!board.hasPiece(point) && point.y <= board.getMax().y && point.x <= board.getMax().x && point.y >= 0 && point.x >= 0) {
-                moves = new ArrayList<>();
+            if (!board.hasPiece(point) //If there's a free space, it's a move
+                    && point.y <= board.getMax().y
+                    && point.x <= board.getMax().x
+                    && point.y >= 0 && point.x >= 0) {
+                moves = new ArrayList<>(); //???
                 move = new Move(start, point);
+
+                //If the move ends in the opposite direction of the offset ???
                 if (move.getEnd().x == start.x - offset.x && move.getEnd().y == start.y - offset.y) {
-                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
+                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y),
+                                        new Point(point.x - offset.x, point.y - offset.y)));
                     moves.add(move);
                 } else {
                     moves.add(move);
-                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y), new Point(point.x - offset.x, point.y - offset.y)));
+                    moves.add(new Move(new Point(start.x - offset.x, start.y - offset.y),
+                                        new Point(point.x - offset.x, point.y - offset.y)));
                 }
                 moveListMap.put(move, moves);
-            } else {
+            } else { //Reached the end of the list of possible moves
                 break;
             }
         }
         return moveListMap;
     }
 
-
     @Override
     public Map<Move, List<Move>> getMoves(Board board, Point start) {
         Map<Move, List<Move>> moveListMap = new HashMap<>();
+        //Get all the fox moves in each direction
         switch (getDirection()) {
             case PLUS_Y -> {
                 moveListMap.putAll(getMoves(board, start, new Point(0, 1)));
