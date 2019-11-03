@@ -1,9 +1,6 @@
 package model;
 
-import helpers.Foxes;
-import helpers.Move;
-import helpers.Piece;
-import helpers.Square;
+import helpers.*;
 import view.View;
 
 import java.awt.*;
@@ -96,6 +93,7 @@ public class Board {
             }
 
             pieces.put(occupiedPoint, piece);
+            //this.view.addPiece(occupiedPoint, piece);
         }
     }
 
@@ -251,7 +249,15 @@ public class Board {
      */
     //Check if there are any rabbit
     public boolean isVictory() {
-        return false;
+        for(Map.Entry<Point, Piece> entry : this.pieces.entrySet()) {
+            //Return false if a rabbit is not in a hole
+            if(entry.getValue().getClass() == Rabbits.class
+                    && ((this.terrain.get(entry.getKey()) == null) || !this.terrain.get(entry.getKey()).isHole())){
+                return false;
+            }
+        }
+        return true;
+
 //        return terrain.values().stream()
 //                .filter(Square::hasPiece)
 //                .filter(square -> square.getPiece().equals(Piece.RABBIT))

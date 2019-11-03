@@ -11,6 +11,7 @@ import java.util.Set;
 public class Mushroom implements Piece {
 
     private Point boardSpot;
+    private static ImageIcon icon = new ImageIcon("./resources/Mushroom.jpg");
 
     public Mushroom(Point boardSpot) {
         this.boardSpot = boardSpot;
@@ -23,7 +24,7 @@ public class Mushroom implements Piece {
 
     @Override
     public Set<Point> boardSpotsUsed() {
-        return null;
+        return Set.of(this.boardSpot);
     }
 
     @Override
@@ -33,7 +34,7 @@ public class Mushroom implements Piece {
 
     @Override
     public ImageIcon getImageIcon() {
-        return null;
+        return Mushroom.icon;
     }
 
 }

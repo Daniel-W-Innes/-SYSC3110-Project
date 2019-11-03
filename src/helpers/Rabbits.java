@@ -11,6 +11,7 @@ import java.util.List;
 public class Rabbits implements Piece  {
 
     private Point boardSpot;
+    private static ImageIcon icon = new ImageIcon("./resources/Rabbit_white.png");
 
     public Rabbits(Point boardSpot) {
         this.boardSpot = boardSpot;
@@ -23,7 +24,7 @@ public class Rabbits implements Piece  {
 
     @Override
     public Set<Point> boardSpotsUsed() {
-        return null;
+        return Set.of(this.boardSpot);
     }
 
     @Override
@@ -75,6 +76,6 @@ public class Rabbits implements Piece  {
 
     @Override
     public ImageIcon getImageIcon() {
-        return null;
+        return Rabbits.icon;
     }
 }

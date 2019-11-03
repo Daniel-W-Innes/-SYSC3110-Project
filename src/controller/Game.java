@@ -2,6 +2,7 @@ package controller;
 
 import helpers.*;
 import model.Board;
+import view.GuiView;
 import view.View;
 
 import java.awt.Point;
@@ -34,6 +35,7 @@ public class Game {
      * @param observer A view
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
+    //TODO: Refactor into new class
     public void setUp(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         switch (levelNumber) {
@@ -46,29 +48,46 @@ public class Game {
                 board.addPiece(new Point(0, 2), new Mushroom(new Point(0, 2)));
                 board.addPiece(new Point(1, 3), new Mushroom(new Point(1, 3)));
 
+                board.addSquare(new Point(0,0), new Square(true, true));
+                board.addSquare(new Point(2,0), new Square(false, true));
+                board.addSquare(new Point(4,0), new Square(false, true));
+
+                board.addSquare(new Point(0,2), new Square(false, true));
+                board.addSquare(new Point(2,2), new Square(false, true));
+                board.addSquare(new Point(4,2), new Square(false, true));
+
+                board.addSquare(new Point(0,4), new Square(false, true));
+                board.addSquare(new Point(2,4), new Square(false, true));
+                board.addSquare(new Point(4,4), new Square(false, true));
         }
 
         view = observer;
+        view.sendInitialBoard(board);
+        this.board.setView(view);
     }
 
-    public List<Move> getMoves(Point clickedLocation) {
+    public List<Move> getMoves(Point p) {
 
         /*
             When a user clicks a location on the view, a point is generated. If there are any
             corresponding pieces at that given point, then the list of possible moves are passed to the view.
          */
 
-        lastClickedPiece = board.getPieces().get(clickedLocation);
+        lastClickedPiece = board.getPieces().get(p);
         if(lastClickedPiece == null) {
             return new ArrayList<>();
         }
-        return lastClickedPiece.getMoves(board);
+
+        return this.board.getPieces().get(p).getMoves(board);
     }
 
-    public void movePiece(Point newLocation) {
+    public void movePiece(Move move) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(lastClickedPiece, newLocation);
+        board.movePiece(lastClickedPiece, move.getEndPoint());
+        if(isVictory()) {
+            this.view.notifyWin();
+        }
     }
 
     /**
@@ -79,4 +98,8 @@ public class Game {
         return board.isVictory();
     }
 
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.setUp(new GuiView(game), 1);
+    }
 }
