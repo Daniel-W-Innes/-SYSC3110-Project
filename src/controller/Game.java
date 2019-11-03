@@ -6,6 +6,7 @@ import view.GuiView;
 import view.View;
 
 import java.awt.Point;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -48,7 +49,7 @@ public class Game {
                 board.addPiece(new Point(0, 2), new Mushroom(new Point(0, 2)));
                 board.addPiece(new Point(1, 3), new Mushroom(new Point(1, 3)));
                 this.setDefaultTerrain(board);
-
+                break;
             case 2:
                 board = new Board();
                 board.addPiece(new Point(4, 2), new Rabbits((new Point(4, 2))));
@@ -60,6 +61,20 @@ public class Game {
                 board.addPiece(new Point(1, 2), new Mushroom(new Point(1, 2)));
                 board.addPiece(new Point(2, 3), new Mushroom(new Point(2, 3)));
                 this.setDefaultTerrain(board);
+                break;
+            case 3:
+                board = new Board();
+                board.addPiece(new Point(3, 0), new Rabbits(new Point(3, 0)));
+                board.addPiece(new Point(4, 2), new Rabbits(new Point(4, 2)));
+                board.addPiece(new Point(1, 4), new Rabbits(new Point(1, 4)));
+
+                board.addPiece(new Point(1, 1), new Foxes(Foxes.Direction.Y_AXIS, new Point(1, 1)));
+                board.addPiece(new Point(4, 3), new Foxes(Foxes.Direction.X_AXIS, new Point(4, 3)));
+
+                board.addPiece(new Point(3, 1), new Mushroom(new Point(3, 1)));
+                board.addPiece(new Point(2, 4), new Mushroom(new Point(2, 4)));
+                this.setDefaultTerrain(board);
+                break;
         }
 
         view = observer;
@@ -114,6 +129,6 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new GuiView(game), 2);
+        game.setUp(new GuiView(game), 3);
     }
 }

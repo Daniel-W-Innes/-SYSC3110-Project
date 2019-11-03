@@ -11,7 +11,6 @@ import java.awt.*;
 public class GuiView extends JFrame implements view.View {
     private final Game game;
     private BoardPanel boardPanel;
-    private boolean keepSuffering;
 
     /**
      * Starts up an instance of the TextView GUI

@@ -12,7 +12,7 @@ import java.util.List;
  * The board is the only class observed by a view.
  * @author frank liu, daniel innes
  */
-public class Board {
+public class Board implements Model {
 
     /**
      * The Board map containing all squares.
