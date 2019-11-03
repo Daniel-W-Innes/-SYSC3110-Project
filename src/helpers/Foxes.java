@@ -14,6 +14,11 @@ public class Foxes implements Piece {
     Point tailLocation;
     Direction direction;
 
+    private static ImageIcon verticalHeadIcon = new ImageIcon("./resources/Fox_down.jpg");
+    private static ImageIcon verticalTailIcon = new ImageIcon("./resources/Fox_up.jpg");
+    private static ImageIcon horizontalHeadIcon = new ImageIcon("./resources/Fox_right.jpg");
+    private static ImageIcon horizontalTailIcon= new ImageIcon("./resources/Fox_left.jpg");
+
     public enum Direction
     {
         X_AXIS,
@@ -142,8 +147,24 @@ public class Foxes implements Piece {
     }
 
     @Override
-    public ImageIcon getImageIcon() {
-        return null;
+    public ImageIcon getImageIcon(Point p) {
+        if(this.direction == Direction.Y_AXIS) {
+            if(headLocation.equals(p)) {
+                return Foxes.verticalHeadIcon;
+            } else if(tailLocation.equals(p)) {
+                return Foxes.verticalTailIcon;
+            } else {
+                throw new IllegalStateException("Illegal fox state");
+            }
+        } else {
+            if(headLocation.equals(p)) {
+                return Foxes.horizontalHeadIcon;
+            } else if(tailLocation.equals(p)) {
+                return Foxes.horizontalTailIcon;
+            } else {
+                throw new IllegalStateException("Illegal fox state");
+            }
+        }
     }
 
     private void calculateTailLocation() {

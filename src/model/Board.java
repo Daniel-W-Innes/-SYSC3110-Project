@@ -149,6 +149,10 @@ public class Board {
                 view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
                 view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
 
+                // Since the piece has moved, its internal representation has to be updated as well to match the new location
+                // of it stored in the board
+                piece.updateBoardSpotUsed(newLocation);
+
                 pieces.put(newLocation, removedPiece); // Add new fox head
                 pieces.put(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail
                 view.addPiece(newLocation, removedPiece); // Add new fox head to view
@@ -159,6 +163,10 @@ public class Board {
                 pieces.remove(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
                 view.removePiece(removedPiece.getHeadLocation());
                 view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
+
+                // Since the piece has moved, its internal representation has to be updated as well to match the new location
+                // of it stored in the board
+                piece.updateBoardSpotUsed(newLocation);
 
                 pieces.put(newLocation, removedPiece);
                 pieces.put(new Point(newLocation.x, newLocation.y - 1), removedPiece);
@@ -174,14 +182,13 @@ public class Board {
                 pieces.remove(point);
                 view.removePiece(point);
             }
+            // Since the piece has moved, its internal representation has to be updated as well to match the new location
+            // of it stored in the board
+            piece.updateBoardSpotUsed(newLocation);
 
             pieces.put(newLocation, piece);
             view.addPiece(newLocation, piece);
         }
-
-        // Since the piece has moved, its internal representation has to be updated as well to match the new location
-        // of it stored in the board
-        piece.updateBoardSpotUsed(newLocation);
     }
 
     /**

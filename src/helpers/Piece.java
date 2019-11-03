@@ -11,6 +11,6 @@ public interface Piece {
 
     Set<Point> boardSpotsUsed();
     List<Move> getMoves(Board board);
-    ImageIcon getImageIcon();
+    ImageIcon getImageIcon(Point p);
     void updateBoardSpotUsed(Point newLocation);
 }

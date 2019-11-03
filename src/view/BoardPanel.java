@@ -20,8 +20,6 @@ public class BoardPanel extends JPanel implements ActionListener {
     private HashMap<Point, BoardTile> boardMap = new HashMap<>();
     private final Game game;
 
-    //private static final ImageIcon emptyTileIcon = new ImageIcon("./resources/Blank.jpg");
-
     public BoardPanel(Game game) {
         this.game = game;
 
@@ -53,7 +51,7 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     public void addPiece(Point point, Piece piece) {
         //this.boardMap.get(point).placePiece(piece);
-        this.boardMap.get(point).setIcon(piece.getImageIcon());
+        this.boardMap.get(point).setIcon(piece.getImageIcon(point));
     }
 
     public void removePiece(Point point) {
@@ -62,7 +60,6 @@ public class BoardPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        //TODO: cancel a move
         Point p = ((BoardTile) e.getSource()).getPoint();
 
         if(this.clickedSquare == null) {

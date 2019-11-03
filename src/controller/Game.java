@@ -47,23 +47,37 @@ public class Game {
                 board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
                 board.addPiece(new Point(0, 2), new Mushroom(new Point(0, 2)));
                 board.addPiece(new Point(1, 3), new Mushroom(new Point(1, 3)));
+                this.setDefaultTerrain(board);
 
-                board.addSquare(new Point(0,0), new Square(true, true));
-                board.addSquare(new Point(2,0), new Square(false, true));
-                board.addSquare(new Point(4,0), new Square(false, true));
+            case 2:
+                board = new Board();
+                board.addPiece(new Point(4, 2), new Rabbits((new Point(4, 2))));
+                board.addPiece(new Point(2, 4), new Rabbits((new Point(2, 4))));
 
-                board.addSquare(new Point(0,2), new Square(false, true));
-                board.addSquare(new Point(2,2), new Square(false, true));
-                board.addSquare(new Point(4,2), new Square(false, true));
+                board.addPiece(new Point(3, 1), new Foxes(Foxes.Direction.Y_AXIS, new Point(3, 1)));
 
-                board.addSquare(new Point(0,4), new Square(false, true));
-                board.addSquare(new Point(2,4), new Square(false, true));
-                board.addSquare(new Point(4,4), new Square(false, true));
+                board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
+                board.addPiece(new Point(1, 2), new Mushroom(new Point(1, 2)));
+                board.addPiece(new Point(2, 3), new Mushroom(new Point(2, 3)));
+                this.setDefaultTerrain(board);
         }
 
         view = observer;
         view.sendInitialBoard(board);
         this.board.setView(view);
+    }
+    private void setDefaultTerrain(Board b) {
+        board.addSquare(new Point(0,0), new Square(true, true));
+        board.addSquare(new Point(2,0), new Square(false, true));
+        board.addSquare(new Point(4,0), new Square(true, true));
+
+        board.addSquare(new Point(0,2), new Square(false, true));
+        board.addSquare(new Point(2,2), new Square(true, true));
+        board.addSquare(new Point(4,2), new Square(false, true));
+
+        board.addSquare(new Point(0,4), new Square(true, true));
+        board.addSquare(new Point(2,4), new Square(false, true));
+        board.addSquare(new Point(4,4), new Square(true, true));
     }
 
     public List<Move> getMoves(Point p) {
@@ -100,6 +114,6 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new GuiView(game), 1);
+        game.setUp(new GuiView(game), 2);
     }
 }

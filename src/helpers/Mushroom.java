@@ -33,7 +33,7 @@ public class Mushroom implements Piece {
     }
 
     @Override
-    public ImageIcon getImageIcon() {
+    public ImageIcon getImageIcon(Point p) {
         return Mushroom.icon;
     }
 

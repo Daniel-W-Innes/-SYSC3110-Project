@@ -75,7 +75,7 @@ public class Rabbits implements Piece  {
     }
 
     @Override
-    public ImageIcon getImageIcon() {
+    public ImageIcon getImageIcon(Point p) {
         return Rabbits.icon;
     }
 }
