@@ -26,7 +26,7 @@ public class TextView implements Observer {
      */
     private TextView(Game game) {
         this.game = game;
-        game.setUp(this, 1);
+        //game.setUp(this, 1);
     }
 
     /**

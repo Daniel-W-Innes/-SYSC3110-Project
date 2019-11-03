@@ -3,6 +3,7 @@ package model;
 import helpers.Observer;
 import helpers.Piece;
 import helpers.Square;
+import view.View;
 
 import java.awt.*;
 import java.util.*;
@@ -13,14 +14,14 @@ import java.util.stream.Collectors;
  * The board is the only class observed by a view.
  * @author frank liu, daniel innes
  */
-public class Board implements helpers.Observable {
+public class Board implements Model {
 
     /**
      * The Board map containing all squares.
      */
     private final Map<Point, Square> board;
     private final Point max;
-    private Observer observer;
+    private View view;
 
     /**
      * Initialize a new with to a defensive copy of the given board.
@@ -33,7 +34,6 @@ public class Board implements helpers.Observable {
                 .map(entry -> Map.entry(entry.getKey(), new Square(entry.getValue().isHole(), entry.getValue().isRaised(), entry.getValue().getPiece())))
                 .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
         this.max = board.getMax();
-        this.observer = board.getObserver();
     }
 
     /**
@@ -58,23 +58,6 @@ public class Board implements helpers.Observable {
 
     public Square getSquare(Point loc) {
         return board.get(loc);
-    }
-
-    @Override
-    public void setObserver(Observer observer) {
-        this.observer = observer;
-    }
-
-    @Override
-    public void notifyObserver() {
-        if (this.observer != null){
-            this.observer.update(new EventObject(this));
-        }
-    }
-
-    @Override
-    public Observer getObserver() {
-        return observer;
     }
 
     /**
@@ -123,7 +106,7 @@ public class Board implements helpers.Observable {
      * @return The Board map
      */
 
-    private Map<Point, Square> getBoard() {
+    public Map<Point, Square> getBoard() {
         return board;
     }
 
@@ -168,7 +151,7 @@ public class Board implements helpers.Observable {
     public boolean isVictory() {
         return board.values().stream()
                 .filter(Square::hasPiece)
-                .filter(square -> square.getPiece().equals(Piece.RABBIT))
+                .filter(square -> square.getPiece().equals(null))
                 .allMatch(Square::isHole);
     }
 
@@ -178,7 +161,6 @@ public class Board implements helpers.Observable {
      * @param obj The object to test against
      * @return If obj is the same as this
      */
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -196,10 +178,22 @@ public class Board implements helpers.Observable {
      *
      * @return The hashcode
      */
-
     @Override
     public int hashCode() {
         return getBoard().hashCode();
+    }
+
+    //TODO: This shouldn't even exist???
+    @Override
+    public void addView(View view) {
+        this.view = view;
+
+        this.view.sendBoardTerrain(this);
+    }
+
+    @Override
+    public void removeView(View view) {
+        this.view = null;
     }
 
     /**
@@ -279,7 +273,7 @@ public class Board implements helpers.Observable {
          *
          * @return The game board.
          */
-        public Board build() {
+        /*public Board build() {
             Map<Point, Square> board = new HashMap<>();
             Point max = new Point(0, 0);
             //Check if the foxes positions
@@ -342,6 +336,6 @@ public class Board implements helpers.Observable {
                 updateMax(max, entry.getKey());
             }
             return new Board(board, new Point(max));
-        }
+        } */
     }
 }

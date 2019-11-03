@@ -49,7 +49,7 @@ public final class Move {
      * @return the end point
      */
 
-    Point getEndPoint() {
+    public Point getEndPoint() {
         return end;
     }
 
