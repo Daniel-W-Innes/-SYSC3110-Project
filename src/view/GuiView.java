@@ -36,9 +36,7 @@ public class GuiView extends JFrame implements View {
         JToolBar toolbar = new JToolBar();
 
         JButton newBtn = new JButton("New Game");
-        newBtn.addActionListener( e -> {
-            //game.reset() or game.newGame()
-        });
+        newBtn.addActionListener(e -> game.resetLevel(this));
         toolbar.add(newBtn);
 
         JButton loadBtn = new JButton("Load Game");
@@ -70,7 +68,7 @@ public class GuiView extends JFrame implements View {
 
     @Override
     public void addPiece(Point point, Piece piece) {
-        this.boardPanel.addPiece(point, piece);
+        boardPanel.addPiece(point, piece);
     }
 
     @Override
@@ -85,7 +83,8 @@ public class GuiView extends JFrame implements View {
 
     @Override
     public void sendInitialBoard(Board board) {
-        this.boardPanel.updateBoardTerrain(board);
-        board.getPieces().forEach((point, piece) -> this.boardPanel.addPiece(point, piece));
+        boardPanel.reset();
+        boardPanel.updateBoardTerrain(board);
+        board.getPieces().forEach((point, piece) -> boardPanel.addPiece(point, piece));
     }
 }

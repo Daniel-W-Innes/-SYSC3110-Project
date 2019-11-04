@@ -13,6 +13,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static model.Board.maxBoardLength;
+
 class BoardPanel extends JPanel implements ActionListener {
     private Point clickedSquare;
     private List<Move> availableMoves;
@@ -24,17 +26,16 @@ class BoardPanel extends JPanel implements ActionListener {
 
     BoardPanel(Game game) {
         this.game = game;
-
-        this.setLayout(new GridLayout(5, 5));
+        this.setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
         //Add the BoardTiles to the board
-        for(int y = 0; y < 5; y++) {
-            for(int x = 0; x < 5; x++) {
+        for (int x = 0; x < maxBoardLength.x; x++) {
+            for (int y = 0; y < maxBoardLength.y; y++) {
                 Point p = new Point(x, y);
                 BoardTile tile = new BoardTile(p);
                 tile.addActionListener(this);
 
-                this.boardMap.put(p, tile);
-                this.add(tile);
+                boardMap.put(p, tile);
+                add(tile);
             }
         }
         this.availableMoves = new ArrayList<>();
@@ -53,7 +54,7 @@ class BoardPanel extends JPanel implements ActionListener {
 
     void addPiece(Point point, Piece piece) {
         //this.boardMap.get(point).placePiece(piece);
-        this.boardMap.get(point).setIcon(piece.getImageIcon(point));
+        boardMap.get(point).setIcon(piece.getImageIcon(point));
     }
 
     public void removePiece(Point point) {
@@ -99,5 +100,9 @@ class BoardPanel extends JPanel implements ActionListener {
             }
 
         }
+    }
+
+    public void reset() {
+        boardMap.values().forEach(BoardTile::reset);
     }
 }

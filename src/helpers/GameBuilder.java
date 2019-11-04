@@ -20,7 +20,7 @@ public class GameBuilder {
                 board.addPiece(new Point(4, 2), new Rabbits((new Point(4, 2))));
                 board.addPiece(new Point(2, 4), new Rabbits((new Point(2, 4))));
 
-                board.addPiece(new Point(3, 1), new Foxes(Foxes.Direction.Y_AXIS, new Point(3, 1)));
+                board.addPiece(new Point(3, 1), new Foxes(Foxes.Direction.X_AXIS, new Point(3, 1)));
 
                 board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
                 board.addPiece(new Point(1, 2), new Mushroom(new Point(1, 2)));
@@ -32,8 +32,8 @@ public class GameBuilder {
                 board.addPiece(new Point(4, 2), new Rabbits(new Point(4, 2)));
                 board.addPiece(new Point(1, 4), new Rabbits(new Point(1, 4)));
 
-                board.addPiece(new Point(1, 1), new Foxes(Foxes.Direction.Y_AXIS, new Point(1, 1)));
-                board.addPiece(new Point(4, 3), new Foxes(Foxes.Direction.X_AXIS, new Point(4, 3)));
+                board.addPiece(new Point(1, 1), new Foxes(Foxes.Direction.X_AXIS, new Point(1, 1)));
+                board.addPiece(new Point(4, 3), new Foxes(Foxes.Direction.Y_AXIS, new Point(4, 3)));
 
                 board.addPiece(new Point(3, 1), new Mushroom(new Point(3, 1)));
                 board.addPiece(new Point(2, 4), new Mushroom(new Point(2, 4)));

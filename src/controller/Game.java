@@ -29,6 +29,11 @@ public class Game {
 
     private Piece lastClickedPiece = null;
 
+    public static void main(String[] args) {
+        Game game = new Game();
+        game.setUp(new GuiView(game), 2);
+    }
+
     /**
      * Sets up the board with the given observer, and level
      * @param observer A view
@@ -36,25 +41,7 @@ public class Game {
      */
     //TODO: Refactor into new class
     public void setUp(View observer, int levelNumber) {
-        this.levelNumber = levelNumber;
-        board = getStartingBoard(levelNumber);
-        observer.sendInitialBoard(board);
-        this.board.setView(observer);
-    }
-
-    public List<Move> getMoves(Point p) {
-
-        /*
-            When a user clicks a location on the view, a point is generated. If there are any
-            corresponding pieces at that given point, then the list of possible moves are passed to the view.
-         */
-
-        lastClickedPiece = board.getPieces().get(p);
-        if(lastClickedPiece == null) {
-            return new ArrayList<>();
-        }
-
-        return this.board.getPieces().get(p).getMoves(board);
+        setLevel(observer, levelNumber);
     }
 
     public void movePiece(Move move) {
@@ -63,9 +50,29 @@ public class Game {
         board.movePiece(lastClickedPiece, move.getEndPoint());
     }
 
+    public List<Move> getMoves(Point point) {
 
-    public static void main(String[] args) {
-        Game game = new Game();
-        game.setUp(new GuiView(game), 3);
+        /*
+            When a user clicks a location on the view, a point is generated. If there are any
+            corresponding pieces at that given point, then the list of possible moves are passed to the view.
+         */
+
+        lastClickedPiece = board.getPieces().get(point);
+        if(lastClickedPiece == null) {
+            return new ArrayList<>();
+        }
+
+        return this.board.getPieces().get(point).getMoves(board);
+    }
+
+    private void setLevel(View observer, int levelNumber) {
+        this.levelNumber = levelNumber;
+        board = getStartingBoard(levelNumber);
+        observer.sendInitialBoard(board);
+        board.setView(observer);
+    }
+
+    public void resetLevel(View observer) {
+        setLevel(observer, levelNumber);
     }
 }

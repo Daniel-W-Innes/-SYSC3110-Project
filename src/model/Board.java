@@ -22,7 +22,7 @@ public class Board implements Model {
      */
     private final Map<Point, Square> terrain;
     private final Map<Point, Piece> pieces;
-    public static final int maxBoardLength = 5;
+    public static final Point maxBoardLength = new Point(5, 5);
     private View view;
 
     public Board() {
@@ -210,7 +210,7 @@ public class Board implements Model {
 
         // Index for points start at 0, meaning that even though the max board length is 5, any value above 4 leads
         // to an invalid index. Hence the minus 1 in the if statement.
-        if(location.x > (maxBoardLength - 1) || location.y > (maxBoardLength - 1))
+        if (location.x > (maxBoardLength.x - 1) || location.y > (maxBoardLength.y - 1))
         {
             throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location.toString() + ".\nMax Board length = 5");
         }
@@ -238,8 +238,8 @@ public class Board implements Model {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         Point point;
-        for (int x = 0; x <= maxBoardLength; x++) {
-            for (int y = 0; y <= maxBoardLength; y++) {
+        for (int x = 0; x <= maxBoardLength.x; x++) {
+            for (int y = 0; y <= maxBoardLength.y; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
                 stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "__");
