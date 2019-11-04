@@ -39,7 +39,7 @@ public final class Move {
      * @return The start point
      */
 
-    private Point getStartPoint() {
+    public Point getStartPoint() {
         return start;
     }
 
@@ -89,6 +89,6 @@ public final class Move {
      * @return The representative string
      */
     public String toString() {
-        return "Move from {" + start.x + ", " + start.y + "} to {" + end.x + ", " + end.y + "}";
+        return "{" + start.x + ", " + start.y + "} -> {" + end.x + ", " + end.y + "}";
     }
 }

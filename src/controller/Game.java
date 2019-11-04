@@ -31,7 +31,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new GuiView(game), 2);
+        game.setUp(new GuiView(game), 3);
     }
 
     /**
@@ -62,7 +62,7 @@ public class Game {
             return new ArrayList<>();
         }
 
-        return this.board.getPieces().get(point).getMoves(board);
+        return this.board.getPieces().get(point).getMoves(board, point);
     }
 
     private void setLevel(View observer, int levelNumber) {

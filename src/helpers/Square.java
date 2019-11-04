@@ -13,10 +13,6 @@ public class Square {
      * If the square is a raised.
      */
     private final boolean isRaised;
-    /**
-     * The piece located on the square, nullable.
-     */
-    private Piece piece;
 
     /**
      * The hashcode for the move generated with stringBuilders when the move is initialized.
@@ -50,49 +46,8 @@ public class Square {
             stringBuilder.append(1);
             stringBuilder.append(2);
         }
-        if (piece == null) {
-            stringBuilder.append(1);
-        } else {
             stringBuilder.append(2);
-            stringBuilder.append(piece.hashCode());
-        }
         return stringBuilder.toString().hashCode();
-    }
-
-    /**
-     * Get if the square contains a piece.
-     *
-     * @return If square contains a piece
-     */
-    private boolean hasPiece() {
-        return piece != null;
-    }
-
-    /**
-     * Get the Piece that is on the square.
-     *
-     * @return The piece that is on the square or null if there is no piece
-     */
-    private Piece getPiece() {
-        return piece;
-    }
-
-    /**
-     * Change the piece that is on the square and regenerated the hashCode.
-     *
-     * @param piece The new piece
-     */
-    public void setPiece(Piece piece) {
-        this.piece = piece;
-        hashCode = genHashCode();
-    }
-
-    /**
-     * Removes the piece that is on this square and regenerated the hashCode.
-     */
-    void removePiece() {
-        this.piece = null;
-        hashCode = genHashCode();
     }
 
     /**
@@ -130,7 +85,7 @@ public class Square {
             return false;
         }
         Square square = (Square) obj;
-        return hasPiece() != square.hasPiece() || isHole() != square.isHole() || isRaised() != square.isRaised() || !hasPiece() || getPiece().equals(square.getPiece());
+        return isHole() == square.isHole() && isRaised() == square.isRaised();
     }
 
     /**
@@ -142,28 +97,5 @@ public class Square {
     @Override
     public int hashCode() {
         return hashCode;
-    }
-
-    /**
-     * Get a string representation of the square. The String is formatted as follows {square type \s Piece that is on the square} e.g. {Hole Rabbit}.
-     *
-     * @return The representative string
-     */
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (isHole) {
-            stringBuilder.append("H");
-        } else if (isRaised) {
-            stringBuilder.append("R");
-        } else {
-            stringBuilder.append("_");
-        }
-        if (hasPiece()) {
-            stringBuilder.append(piece.toString());
-        } else {
-            stringBuilder.append("_");
-        }
-        return stringBuilder.toString();
     }
 }

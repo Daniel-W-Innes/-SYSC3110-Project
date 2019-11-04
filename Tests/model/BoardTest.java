@@ -1,10 +1,7 @@
 package model;
 
 
-import helpers.Foxes;
-import helpers.Piece;
-import helpers.Rabbits;
-import helpers.Square;
+import helpers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -40,6 +37,7 @@ class BoardTest {
 
         for(Map.Entry<Point, Square> squareEntry : squareLocations.entrySet())
         {
+            assertTrue(board.hasSquare(squareEntry.getKey()));
             assertTrue(board.getTerrain().containsKey(squareEntry.getKey()));
         }
     }
@@ -107,26 +105,16 @@ class BoardTest {
     }
 
     @Test
-    void hasPiece() {
-    }
-
-    @Test
-    void hasSquare() {
-    }
-
-    @Test
-    void testToString() {
-    }
-
-    @Test
     void isVictory() {
+        board.addPiece(new Point(0, 0), new Rabbits(new Point(0, 0)));
+        board.addPiece(new Point(1, 1), new Rabbits(new Point(1, 1)));
+        board.addPiece(new Point(2, 2), new Mushroom(new Point( 3, 4)));
+
+        board.addSquare(new Point(0, 0), new Square(true, true));
+        board.addSquare(new Point(1, 1), new Square(true, false));
+        board.addSquare(new Point(2, 3), new Square(false, false));
+
+      //  assertTrue(board.)
     }
 
-    @Test
-    void testEquals() {
-    }
-
-    @Test
-    void testHashCode() {
-    }
 }

@@ -47,12 +47,12 @@ public class Foxes implements Piece {
 
         if(direction == Direction.X_AXIS && headLocation.x == 0)
         {
-            throw new IllegalArgumentException("The head of the fox must not be along the first row or column!");
+            throw new IllegalArgumentException("The head of the fox must not be along the first column!");
         }
 
         if(direction == Direction.Y_AXIS && headLocation.y == 0)
         {
-            throw new IllegalArgumentException("The head of the fox must not be along the first row or column!");
+            throw new IllegalArgumentException("The head of the fox must not be along the first row!");
         }
 
         this.direction = direction;
