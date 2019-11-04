@@ -11,7 +11,7 @@ import java.util.Set;
 public class Mushroom implements Piece {
 
     private Point boardSpot;
-    private static ImageIcon icon = new ImageIcon("./resources/Mushroom.jpg");
+    private static final ImageIcon icon = new ImageIcon("./resources/Mushroom.jpg");
 
     public Mushroom(Point boardSpot) {
         this.boardSpot = boardSpot;

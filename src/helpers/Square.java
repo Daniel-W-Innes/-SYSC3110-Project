@@ -64,7 +64,7 @@ public class Square {
      *
      * @return If square contains a piece
      */
-    public boolean hasPiece() {
+    private boolean hasPiece() {
         return piece != null;
     }
 
@@ -73,7 +73,7 @@ public class Square {
      *
      * @return The piece that is on the square or null if there is no piece
      */
-    public Piece getPiece() {
+    private Piece getPiece() {
         return piece;
     }
 

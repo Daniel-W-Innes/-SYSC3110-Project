@@ -39,7 +39,7 @@ public final class Move {
      * @return The start point
      */
 
-    public Point getStartPoint(){
+    private Point getStartPoint() {
         return start;
     }
 
@@ -51,92 +51,6 @@ public final class Move {
 
     public Point getEndPoint() {
         return end;
-    }
-
-    /**
-     * Check if the move is in the plus y direction.
-     *
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isPlusY() {
-        return isPlusY(0);
-    }
-
-    /**
-     * Check if the move is in the plus y direction and is longer then offset.
-     *
-     * @param offset The offset add to the end's y coordinate
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isPlusY(int offset) {
-        return start.x == end.x && start.y < end.y + offset;
-    }
-
-    /**
-     * Check if the move is in the plus x direction.
-     *
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isPlusX() {
-        return isPlusX(0);
-    }
-
-    /**
-     * Check if the move is in the plus x direction and is longer then offset.
-     *
-     * @param offset The offset add to the end's x coordinate
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isPlusX(int offset) {
-        return start.y == end.y && start.x < end.x + offset;
-    }
-
-    /**
-     * Check if the move is in the minus y direction.
-     *
-     * @return If the move satisfies the conditions
-     */
-
-
-    boolean isMinusY() {
-        return isMinusY(0);
-    }
-
-    /**
-     * Check if the move is in the minus y direction and is longer then offset.
-     *
-     * @param offset The offset add to the end's y coordinate
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isMinusY(int offset) {
-        return start.x == end.x && start.y > end.y + offset;
-    }
-
-    /**
-     * Check if the move is in the minus x direction.
-     *
-     * @return If the move satisfies the conditions
-     */
-
-
-    boolean isMinusX() {
-        return isMinusX(0);
-    }
-
-    /**
-     * Check if the move is in the minus x direction and is longer then offset.
-     *
-     * @param offset The offset add to the end's x coordinate
-     * @return If the move satisfies the conditions
-     */
-
-    boolean isMinusX(int offset) {
-        return start.y == end.y && start.x > end.x + offset;
     }
 
     /**

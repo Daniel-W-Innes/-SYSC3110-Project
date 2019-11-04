@@ -68,42 +68,24 @@ public class GuiView extends JFrame implements View {
         this.add(this.boardPanel, BorderLayout.CENTER);
     }
 
-    /**
-     * Observer pattern
-     * @param point
-     * @param piece
-     */
     @Override
     public void addPiece(Point point, Piece piece) {
         this.boardPanel.addPiece(point, piece);
     }
 
-    /**
-     * Observer pattern
-     * @param point
-     */
     @Override
     public void removePiece(Point point) {
         this.boardPanel.removePiece(point);
     }
 
-    /**
-     * Concrete implementation of the View.notifyWin() that handles a win
-     */
     @Override
     public void notifyWin() {
         JOptionPane.showMessageDialog(this, "You win!");
     }
 
-    /**
-     * The model sends over the initial board terrain layout.
-     * @param board the board
-     */
     @Override
     public void sendInitialBoard(Board board) {
         this.boardPanel.updateBoardTerrain(board);
-        board.getPieces().forEach((point, piece) -> {
-            this.boardPanel.addPiece(point, piece);
-        });
+        board.getPieces().forEach((point, piece) -> this.boardPanel.addPiece(point, piece));
     }
 }

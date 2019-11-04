@@ -4,14 +4,15 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 
 public class Rabbits implements Piece  {
 
     private Point boardSpot;
-    private static ImageIcon icon = new ImageIcon("./resources/Rabbit_white.png");
+    private static final ImageIcon icon = new ImageIcon("./resources/Rabbit_white.png");
 
     public Rabbits(Point boardSpot) {
         this.boardSpot = boardSpot;

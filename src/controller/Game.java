@@ -5,12 +5,9 @@ import model.Board;
 import view.GuiView;
 import view.View;
 
-import java.awt.Point;
-import java.net.MalformedURLException;
+import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  * The main controller of the program.
@@ -40,17 +37,15 @@ public class Game {
     public void setUp(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         switch (levelNumber) {
-            case 1:
+            case 1 -> {
                 board = new Board();
-
                 board.addPiece(new Point(2, 3), new Rabbits(new Point(2, 3)));
-
                 board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
                 board.addPiece(new Point(0, 2), new Mushroom(new Point(0, 2)));
                 board.addPiece(new Point(1, 3), new Mushroom(new Point(1, 3)));
                 this.setDefaultTerrain(board);
-                break;
-            case 2:
+            }
+            case 2 -> {
                 board = new Board();
                 board.addPiece(new Point(4, 2), new Rabbits((new Point(4, 2))));
                 board.addPiece(new Point(2, 4), new Rabbits((new Point(2, 4))));
@@ -61,8 +56,8 @@ public class Game {
                 board.addPiece(new Point(1, 2), new Mushroom(new Point(1, 2)));
                 board.addPiece(new Point(2, 3), new Mushroom(new Point(2, 3)));
                 this.setDefaultTerrain(board);
-                break;
-            case 3:
+            }
+            case 3 -> {
                 board = new Board();
                 board.addPiece(new Point(3, 0), new Rabbits(new Point(3, 0)));
                 board.addPiece(new Point(4, 2), new Rabbits(new Point(4, 2)));
@@ -74,25 +69,26 @@ public class Game {
                 board.addPiece(new Point(3, 1), new Mushroom(new Point(3, 1)));
                 board.addPiece(new Point(2, 4), new Mushroom(new Point(2, 4)));
                 this.setDefaultTerrain(board);
-                break;
+            }
         }
 
         view = observer;
         view.sendInitialBoard(board);
         this.board.setView(view);
     }
+
     private void setDefaultTerrain(Board b) {
-        board.addSquare(new Point(0,0), new Square(true, true));
-        board.addSquare(new Point(2,0), new Square(false, true));
-        board.addSquare(new Point(4,0), new Square(true, true));
+        board.addSquare(new Point(0, 0), new Square(true, true));
+        board.addSquare(new Point(2, 0), new Square(false, true));
+        board.addSquare(new Point(4, 0), new Square(true, true));
 
-        board.addSquare(new Point(0,2), new Square(false, true));
-        board.addSquare(new Point(2,2), new Square(true, true));
-        board.addSquare(new Point(4,2), new Square(false, true));
+        board.addSquare(new Point(0, 2), new Square(false, true));
+        board.addSquare(new Point(2, 2), new Square(true, true));
+        board.addSquare(new Point(4, 2), new Square(false, true));
 
-        board.addSquare(new Point(0,4), new Square(true, true));
-        board.addSquare(new Point(2,4), new Square(false, true));
-        board.addSquare(new Point(4,4), new Square(true, true));
+        board.addSquare(new Point(0, 4), new Square(true, true));
+        board.addSquare(new Point(2, 4), new Square(false, true));
+        board.addSquare(new Point(4, 4), new Square(true, true));
     }
 
     public List<Move> getMoves(Point p) {
@@ -123,7 +119,7 @@ public class Game {
      * Returns if the user has won
      * @return true if the user has won
      */
-    public boolean isVictory() {
+    private boolean isVictory() {
         return board.isVictory();
     }
 

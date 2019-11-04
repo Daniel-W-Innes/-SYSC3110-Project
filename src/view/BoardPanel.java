@@ -13,14 +13,16 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-public class BoardPanel extends JPanel implements ActionListener {
+class BoardPanel extends JPanel implements ActionListener {
     private Point clickedSquare;
     private List<Move> availableMoves;
 
-    private HashMap<Point, BoardTile> boardMap = new HashMap<>();
+    private final HashMap<Point, BoardTile> boardMap = new HashMap<>();
     private final Game game;
 
-    public BoardPanel(Game game) {
+    //private static final ImageIcon emptyTileIcon = new ImageIcon("./resources/Blank.jpg");
+
+    BoardPanel(Game game) {
         this.game = game;
 
         this.setLayout(new GridLayout(5, 5));
@@ -42,14 +44,14 @@ public class BoardPanel extends JPanel implements ActionListener {
      * Update the visual representation of the board terrain. Call it when you first load a level.
      * @param b the board
      */
-    public void updateBoardTerrain(Board b) {
+    void updateBoardTerrain(Board b) {
         b.getTerrain().forEach((point, square) -> {
             this.boardMap.get(point).setRaised(square.isRaised());
             this.boardMap.get(point).setHole(square.isHole());
         });
     }
 
-    public void addPiece(Point point, Piece piece) {
+    void addPiece(Point point, Piece piece) {
         //this.boardMap.get(point).placePiece(piece);
         this.boardMap.get(point).setIcon(piece.getImageIcon(point));
     }
@@ -91,15 +93,11 @@ public class BoardPanel extends JPanel implements ActionListener {
                 this.game.movePiece(attemptedMove);
                 clickedSquare = null;
                 //Remove highlighting
-                this.availableMoves.forEach(move -> {
-                    this.boardMap.get(move.getEndPoint()).setHighlighted(false);
-                });
-            } else { //Invalid move, deselect piece, unhighlight
+                this.availableMoves.forEach(move -> this.boardMap.get(move.getEndPoint()).setHighlighted(false));
+            } else { //Invalid move, deselect
                 this.clickedSquare = null;
                 //Remove highlighting
-                this.availableMoves.forEach(move -> {
-                    this.boardMap.get(move.getEndPoint()).setHighlighted(false);
-                });
+                this.availableMoves.forEach(move -> this.boardMap.get(move.getEndPoint()).setHighlighted(false));
                 this.availableMoves.clear();
             }
 

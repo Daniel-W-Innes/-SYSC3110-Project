@@ -4,20 +4,21 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class Foxes implements Piece {
 
-    Set<Point> occupiedBoardSpots = null;
-    Point headLocation;
-    Point tailLocation;
-    Direction direction;
-
-    private static ImageIcon verticalHeadIcon = new ImageIcon("./resources/Fox_down.jpg");
-    private static ImageIcon verticalTailIcon = new ImageIcon("./resources/Fox_up.jpg");
-    private static ImageIcon horizontalHeadIcon = new ImageIcon("./resources/Fox_right.jpg");
-    private static ImageIcon horizontalTailIcon= new ImageIcon("./resources/Fox_left.jpg");
+    private static final ImageIcon verticalHeadIcon = new ImageIcon("./resources/Fox_down.jpg");
+    private static final ImageIcon verticalTailIcon = new ImageIcon("./resources/Fox_up.jpg");
+    private static final ImageIcon horizontalHeadIcon = new ImageIcon("./resources/Fox_right.jpg");
+    private static final ImageIcon horizontalTailIcon = new ImageIcon("./resources/Fox_left.jpg");
+    private Set<Point> occupiedBoardSpots = null;
+    private Point headLocation;
+    private Point tailLocation;
+    private Direction direction;
 
     public enum Direction
     {
@@ -93,12 +94,11 @@ public class Foxes implements Piece {
             result in the tail being at (1, 0) and the head at (2, 0), which was found to be clear of any pieces and squares.
          */
 
-        switch (direction)
-        {
-            case X_AXIS:
+        switch (direction) {
+            case X_AXIS -> {
                 headPointCopy.x += 1;
-                while(headPointCopy.x != Board.maxBoardLength) {
-                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                while (headPointCopy.x != Board.maxBoardLength) {
+                    if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
@@ -106,9 +106,8 @@ public class Foxes implements Piece {
                 }
                 headPointCopy = new Point(tailLocation);
                 headPointCopy.x -= 1;
-
-                while(headPointCopy.x >= 0) {
-                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                while (headPointCopy.x >= 0) {
+                    if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     // Note the translation so that the move is relative to the head
@@ -118,12 +117,12 @@ public class Foxes implements Piece {
                     // but so does another '-1' to account for the translation made earlier
                     headPointCopy.x -= 2;
                 }
-                break;
-
-            case Y_AXIS: // Same ideas a X_AXIS
+            }
+// Same ideas a X_AXIS
+            case Y_AXIS -> {
                 headPointCopy.y += 1;
-                while(headPointCopy.y != Board.maxBoardLength) {
-                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                while (headPointCopy.y != Board.maxBoardLength) {
+                    if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
@@ -131,16 +130,15 @@ public class Foxes implements Piece {
                 }
                 headPointCopy = new Point(tailLocation);
                 headPointCopy.y -= 1;
-
-                while(headPointCopy.y >= 0) {
-                    if(board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)){
+                while (headPointCopy.y >= 0) {
+                    if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     headPointCopy.y += 1;
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
                     headPointCopy.y -= 2;
                 }
-                break;
+            }
         }
 
         return possibleMoves;
@@ -172,15 +170,9 @@ public class Foxes implements Piece {
 
         occupiedBoardSpots.add(headLocation);
 
-        switch(direction)
-        {
-            case X_AXIS:
-                tailLocation = new Point(headLocation.x - 1, headLocation.y);
-                break;
-
-            case Y_AXIS:
-                tailLocation = new Point(headLocation.x, headLocation.y - 1);
-                break;
+        switch (direction) {
+            case X_AXIS -> tailLocation = new Point(headLocation.x - 1, headLocation.y);
+            case Y_AXIS -> tailLocation = new Point(headLocation.x, headLocation.y - 1);
         }
 
         occupiedBoardSpots.add(tailLocation);

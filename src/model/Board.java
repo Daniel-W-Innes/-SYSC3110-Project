@@ -1,11 +1,14 @@
 package model;
 
-import helpers.*;
+import helpers.Foxes;
+import helpers.Piece;
+import helpers.Rabbits;
+import helpers.Square;
 import view.View;
 
 import java.awt.*;
-import java.util.*;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 // TODO: add a move method that checks for a victory and if there is one, notify the view of that victory
 /**
  * A class representing the state of the Board.
@@ -17,18 +20,14 @@ public class Board implements Model {
     /**
      * The Board map containing all squares.
      */
-    private Map<Point, Square> terrain;
-    private Map<Point, Piece> pieces;
+    private final Map<Point, Square> terrain;
+    private final Map<Point, Piece> pieces;
     public static final int maxBoardLength = 5;
-    View view;
+    private View view;
 
     public Board() {
         terrain = new HashMap<>();
         pieces = new HashMap<>();
-    }
-
-    public void setView(View view) {
-        this.view = view;
     }
 
     /**
@@ -299,5 +298,10 @@ public class Board implements Model {
     @Override
     public int hashCode() {
         return getTerrain().hashCode();
+    }
+
+    @Override
+    public void setView(View view) {
+        this.view = view;
     }
 }
