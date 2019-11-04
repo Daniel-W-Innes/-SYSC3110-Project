@@ -103,7 +103,7 @@ public class Game {
             return new ArrayList<>();
         }
 
-        return this.board.getPieces().get(p).getMoves(board);
+        return this.board.getPieces().get(p).getMoves(board, p);
     }
 
     public void movePiece(Move move) {

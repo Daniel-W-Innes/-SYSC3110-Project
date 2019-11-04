@@ -28,7 +28,7 @@ public class Mushroom implements Piece {
     }
 
     @Override
-    public List<Move> getMoves(Board board) {
+    public List<Move> getMoves(Board board, Point clickedPoint) {
         return new ArrayList<>();
     }
 

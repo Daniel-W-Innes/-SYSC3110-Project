@@ -11,8 +11,10 @@ import java.util.Set;
 
 public class Rabbits implements Piece  {
 
+    public static final String imageIconLocation = "./resources/Rabbit_white.png";
+
     private Point boardSpot;
-    private static final ImageIcon icon = new ImageIcon("./resources/Rabbit_white.png");
+    private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
     public Rabbits(Point boardSpot) {
         this.boardSpot = boardSpot;
@@ -29,7 +31,7 @@ public class Rabbits implements Piece  {
     }
 
     @Override
-    public List<Move> getMoves(Board board) {
+    public List<Move> getMoves(Board board, Point clickedPoint) {
         List<Move> possibleMoves = new ArrayList<>();
         // Possible moves could exist in any of the four directions depending on the obstacles of the board
         // Thus all directions have to be checked.

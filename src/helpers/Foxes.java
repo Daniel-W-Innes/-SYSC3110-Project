@@ -11,10 +11,15 @@ import java.util.Set;
 
 public class Foxes implements Piece {
 
-    private static final ImageIcon verticalHeadIcon = new ImageIcon("./resources/Fox_down.jpg");
-    private static final ImageIcon verticalTailIcon = new ImageIcon("./resources/Fox_up.jpg");
-    private static final ImageIcon horizontalHeadIcon = new ImageIcon("./resources/Fox_right.jpg");
-    private static final ImageIcon horizontalTailIcon = new ImageIcon("./resources/Fox_left.jpg");
+    public static final String vertexHeadImageLocation = "./resources/Fox_down.jpg";
+    public static final String verticalTailImageLocation = "./resources/Fox_up.jpg";
+    public static final String horizontalHeadImageLocation = "./resources/Fox_right.jpg";
+    public static final String horizontalTailImageLocation = "./resources/Fox_left.jpg";
+
+    private static final ImageIcon verticalHeadIcon = new ImageIcon(vertexHeadImageLocation);
+    private static final ImageIcon verticalTailIcon = new ImageIcon(verticalTailImageLocation);
+    private static final ImageIcon horizontalHeadIcon = new ImageIcon(horizontalHeadImageLocation);
+    private static final ImageIcon horizontalTailIcon = new ImageIcon(horizontalTailImageLocation);
     private Set<Point> occupiedBoardSpots = null;
     private Point headLocation;
     private Point tailLocation;
@@ -77,7 +82,11 @@ public class Foxes implements Piece {
     }
 
     @Override
-    public List<Move> getMoves(Board board) {
+    public List<Move> getMoves(Board board, Point clickedPoint) {
+
+        if(clickedPoint.equals(tailLocation)) {
+            return new ArrayList<>();
+        }
 
         Point headPointCopy = new Point(headLocation);
         List<Move> possibleMoves = new ArrayList<>();

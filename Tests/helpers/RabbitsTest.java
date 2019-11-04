@@ -1,6 +1,7 @@
 package helpers;
 
 import model.Board;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.awt.*;
@@ -12,18 +13,25 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class RabbitsTest {
 
+    Rabbits rabbit = null;
+
+    @BeforeEach
+    void setUp() {
+        rabbit = new Rabbits(new Point(1, 2));
+    }
+
     @Test
-    void getMoves() {
+    void testGetMoves() {
 
         Board board = new Board();
 
         board.addPiece(new Point(1, 1), new Rabbits(new Point(1, 1)));
         board.addPiece(new Point(1, 3),  new Rabbits(new Point(1, 3)));
         board.addPiece(new Point(2, 2),  new Rabbits(new Point(2, 2)));
-        board.addPiece(new Point(3, 2),  new Rabbits(new Point(2, 3)));
+        board.addPiece(new Point(3, 2),  new Rabbits(new Point(3, 2)));
         board.addPiece(new Point(0, 1),  new Rabbits(new Point(0, 1)));
 
-        Rabbits rabbit = new Rabbits(new Point(1, 2));
+        rabbit = new Rabbits(new Point(1, 2));
 
         board.addPiece(new Point(1, 2), rabbit);
 
@@ -33,7 +41,25 @@ class RabbitsTest {
         possibleMoves.add(new Move(new Point(1, 2), new Point(1, 0)));
 
         for(int i = 0; i < possibleMoves.size(); i++) {
-            assertTrue(possibleMoves.contains(rabbit.getMoves(board).get(i)));
+            assertTrue(possibleMoves.contains(rabbit.getMoves(board, new Point(1, 2)).get(i)));
         }
+    }
+
+    @Test
+    void testBoardSpotsUsed() {
+        assertEquals(1, rabbit.boardSpotsUsed().size());
+        assertTrue(rabbit.boardSpotsUsed().contains(new Point(1, 2)));
+    }
+
+    @Test
+    void testUpdateBoardSpotsUsed() {
+        rabbit.updateBoardSpotUsed(new Point(2, 3));
+        assertEquals(1, rabbit.boardSpotsUsed().size());
+        assertTrue(rabbit.boardSpotsUsed().contains(new Point(2, 3)));
+    }
+
+    @Test
+    void testGetImageIcon() {
+        assertEquals(Rabbits.imageIconLocation, rabbit.getImageIcon(new Point()).getDescription());
     }
 }

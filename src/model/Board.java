@@ -86,9 +86,16 @@ public class Board implements Model {
             the piece locations refer to the same object.
          */
 
+        boolean isFox = piece instanceof Foxes;
+
         for(Point occupiedPoint : piece.boardSpotsUsed()) {
-            if(pieces.containsKey(occupiedPoint) || terrain.containsKey(occupiedPoint)) {
+            if(pieces.containsKey(occupiedPoint)) {
                 throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
+            }
+            if(isFox) {
+                if(terrain.containsKey(occupiedPoint)) {
+                    throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
+                }
             }
 
             pieces.put(occupiedPoint, piece);
