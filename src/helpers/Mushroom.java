@@ -4,14 +4,17 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
+import static controller.Game.resourcesFolder;
+
 public class Mushroom implements Piece {
 
     private Point boardSpot;
-    private static final ImageIcon icon = new ImageIcon("./resources/Mushroom.jpg");
+    private static final ImageIcon icon = new ImageIcon(resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png");
 
     public Mushroom(Point boardSpot) {
         this.boardSpot = boardSpot;
@@ -24,7 +27,7 @@ public class Mushroom implements Piece {
 
     @Override
     public Set<Point> boardSpotsUsed() {
-        return Set.of(this.boardSpot);
+        return Set.of(boardSpot);
     }
 
     @Override
@@ -33,8 +36,8 @@ public class Mushroom implements Piece {
     }
 
     @Override
-    public ImageIcon getImageIcon(Point p) {
-        return Mushroom.icon;
+    public ImageIcon getImageIcon(Point location) {
+        return icon;
     }
 
 }

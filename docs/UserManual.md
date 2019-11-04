@@ -21,7 +21,7 @@ There are three steps to playing the game:
 	* These commands can be reviewed with by typing in help.
 	* Keep entering moves until you win the game, or get bored.
 	
-	- The are letter abrievations for the state of each square. The first letter describes whether the terrain is raised or has a hole in it. The second letter shows the piece that is on the square. An underscore symbolizes that the square is either flat or has no pieice on it respectively. Some possible combinations are, as an example:
+	- The are letter abbreviations for the state of each square. The first letter describes whether the terrain is raised or has a hole in it. The second letter shows the piece that is on the square. An underscore symbolizes that the square is either flat or has no pieces on it respectively. Some possible combinations are, as an example:
 	
 	1. _ _ : Terrain is flat with no piece on it
 	2. R _ : Terrain is raised with no piece on it

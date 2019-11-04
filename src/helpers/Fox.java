@@ -4,35 +4,30 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class Foxes implements Piece {
+import static controller.Game.resourcesFolder;
 
-    public static final String vertexHeadImageLocation = "./resources/Fox_down.jpg";
-    public static final String verticalTailImageLocation = "./resources/Fox_up.jpg";
-    public static final String horizontalHeadImageLocation = "./resources/Fox_right.jpg";
-    public static final String horizontalTailImageLocation = "./resources/Fox_left.jpg";
+public class Fox implements Piece {
+
+    static final String vertexHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_down.jpg";
+    static final String verticalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_up.jpg";
+    static final String horizontalHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_right.jpg";
+    static final String horizontalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_left.jpg";
 
     private static final ImageIcon verticalHeadIcon = new ImageIcon(vertexHeadImageLocation);
     private static final ImageIcon verticalTailIcon = new ImageIcon(verticalTailImageLocation);
     private static final ImageIcon horizontalHeadIcon = new ImageIcon(horizontalHeadImageLocation);
     private static final ImageIcon horizontalTailIcon = new ImageIcon(horizontalTailImageLocation);
-    private Set<Point> occupiedBoardSpots = null;
+    private final Direction direction;
     private Point headLocation;
     private Point tailLocation;
-    private Direction direction;
+    private Set<Point> occupiedBoardSpots;
 
-    public enum Direction
-    {
-        X_AXIS,
-        Y_AXIS
-    }
-
-    public Foxes(Direction direction, Point headLocation) {
-
+    public Fox(Direction direction, Point headLocation) {
         /* Functionally, it does not matter the order of the fox's tail and head, as it can move both directions along its axis.
          * Because of this, and due to the images available, the tail of the fox is either:
          *
@@ -43,28 +38,22 @@ public class Foxes implements Piece {
          * Due to this tail placement, if the head was along the first row or column, the index of the tail would be -1 along the respective
          * axis, which is not a valid index.
          */
-
-
-        if(direction == Direction.X_AXIS && headLocation.x == 0)
-        {
+        if (Direction.X_AXIS == direction && 0 == headLocation.x) {
             throw new IllegalArgumentException("The head of the fox must not be along the first column!");
-        }
-
-        if(direction == Direction.Y_AXIS && headLocation.y == 0)
-        {
+        } else if (Direction.Y_AXIS == direction && 0 == headLocation.y) {
             throw new IllegalArgumentException("The head of the fox must not be along the first row!");
         }
-
         this.direction = direction;
         this.headLocation = headLocation;
-
-       calculateTailLocation();
+        tailLocation = calculateTailLocation();
+        occupiedBoardSpots = Set.of(headLocation, tailLocation);
     }
 
     @Override
     public void updateBoardSpotUsed(Point newLocation) {
-        this.headLocation = new Point(newLocation);
-        calculateTailLocation();
+        headLocation = new Point(newLocation);
+        tailLocation = calculateTailLocation();
+        occupiedBoardSpots = Set.of(newLocation, tailLocation);
     }
 
 
@@ -83,14 +72,11 @@ public class Foxes implements Piece {
 
     @Override
     public List<Move> getMoves(Board board, Point clickedPoint) {
-
-        if(clickedPoint.equals(tailLocation)) {
+        if (clickedPoint.equals(tailLocation)) {
             return new ArrayList<>();
         }
-
         Point headPointCopy = new Point(headLocation);
         List<Move> possibleMoves = new ArrayList<>();
-
         /*
             To find valid moves for the fox, a loop is done in both directions along the fox's direction.
             For example, if the fox is facing positive X, and the head is located at (3, 0), then the squares
@@ -102,7 +88,6 @@ public class Foxes implements Piece {
             Thus, if the square (1, 0) is a valid move, then the move would contain an end point of (2, 0), as this would
             result in the tail being at (1, 0) and the head at (2, 0), which was found to be clear of any pieces and squares.
          */
-
         switch (direction) {
             case X_AXIS -> {
                 headPointCopy.x += 1;
@@ -115,7 +100,7 @@ public class Foxes implements Piece {
                 }
                 headPointCopy = new Point(tailLocation);
                 headPointCopy.x -= 1;
-                while (headPointCopy.x >= 0) {
+                while (0 <= headPointCopy.x) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
@@ -139,7 +124,7 @@ public class Foxes implements Piece {
                 }
                 headPointCopy = new Point(tailLocation);
                 headPointCopy.y -= 1;
-                while (headPointCopy.y >= 0) {
+                while (0 <= headPointCopy.y) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
@@ -149,41 +134,39 @@ public class Foxes implements Piece {
                 }
             }
         }
-
         return possibleMoves;
     }
 
     @Override
-    public ImageIcon getImageIcon(Point p) {
-        if(this.direction == Direction.Y_AXIS) {
-            if(headLocation.equals(p)) {
-                return Foxes.horizontalHeadIcon;
-            } else if(tailLocation.equals(p)) {
-                return Foxes.horizontalTailIcon;
+    public ImageIcon getImageIcon(Point location) {
+        if (Direction.Y_AXIS == direction) {
+            if (headLocation.equals(location)) {
+                return horizontalHeadIcon;
+            } else if (tailLocation.equals(location)) {
+                return horizontalTailIcon;
             } else {
                 throw new IllegalStateException("Illegal fox state");
             }
         } else {
-            if(headLocation.equals(p)) {
-                return Foxes.verticalHeadIcon;
-            } else if(tailLocation.equals(p)) {
-                return Foxes.verticalTailIcon;
+            if (headLocation.equals(location)) {
+                return verticalHeadIcon;
+            } else if (tailLocation.equals(location)) {
+                return verticalTailIcon;
             } else {
                 throw new IllegalStateException("Illegal fox state");
             }
         }
     }
 
-    private void calculateTailLocation() {
-        occupiedBoardSpots = new HashSet<>();
-
-        occupiedBoardSpots.add(headLocation);
-
+    private Point calculateTailLocation() {
         switch (direction) {
-            case X_AXIS -> tailLocation = new Point(headLocation.x - 1, headLocation.y);
-            case Y_AXIS -> tailLocation = new Point(headLocation.x, headLocation.y - 1);
+            case X_AXIS -> {
+                return new Point(headLocation.x - 1, headLocation.y);
+            }
+            case Y_AXIS -> {
+                return new Point(headLocation.x, headLocation.y - 1);
+            }
+            default -> throw new IllegalStateException("Illegal fox state");
         }
-
-        occupiedBoardSpots.add(tailLocation);
     }
 }

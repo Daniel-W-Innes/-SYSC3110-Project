@@ -3,10 +3,11 @@ package controller;
 import helpers.Move;
 import helpers.Piece;
 import model.Board;
-import view.GuiView;
+import view.Gui;
 import view.View;
 
 import java.awt.*;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +28,12 @@ public class Game {
      */
     private int levelNumber;
 
-    private Piece lastClickedPiece = null;
+    public static final String resourcesFolder = "resources" + File.separator;
+    private Piece lastClickedPiece;
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new GuiView(game), 3);
+        game.setUp(new Gui(game), 1);
     }
 
     /**
@@ -50,18 +52,14 @@ public class Game {
     }
 
     public List<Move> getMoves(Point point) {
-
-        /*
-            When a user clicks a location on the view, a point is generated. If there are any
-            corresponding pieces at that given point, then the list of possible moves are passed to the view.
-         */
-
+        // When a user clicks a location on the view, a point is generated. If there are any
+        // corresponding pieces at that given point, then the list of possible moves are passed to the view.
         lastClickedPiece = board.getPieces().get(point);
-        if(lastClickedPiece == null) {
+        if (null == lastClickedPiece) {
             return new ArrayList<>();
         }
 
-        return this.board.getPieces().get(point).getMoves(board, point);
+        return board.getPieces().get(point).getMoves(board, point);
     }
 
     public void setLevel(View observer, int levelNumber) {

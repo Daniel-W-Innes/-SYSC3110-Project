@@ -62,11 +62,11 @@ public class Square {
         if (obj == this) {
             return true;
         }
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (null == obj || obj.getClass() != getClass()) {
             return false;
         }
         Square square = (Square) obj;
-        return isHole() == square.isHole() && isRaised() == square.isRaised();
+        return isHole == square.isHole && isRaised == square.isRaised;
     }
 
     /**

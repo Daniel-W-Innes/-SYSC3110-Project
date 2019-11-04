@@ -5,16 +5,17 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class MoveTest {
 
-    Move move = null;
-    Move similarMove = null;
-    Move differentMove = null;
+    private Move move;
+    private Move similarMove;
+    private Move differentMove;
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         move = new Move(new Point(1, 1), new Point(2, 2));
         similarMove = new Move(new Point(1, 1), new Point(2, 2));
         differentMove = new Move(new Point(3, 4), new Point(2, 2));

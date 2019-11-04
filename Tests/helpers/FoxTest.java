@@ -6,25 +6,33 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 import java.util.ArrayList;
-import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
-class FoxesTest {
+class FoxTest {
 
-    Foxes fox = null;
+    private Fox fox;
+
+    private static void testBoardUsed(Fox fox, List<Point> expectedPoints) {
+        assertEquals(expectedPoints.size(), fox.boardSpotsUsed().size());
+        for (Point occupiedPoint : expectedPoints) {
+            assertTrue(fox.boardSpotsUsed().contains(occupiedPoint));
+        }
+    }
 
     @BeforeEach
     void setUp() {
-        fox = new Foxes(Foxes.Direction.X_AXIS, new Point(2, 0));
+        fox = new Fox(Direction.X_AXIS, new Point(2, 0));
     }
 
     @Test
     void testFoxCreation() {
         assertEquals(new Point(2, 0), fox.getHeadLocation());
-        assertEquals(Foxes.Direction.X_AXIS, fox.getDirection());
-        ArrayList<Point> occupiedPoints = new ArrayList<>();
+        assertEquals(Direction.X_AXIS, fox.getDirection());
+        List<Point> occupiedPoints = new ArrayList<>();
         occupiedPoints.add(new Point(2, 0));
         occupiedPoints.add(new Point(1, 0));
 
@@ -34,8 +42,8 @@ class FoxesTest {
     @Test
     void testUpdateBoardSpotsUsed() {
         fox.updateBoardSpotUsed(new Point(3, 0));
-        assertEquals(Foxes.Direction.X_AXIS, fox.getDirection());
-        ArrayList<Point> occupiedPoints = new ArrayList<>();
+        assertEquals(Direction.X_AXIS, fox.getDirection());
+        List<Point> occupiedPoints = new ArrayList<>();
         occupiedPoints.add(new Point(3, 0));
         occupiedPoints.add(new Point(2, 0));
 
@@ -43,22 +51,15 @@ class FoxesTest {
 
     }
 
-    private void testBoardUsed(Foxes fox, ArrayList<Point> expectedPoints) {
-        assertEquals(expectedPoints.size(), fox.boardSpotsUsed().size());
-        for(Point occupiedPoint : expectedPoints) {
-            assertTrue(fox.boardSpotsUsed().contains(occupiedPoint));
-        }
-    }
-
     @Test
     void testGetIcon() {
-        assertEquals(Foxes.vertexHeadImageLocation, fox.getImageIcon(new Point(2, 0)).getDescription());
-        assertEquals(Foxes.verticalTailImageLocation, fox.getImageIcon(new Point(1, 0)).getDescription());
+        assertEquals(Fox.vertexHeadImageLocation, fox.getImageIcon(new Point(2, 0)).getDescription());
+        assertEquals(Fox.verticalTailImageLocation, fox.getImageIcon(new Point(1, 0)).getDescription());
 
-        fox = new Foxes(Foxes.Direction.Y_AXIS, new Point(0, 2));
+        fox = new Fox(Direction.Y_AXIS, new Point(0, 2));
 
-        assertEquals(Foxes.horizontalHeadImageLocation, fox.getImageIcon(new Point(0, 2)).getDescription());
-        assertEquals(Foxes.horizontalTailImageLocation, fox.getImageIcon(new Point(0, 1)).getDescription());
+        assertEquals(Fox.horizontalHeadImageLocation, fox.getImageIcon(new Point(0, 2)).getDescription());
+        assertEquals(Fox.horizontalTailImageLocation, fox.getImageIcon(new Point(0, 1)).getDescription());
     }
 
     @Test
@@ -78,14 +79,14 @@ class FoxesTest {
     void testGetMovesY() {
         Board board = new Board();
 
-        Foxes fox = new Foxes(Foxes.Direction.Y_AXIS, new Point(0, 2));
+        Fox fox = new Fox(Direction.Y_AXIS, new Point(0, 2));
 
         board.addPiece(new Point(0, 2), fox);
 
-        Set<Move> possibleMoves = new HashSet<>();
-        possibleMoves.add(new Move(new Point(0, 2), new Point(0, 3)));
-        possibleMoves.add(new Move(new Point(0, 2), new Point(0, 4)));
-        possibleMoves.add(new Move(new Point(0, 2), new Point(0, 1)));
+        Set<Move> possibleMoves = Set.of(
+                new Move(new Point(0, 2), new Point(0, 3)),
+                new Move(new Point(0, 2), new Point(0, 4)),
+                new Move(new Point(0, 2), new Point(0, 1)));
 
         assertEquals(possibleMoves.size(), fox.getMoves(board, new Point(0, 2)).size());
 

@@ -1,6 +1,5 @@
 package helpers;
 
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -8,12 +7,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class SquareTest {
 
-    private Square square = null;
-    private Square similarSquare = null;
-    private Square differentSquare = null;
+    private Square square;
+    private Square similarSquare;
+    private Square differentSquare;
 
     @BeforeEach
-    private void setUp() {
+    void setUp() {
         square = new Square(true, false);
         similarSquare = new Square(true, false);
         differentSquare = new Square(false, false);

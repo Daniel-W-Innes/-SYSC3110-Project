@@ -11,7 +11,9 @@ import java.awt.event.ActionListener;
 /**
  * Gui
  */
-public class GuiView extends JFrame implements View {
+public class Gui extends JFrame implements View {
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 960;
     private final Game game;
     private BoardPanel boardPanel;
     private JToolBar toolbar;
@@ -20,15 +22,15 @@ public class GuiView extends JFrame implements View {
      * Starts up an instance of the TextView GUI
      * @param game - The Central controller to interact with
      */
-    public GuiView(Game game) {
+    public Gui(Game game) {
         super("Jumpin game simulator");
         this.game = game;
 
-        this.setSize(900, 960);
-        this.setDefaultCloseOperation(EXIT_ON_CLOSE);
-        this.createToolbar();
-        this.populateBoard();
-        this.setVisible(true);
+        setSize(WIDTH, HEIGHT);
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        createToolbar();
+        populateBoard();
+        setVisible(true);
     }
 
     /**
@@ -47,7 +49,7 @@ public class GuiView extends JFrame implements View {
         addToolbarButton("Undo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
         addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
-        this.add(toolbar, BorderLayout.PAGE_START);
+        add(toolbar, BorderLayout.PAGE_START);
     }
 
 
@@ -58,8 +60,8 @@ public class GuiView extends JFrame implements View {
     }
 
     private void populateBoard() {
-        this.boardPanel = new BoardPanel(this.game);
-        this.add(this.boardPanel, BorderLayout.CENTER);
+        boardPanel = new BoardPanel(game);
+        add(boardPanel, BorderLayout.CENTER);
     }
 
     @Override
@@ -69,7 +71,7 @@ public class GuiView extends JFrame implements View {
 
     @Override
     public void removePiece(Point point) {
-        this.boardPanel.removePiece(point);
+        boardPanel.removePiece(point);
     }
 
     @Override

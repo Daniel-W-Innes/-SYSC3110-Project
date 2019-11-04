@@ -12,6 +12,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static model.Board.maxBoardLength;
 
@@ -19,90 +20,82 @@ class BoardPanel extends JPanel implements ActionListener {
     private Point clickedSquare;
     private List<Move> availableMoves;
 
-    private final HashMap<Point, BoardTile> boardMap = new HashMap<>();
+    private final Map<Point, Tile> boardMap = new HashMap<>();
     private final Game game;
-
-    //private static final ImageIcon emptyTileIcon = new ImageIcon("./resources/Blank.jpg");
 
     BoardPanel(Game game) {
         this.game = game;
-        this.setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
+        setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
         //Add the BoardTiles to the board
         for (int x = 0; x < maxBoardLength.x; x++) {
             for (int y = 0; y < maxBoardLength.y; y++) {
                 Point p = new Point(x, y);
-                BoardTile tile = new BoardTile(p);
+                Tile tile = new Tile(p);
                 tile.addActionListener(this);
 
                 boardMap.put(p, tile);
                 add(tile);
             }
         }
-        this.availableMoves = new ArrayList<>();
+        availableMoves = new ArrayList<>();
     }
 
     /**
      * Update the visual representation of the board terrain. Call it when you first load a level.
-     * @param b the board
+     * @param board the new board
      */
-    void updateBoardTerrain(Board b) {
-        b.getTerrain().forEach((point, square) -> {
-            this.boardMap.get(point).setRaised(square.isRaised());
-            this.boardMap.get(point).setHole(square.isHole());
+    void updateBoardTerrain(Board board) {
+        board.getTerrain().forEach((point, square) -> {
+            boardMap.get(point).setRaised(square.isRaised());
+            boardMap.get(point).setHole(square.isHole());
         });
     }
 
     void addPiece(Point point, Piece piece) {
-        //this.boardMap.get(point).placePiece(piece);
         boardMap.get(point).setIcon(piece.getImageIcon(point));
     }
 
-    public void removePiece(Point point) {
-        this.boardMap.get(point).setIcon(null);
+    void removePiece(Point point) {
+        boardMap.get(point).setIcon(null);
     }
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Point p = ((BoardTile) e.getSource()).getPoint();
-
-        if(this.clickedSquare == null) {
+        Point point = ((Tile) e.getSource()).getPoint();
+        if (null == clickedSquare) {
             //1st part of the move: update currently selected square
-            clickedSquare = p;
-            this.availableMoves = this.game.getMoves(p);
-
+            clickedSquare = point;
+            availableMoves = game.getMoves(point);
             //Don't count the click if there are no available moves
-            if(this.availableMoves.isEmpty()) {
-                this.clickedSquare = null;
+            if (availableMoves.isEmpty()) {
+                clickedSquare = null;
             } else {
-                this.availableMoves.forEach(move -> {
+                availableMoves.forEach(move -> {
                     //Highlight available moves
-                    this.boardMap.get(move.getEndPoint()).setHighlighted(true);
+                    boardMap.get(move.getEndPoint()).setHighlighted(true);
                 });
-                System.out.println();
             }
-
         } else {
             //2nd part of the move: check validity and do move
-            Move attemptedMove = new Move(clickedSquare.getLocation(), p);
-
+            Move attemptedMove = new Move(clickedSquare.getLocation(), point);
             //Valid move
-            if(this.availableMoves.contains(attemptedMove)) {
+            if (availableMoves.contains(attemptedMove)) {
                 //Delegate to controller
-                this.game.movePiece(attemptedMove);
+                game.movePiece(attemptedMove);
                 clickedSquare = null;
                 //Remove highlighting
-                this.availableMoves.forEach(move -> this.boardMap.get(move.getEndPoint()).setHighlighted(false));
+                availableMoves.forEach(move -> boardMap.get(move.getEndPoint()).setHighlighted(false));
             } else { //Invalid move, deselect
-                this.clickedSquare = null;
+                clickedSquare = null;
                 //Remove highlighting
-                this.availableMoves.forEach(move -> this.boardMap.get(move.getEndPoint()).setHighlighted(false));
-                this.availableMoves.clear();
+                availableMoves.forEach(move -> boardMap.get(move.getEndPoint()).setHighlighted(false));
+                availableMoves.clear();
             }
 
         }
     }
 
-    public void reset() {
-        boardMap.values().forEach(BoardTile::reset);
+    void reset() {
+        boardMap.values().forEach(Tile::reset);
     }
 }

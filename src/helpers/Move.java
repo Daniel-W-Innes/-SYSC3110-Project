@@ -6,7 +6,7 @@ import java.util.Arrays;
 /**
  * Immutable class Move represents a move from one point to anther.
  */
-public final class Move {
+public class Move {
     /**
      * The start point for the move.
      */
@@ -39,7 +39,7 @@ public final class Move {
      * @return The start point
      */
 
-    public Point getStartPoint() {
+    Point getStartPoint() {
         return start;
     }
 
@@ -65,11 +65,11 @@ public final class Move {
         if (obj == this) {
             return true;
         }
-        if (obj == null || obj.getClass() != this.getClass()) {
+        if (null == obj || obj.getClass() != getClass()) {
             return false;
         }
         Move move = (Move) obj;
-        return getStartPoint().equals(move.getStartPoint()) && getEndPoint().equals(move.getEndPoint());
+        return start.equals(move.start) && end.equals(move.end);
     }
 
     /**
@@ -77,7 +77,6 @@ public final class Move {
      *
      * @return The hashcode
      */
-
     @Override
     public int hashCode() {
         return hashcode;
