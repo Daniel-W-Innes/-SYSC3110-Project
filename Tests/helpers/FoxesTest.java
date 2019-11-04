@@ -52,13 +52,13 @@ class FoxesTest {
 
     @Test
     void testGetIcon() {
-        assertEquals(Foxes.horizontalHeadImageLocation, fox.getImageIcon(new Point(2, 0)).getDescription());
-        assertEquals(Foxes.horizontalTailImageLocation, fox.getImageIcon(new Point(1, 0)).getDescription());
+        assertEquals(Foxes.vertexHeadImageLocation, fox.getImageIcon(new Point(2, 0)).getDescription());
+        assertEquals(Foxes.verticalTailImageLocation, fox.getImageIcon(new Point(1, 0)).getDescription());
 
         fox = new Foxes(Foxes.Direction.Y_AXIS, new Point(0, 2));
 
-        assertEquals(Foxes.vertexHeadImageLocation, fox.getImageIcon(new Point(0, 2)).getDescription());
-        assertEquals(Foxes.verticalTailImageLocation, fox.getImageIcon(new Point(0, 1)).getDescription());
+        assertEquals(Foxes.horizontalHeadImageLocation, fox.getImageIcon(new Point(0, 2)).getDescription());
+        assertEquals(Foxes.horizontalTailImageLocation, fox.getImageIcon(new Point(0, 1)).getDescription());
     }
 
     @Test
