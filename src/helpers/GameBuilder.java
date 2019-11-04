@@ -10,14 +10,13 @@ public class GameBuilder {
         Board board = new Board();
         switch (levelNumber) {
             case 1 -> {
-                setDefaultTerrain(board);
                 board.addPiece(new Point(2, 3), new Rabbits(new Point(2, 3)));
                 board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
                 board.addPiece(new Point(0, 2), new Mushroom(new Point(0, 2)));
                 board.addPiece(new Point(1, 3), new Mushroom(new Point(1, 3)));
+                setDefaultTerrain(board);
             }
             case 2 -> {
-                setDefaultTerrain(board);
                 board.addPiece(new Point(4, 2), new Rabbits((new Point(4, 2))));
                 board.addPiece(new Point(2, 4), new Rabbits((new Point(2, 4))));
 
@@ -26,9 +25,9 @@ public class GameBuilder {
                 board.addPiece(new Point(0, 1), new Mushroom(new Point(0, 1)));
                 board.addPiece(new Point(1, 2), new Mushroom(new Point(1, 2)));
                 board.addPiece(new Point(2, 3), new Mushroom(new Point(2, 3)));
+                setDefaultTerrain(board);
             }
             case 3 -> {
-                setDefaultTerrain(board);
                 board.addPiece(new Point(3, 0), new Rabbits(new Point(3, 0)));
                 board.addPiece(new Point(4, 2), new Rabbits(new Point(4, 2)));
                 board.addPiece(new Point(1, 4), new Rabbits(new Point(1, 4)));
@@ -38,6 +37,7 @@ public class GameBuilder {
 
                 board.addPiece(new Point(3, 1), new Mushroom(new Point(3, 1)));
                 board.addPiece(new Point(2, 4), new Mushroom(new Point(2, 4)));
+                setDefaultTerrain(board);
             }
             default -> setDefaultTerrain(board);
 

@@ -188,6 +188,9 @@ public class Board implements Model {
             pieces.put(newLocation, piece);
             view.addPiece(newLocation, piece);
         }
+        if (isVictory()) {
+            view.notifyWin();
+        }
     }
 
     /**
@@ -254,7 +257,7 @@ public class Board implements Model {
      * @return If the board is victory
      */
     //Check if there are any rabbit
-    public boolean isVictory() {
+    private boolean isVictory() {
         for(Map.Entry<Point, Piece> entry : this.pieces.entrySet()) {
             //Return false if a rabbit is not in a hole
             if(entry.getValue().getClass() == Rabbits.class
