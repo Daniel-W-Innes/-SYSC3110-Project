@@ -6,6 +6,7 @@ import model.Board;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 
 /**
  * Gui
@@ -13,6 +14,7 @@ import java.awt.*;
 public class GuiView extends JFrame implements View {
     private final Game game;
     private BoardPanel boardPanel;
+    private JToolBar toolbar;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -33,32 +35,25 @@ public class GuiView extends JFrame implements View {
      * Creates a toolbar for the gui with the buttons: New game, save game, load game, redo and undo
      */
     private void createToolbar() {
-        JToolBar toolbar = new JToolBar();
+        toolbar = new JToolBar();
 
-        JButton newBtn = new JButton("New Game");
-        newBtn.addActionListener(e -> game.resetLevel(this));
-        toolbar.add(newBtn);
+        addToolbarButton("Reset Game", e -> game.resetLevel(this));
 
-        JButton loadBtn = new JButton("Load Game");
-        loadBtn.addActionListener( e -> {
+        addToolbarButton("Load Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Save Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
-        });
-        toolbar.add(loadBtn);
-
-        JButton saveBtn = new JButton("Save");
-        saveBtn.addActionListener( e -> {
-            //game.save()
-        });
-        toolbar.add(saveBtn);
         toolbar.add(Box.createHorizontalGlue());
+        addToolbarButton("Undo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
-
-        JButton undoBtn = new JButton("Undo");
-        JButton redoBtn = new JButton("Redo");
-
-        toolbar.add(undoBtn);
-        toolbar.add(redoBtn);
         this.add(toolbar, BorderLayout.PAGE_START);
+    }
+
+
+    private void addToolbarButton(String text, ActionListener actionListener) {
+        JButton button = new JButton(text);
+        button.addActionListener(actionListener);
+        toolbar.add(button);
     }
 
     private void populateBoard() {
