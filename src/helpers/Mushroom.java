@@ -14,7 +14,8 @@ import static controller.Game.resourcesFolder;
 public class Mushroom implements Piece {
 
     private Point boardSpot;
-    private static final ImageIcon icon = new ImageIcon(resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png");
+    public static final String imageIconLocation = resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png";
+    private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
     public Mushroom(Point boardSpot) {
         this.boardSpot = boardSpot;
