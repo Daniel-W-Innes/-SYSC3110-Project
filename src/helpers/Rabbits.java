@@ -67,8 +67,8 @@ public class Rabbits implements Piece  {
 
         // Make sure that the possible move is within valid coordinates of the game. The '-1' seen is because
         // the coordinates star at 0, not 1.
-        if(startingPointCopy.x >= 0 && startingPointCopy.x <= Board.maxBoardLength - 1 &&
-           startingPointCopy.y >= 0 && startingPointCopy.y <= Board.maxBoardLength - 1) {
+        if (startingPointCopy.x >= 0 && startingPointCopy.x <= Board.maxBoardLength.x - 1 &&
+                startingPointCopy.y >= 0 && startingPointCopy.y <= Board.maxBoardLength.y - 1) {
 
                 possibleMoves.add(new Move(new Point(start), new Point(startingPointCopy)));
                 return possibleMoves;

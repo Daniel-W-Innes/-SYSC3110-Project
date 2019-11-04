@@ -106,7 +106,7 @@ public class Foxes implements Piece {
         switch (direction) {
             case X_AXIS -> {
                 headPointCopy.x += 1;
-                while (headPointCopy.x != Board.maxBoardLength) {
+                while (headPointCopy.x != Board.maxBoardLength.x) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
@@ -130,7 +130,7 @@ public class Foxes implements Piece {
 // Same ideas a X_AXIS
             case Y_AXIS -> {
                 headPointCopy.y += 1;
-                while (headPointCopy.y != Board.maxBoardLength) {
+                while (headPointCopy.y != Board.maxBoardLength.y) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
@@ -157,17 +157,17 @@ public class Foxes implements Piece {
     public ImageIcon getImageIcon(Point p) {
         if(this.direction == Direction.Y_AXIS) {
             if(headLocation.equals(p)) {
-                return Foxes.verticalHeadIcon;
+                return Foxes.horizontalHeadIcon;
             } else if(tailLocation.equals(p)) {
-                return Foxes.verticalTailIcon;
+                return Foxes.horizontalTailIcon;
             } else {
                 throw new IllegalStateException("Illegal fox state");
             }
         } else {
             if(headLocation.equals(p)) {
-                return Foxes.horizontalHeadIcon;
+                return Foxes.verticalHeadIcon;
             } else if(tailLocation.equals(p)) {
-                return Foxes.horizontalTailIcon;
+                return Foxes.verticalTailIcon;
             } else {
                 throw new IllegalStateException("Illegal fox state");
             }

@@ -6,11 +6,11 @@ import javax.swing.border.CompoundBorder;
 import java.awt.*;
 
 class BoardTile extends JButton {
-    private static final Color brown = new Color(51, 0, 25);
+    private static final Color brown = new Color(82, 54, 27);
+    private static final Color green = new Color(0, 153, 0);
     private boolean isHole;
     private boolean isRaised;
     private boolean isHighlighted;
-    private static final Color green = new Color(0, 153, 0);
     private final Point p;
 
     //private Piece piece;
@@ -37,6 +37,12 @@ class BoardTile extends JButton {
     public void setHole(boolean b) {
         this.isHole = b;
         updateBackgroundColor();
+    }
+
+    void reset() {
+        isHole = false;
+        isRaised = false;
+        setIcon(null);
     }
 
     void setRaised(boolean b) {
