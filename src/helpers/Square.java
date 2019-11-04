@@ -1,5 +1,7 @@
 package helpers;
 
+import java.util.Arrays;
+
 /**
  * The Square class represents one square in the Board.
  * @author frank liu
@@ -13,12 +15,10 @@ public class Square {
      * If the square is a raised.
      */
     private final boolean isRaised;
-
     /**
-     * The hashcode for the move generated with stringBuilders when the move is initialized.
-     * The hashcode is regenerated when {@code setPiece} or {@code removePiece} is called.
+     * The hashcode for the move generated with {@code Arrays.hashCode} when the move is initialized.
      */
-    private int hashCode;
+    private final int hashCode;
 
     /**
      * Initialize a new piece with the given properties.
@@ -29,27 +29,8 @@ public class Square {
     public Square(boolean isHole, boolean isRaised) {
         this.isHole = isHole;
         this.isRaised = isRaised;
-        hashCode = genHashCode();
+        hashCode = Arrays.hashCode((new boolean[]{isHole, isRaised}));
     }
-
-    /**
-     * Generated a hashcode for the square.
-     *
-     * @return The new hashcode
-     */
-    private int genHashCode() {
-        StringBuilder stringBuilder = new StringBuilder();
-        if (isHole) {
-            stringBuilder.append(2);
-            stringBuilder.append(2);
-        } else if (isRaised) {
-            stringBuilder.append(1);
-            stringBuilder.append(2);
-        }
-            stringBuilder.append(2);
-        return stringBuilder.toString().hashCode();
-    }
-
     /**
      * Get if the square is a raised.
      * Note: All holes are raised.
