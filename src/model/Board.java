@@ -39,14 +39,11 @@ public class Board implements Model {
      * @throws IllegalArgumentException If trying to add a new square to a location with an existing square
      */
 
-    public void addSquare(Point location, Square square)
-    {
-
+    public void addSquare(Point location, Square square) {
         checkValidLocation(location);
 
         // Once a terrain square has been placed, it is considered an error to try to replace it with something else.
-        if(terrain.containsKey(location))
-        {
+        if (terrain.containsKey(location)) {
             String errorMessage = "Trying to overwrite a Terrain square at: " + location.toString();
             errorMessage += "Original square: " + terrain.get(location).toString();
             errorMessage += "Attempting to replace with: " + square.toString();
@@ -66,15 +63,13 @@ public class Board implements Model {
      * @throws IllegalArgumentException If trying to add a new piece to a location with an existing piece
      */
 
-    public void addPiece(Point location, Piece piece)
-    {
+    public void addPiece(Point location, Piece piece) {
         checkValidLocation(location);
 
         // Once a piece has been placed, it is considered an error to try to replace it with something else.
-        if(pieces.containsKey(location))
-        {
-            String errorMessage = "Trying to overwrite a Terrain square at: " + location.toString();
-            errorMessage += "Original square: " + pieces.get(location).toString();
+        if (pieces.containsKey(location)) {
+            String errorMessage = "Trying to overwrite a piece at: " + location.toString();
+            errorMessage += "Original piece: " + pieces.get(location).toString();
             errorMessage += "Attempting to replace with: " + piece.toString();
 
             throw new IllegalArgumentException(errorMessage);
@@ -106,7 +101,6 @@ public class Board implements Model {
      * @param location The location on the square to check
      * @return If the board has the square
      */
-
     public boolean hasSquare(Point location) {
         return terrain.containsKey(location);
     }
@@ -120,7 +114,6 @@ public class Board implements Model {
      *
      * @return The Board map
      */
-
     public Map<Point, Square> getTerrain() {
         return terrain;
     }
@@ -138,7 +131,6 @@ public class Board implements Model {
          *
          *  Remember that the tail is always on one side of the head!
          */
-
         if(piece instanceof Foxes) {
             Foxes removedPiece = (Foxes)piece;
 
@@ -201,8 +193,7 @@ public class Board implements Model {
      * @throws IllegalArgumentException If the point is NOT within the board space
      */
 
-    private void checkValidLocation(Point location)
-    {
+    private void checkValidLocation(Point location) {
         if(location.x < 0 || location.y < 0)
         {
             throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location.toString());

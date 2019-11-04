@@ -39,7 +39,6 @@ public class Game {
      * @param observer A view
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
-    //TODO: Refactor into new class
     public void setUp(View observer, int levelNumber) {
         setLevel(observer, levelNumber);
     }
