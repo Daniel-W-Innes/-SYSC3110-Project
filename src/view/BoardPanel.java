@@ -73,10 +73,7 @@ class BoardPanel extends JPanel implements ActionListener {
             if(this.availableMoves.isEmpty()) {
                 this.clickedSquare = null;
             } else {
-                //TODO: Remove debug print:
-                System.out.println("Available moves:");
                 this.availableMoves.forEach(move -> {
-                    System.out.println(move);
                     //Highlight available moves
                     this.boardMap.get(move.getEndPoint()).setHighlighted(true);
                 });

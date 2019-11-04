@@ -6,7 +6,7 @@ import javax.swing.border.CompoundBorder;
 import java.awt.*;
 
 class BoardTile extends JButton {
-    private static final Color brown = new Color(51, 0, 25);
+    private static final Color brown = new Color(82, 54, 27);
     private boolean isHole;
     private boolean isRaised;
     private boolean isHighlighted;
