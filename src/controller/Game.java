@@ -39,7 +39,6 @@ public class Game {
      * @param observer A view
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
-    //TODO: Refactor into new class
     public void setUp(View observer, int levelNumber) {
         setLevel(observer, levelNumber);
     }
@@ -65,7 +64,7 @@ public class Game {
         return this.board.getPieces().get(point).getMoves(board, point);
     }
 
-    private void setLevel(View observer, int levelNumber) {
+    public void setLevel(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
