@@ -64,7 +64,7 @@ public class Game {
         return this.board.getPieces().get(point).getMoves(board);
     }
 
-    private void setLevel(View observer, int levelNumber) {
+    public void setLevel(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
