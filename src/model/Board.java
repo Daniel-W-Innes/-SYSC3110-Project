@@ -6,7 +6,7 @@ import view.View;
 import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
-// TODO: add a move method that checks for a victory and if there is one, notify the view of that victory
+
 /**
  * A class representing the state of the Board.
  * The board is the only class observed by a view.
