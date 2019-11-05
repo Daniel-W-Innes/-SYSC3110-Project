@@ -7,6 +7,10 @@ import java.awt.*;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * Interface that every game piece must implement.
+ */
+
 public interface Piece {
     Set<Point> boardSpotsUsed();
     List<Move> getMoves(Board board, Point clickedPoint);

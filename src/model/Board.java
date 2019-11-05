@@ -10,7 +10,6 @@ import java.util.Map;
 /**
  * A class representing the state of the Board.
  * The board is the only class observed by a view.
- * @author frank liu, daniel innes
  */
 public class Board implements Model {
 
@@ -130,6 +129,13 @@ public class Board implements Model {
             //this.view.addPiece(occupiedPoint, piece);
         }
     }
+
+    /**
+     * Move the given piece to the new location
+     *
+     * @param piece the piece to move
+     * @param newLocation the new location to move the piece to
+     */
 
     public void movePiece(Piece piece, Point newLocation) {
         /* When moving a piece, the fox has to be dealt with separately in the following way:

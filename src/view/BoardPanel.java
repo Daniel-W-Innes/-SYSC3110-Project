@@ -23,6 +23,12 @@ class BoardPanel extends JPanel implements ActionListener {
     private final Map<Point, Tile> boardMap = new HashMap<>();
     private final Game game;
 
+    /**
+     * Initializes the panel with Tiles to represent the game
+     *
+     * @param game the game that needs to be represented with a GUI
+     */
+
     BoardPanel(Game game) {
         this.game = game;
         setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
@@ -51,13 +57,32 @@ class BoardPanel extends JPanel implements ActionListener {
         });
     }
 
+    /**
+     * Visually add where a piece is painted to.
+     *
+     * @param point the point where the texture should be painted
+     * @param piece the piece that is to be painted at the given point
+     */
+
     void addPiece(Point point, Piece piece) {
         boardMap.get(point).setIcon(piece.getImageIcon(point));
     }
 
+    /**
+     * Visually remove where a piece is painted
+     *
+     * @param point the point where a piece should no longer be painted
+     */
+
     void removePiece(Point point) {
         boardMap.get(point).setIcon(null);
     }
+
+    /**
+     * Handler for a button press to implement the necessary logic when the user presss a Tile
+     *
+     * @param e the ActionEvent
+     */
 
     @Override
     public void actionPerformed(ActionEvent e) {
@@ -94,6 +119,10 @@ class BoardPanel extends JPanel implements ActionListener {
 
         }
     }
+
+    /**
+     * Visually reset the board to a default state.
+     */
 
     void reset() {
         boardMap.values().forEach(Tile::reset);

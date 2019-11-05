@@ -52,6 +52,12 @@ public class Gui extends JFrame implements View {
         add(toolbar, BorderLayout.PAGE_START);
     }
 
+    /**
+     *  Adds a button to the tool bar of this class.
+     *
+     * @param text the name of the button
+     * @param actionListener
+     */
 
     private void addToolbarButton(String text, ActionListener actionListener) {
         JButton button = new JButton(text);
@@ -59,25 +65,52 @@ public class Gui extends JFrame implements View {
         toolbar.add(button);
     }
 
+    /**
+     *  Add the board panel to this frame.
+     */
+
     private void populateBoard() {
         boardPanel = new BoardPanel(game);
         add(boardPanel, BorderLayout.CENTER);
     }
+
+    /**
+     * Visually add a piece to the rendered game shown.
+     *
+     * @param point the point where the piece should be rendered to
+     * @param piece the piece that should be painted at the given location
+     */
 
     @Override
     public void addPiece(Point point, Piece piece) {
         boardPanel.addPiece(point, piece);
     }
 
+    /**
+     * Visually remove a piece from the rendered game shown.
+     *
+     * @param point the point where the piece should not longer be rendered to
+     */
+
     @Override
     public void removePiece(Point point) {
         boardPanel.removePiece(point);
     }
 
+    /**
+     *  Show a pop-up menu telling the user that they won.
+     */
+
     @Override
     public void notifyWin() {
         JOptionPane.showMessageDialog(this, "You win!");
     }
+
+    /**
+     * Visually create the initial board state at the beginning of the game.
+     *
+     * @param board the board that is to be shown visually
+     */
 
     @Override
     public void sendInitialBoard(Board board) {

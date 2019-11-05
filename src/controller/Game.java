@@ -33,7 +33,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new Gui(game), 1);
+        game.setUp(new Gui(game), 20);
     }
 
     /**

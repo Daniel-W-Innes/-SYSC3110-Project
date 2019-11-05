@@ -4,7 +4,19 @@ import model.Board;
 
 import java.awt.*;
 
+/**
+ * Helper class to initialize the populate the board with pieces, thus creating an initial boars state.
+ */
+
 public class GameBuilder {
+
+    /**
+     * Constructs a initial board state based off of the level passed in.
+     *
+     * @param levelNumber the desired level, and thus difficulty, of the game
+     * @return an instance of Board initialized with pieces and terrain corresponding to the level passed in
+     */
+
     public static Board getStartingBoard(int levelNumber) {
         Board board = new Board();
         switch (levelNumber) {
@@ -68,6 +80,12 @@ public class GameBuilder {
         }
         return board;
     }
+
+    /**
+     * Helper function to create the initial terrain of the board
+     *
+     * @param board the board to populate with terrain squares
+     */
 
     private static void setDefaultTerrain(Board board) {
         board.addSquare(new Point(0, 0), new Square(true, true));

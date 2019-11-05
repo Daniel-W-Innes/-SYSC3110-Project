@@ -11,6 +11,10 @@ import java.util.Set;
 
 import static controller.Game.resourcesFolder;
 
+/**
+ * Class to represent a Fox of the game.
+ */
+
 public class Fox implements Piece {
 
     static final String vertexHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_down.jpg";
@@ -22,10 +26,18 @@ public class Fox implements Piece {
     private static final ImageIcon verticalTailIcon = new ImageIcon(verticalTailImageLocation);
     private static final ImageIcon horizontalHeadIcon = new ImageIcon(horizontalHeadImageLocation);
     private static final ImageIcon horizontalTailIcon = new ImageIcon(horizontalTailImageLocation);
+
     private final Direction direction;
     private Point headLocation;
     private Point tailLocation;
     private Set<Point> occupiedBoardSpots;
+
+    /**
+     * Constructor that initializes the Fox to the given location and direction.
+     *
+     * @param direction The direction the fox faces
+     * @param headLocation The location of the head of the fox
+     */
 
     public Fox(Direction direction, Point headLocation) {
         /* Functionally, it does not matter the order of the fox's tail and head, as it can move both directions along its axis.
@@ -49,6 +61,12 @@ public class Fox implements Piece {
         occupiedBoardSpots = Set.of(headLocation, tailLocation);
     }
 
+    /**
+     * Update the internal variables holding the location of the Fox
+     *
+     * @param newLocation the new location of the head of the fox
+     */
+
     @Override
     public void updateBoardSpotUsed(Point newLocation) {
         headLocation = new Point(newLocation);
@@ -56,19 +74,44 @@ public class Fox implements Piece {
         occupiedBoardSpots = Set.of(newLocation, tailLocation);
     }
 
+    /**
+     * Get all of the board spots used by the fox piece.
+     *
+     * @return points taken up by the fox piece
+     */
 
     @Override
     public Set<Point> boardSpotsUsed() {
         return occupiedBoardSpots;
     }
 
+    /**
+     * Get the location of the head of the fox.
+     *
+     * @return the point representing the location of the fox head.
+     */
+
     public Point getHeadLocation() {
         return headLocation;
     }
 
+    /**
+     * Get the location of the tail of the fox.
+     *
+     * @return the point representing the location of the fox tail.
+     */
+
     public Direction getDirection() {
         return direction;
     }
+
+    /**
+     * Find the possible moves the fox can take given the current state of the board.
+     *
+     * @param board the model of the board
+     * @param clickedPoint the point the user click in the BoardPanel
+     * @return list of moves that the fox can take
+     */
 
     @Override
     public List<Move> getMoves(Board board, Point clickedPoint) {
@@ -137,6 +180,13 @@ public class Fox implements Piece {
         return possibleMoves;
     }
 
+    /**
+     * Get the texture that should be drawn to represent the fox at a given point.
+     *
+     * @param location the location specifying where the fox texture needs to be drawn
+     * @return ImageIcon that holds the texture needed to be drawn
+     */
+
     @Override
     public ImageIcon getImageIcon(Point location) {
         if (Direction.Y_AXIS == direction) {
@@ -157,6 +207,12 @@ public class Fox implements Piece {
             }
         }
     }
+
+    /**
+     * Calculate the location of the fox tail given the positions of its head and the direction of the fox.
+     *
+     * @return the point representing the location of the fox tail
+     */
 
     private Point calculateTailLocation() {
         switch (direction) {
