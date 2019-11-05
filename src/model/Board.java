@@ -276,6 +276,12 @@ public class Board implements Model {
         return terrain.hashCode();
     }
 
+    /**
+    *  Set the view reference so that the board can notify the view of changes.
+    *
+    *  @param view the view reference
+    */
+    
     @Override
     public void setView(View view) {
         this.view = view;
