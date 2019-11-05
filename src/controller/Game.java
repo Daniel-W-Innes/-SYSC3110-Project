@@ -37,8 +37,9 @@ public class Game {
     }
 
     /**
-     * Sets up the board with the given observer, and level
-     * @param observer A view
+     * Sets up the board with the given observer, and level.
+     *
+     * @param observer A view to add to the new board
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
     public void setUp(View observer, int levelNumber) {
@@ -77,8 +78,9 @@ public class Game {
     }
     
     /**
-     *   Reset the game to the passed in level.
-     *  @param levelNumber the level to set the game to
+     *  Reset the game to the passed in level.
+     *
+     *  @param observer A view to add to the new board
      */  
 
     public void resetLevel(View observer) {
