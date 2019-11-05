@@ -9,8 +9,8 @@ There are three steps to playing the game:
 		 - Suitable JVM implementations can be had from directly from Oracle. However, due to recent changes, an Oracle account is required to obtain a JVM from them. Thus, to obtain a JVM implementation without having to create an account, visit [openjdk](https://adoptopenjdk.net/)
 		 
  2.  
-	- Download the JAR file and the resource folder found in this repository. This is done already in the submission folder, in the sub-folder "Executable".
-	-  Navigate to the downloaded the folder (Milestone2/Executable) containing the JAR file in the operating system terminal and invoke the following command: java -jar --enable-preview SYSC3110-Project.jar	
+	- Download the JAR file and the resource folder found in this repository. This is done already in the submission folder, in the sub-folder "bin".
+	-  Navigate to the downloaded the folder containing the JAR file in the operating system terminal and invoke the following command: java -jar --enable-preview SYSC3110-Project.jar	
 	
 		**Note: The resource folder must be in the same folder as the jar file!**
 	
