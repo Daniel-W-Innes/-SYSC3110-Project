@@ -56,7 +56,7 @@ public class Gui extends JFrame implements View {
      *  Adds a button to the tool bar of this class.
      *
      * @param text the name of the button
-     * @param actionListener
+     * @param actionListener the ActionListener to be triggered when the button is pressed
      */
 
     private void addToolbarButton(String text, ActionListener actionListener) {

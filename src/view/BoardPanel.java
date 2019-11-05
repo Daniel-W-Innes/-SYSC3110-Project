@@ -79,7 +79,7 @@ class BoardPanel extends JPanel implements ActionListener {
     }
 
     /**
-     * Handler for a button press to implement the necessary logic when the user presss a Tile
+     * Handler for a button press to implement the necessary logic when the user press a Tile
      *
      * @param e the ActionEvent
      */
