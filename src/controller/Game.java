@@ -62,12 +62,24 @@ public class Game {
         return board.getPieces().get(point).getMoves(board, point);
     }
 
+    /**
+    * Set the level of game to the passed in level.
+    *
+    *   @param observer the view reference
+     *   @param levelNumber the level to set the game to
+    */
+    
     public void setLevel(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
         board.setView(observer);
     }
+    
+    /**
+     *   Reset the game to the passed in level.
+     *  @param levelNumber the level to set the game to
+     */  
 
     public void resetLevel(View observer) {
         setLevel(observer, levelNumber);
