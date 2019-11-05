@@ -35,7 +35,7 @@ There are four phases of this program:
 
 More details can be found at appropriate document on cuLearn.
 
-Currently, phase one has been implemented.
+Currently, phase two has been implemented.
 
 ## Program Requirements
 
@@ -58,8 +58,3 @@ Other files that can be found in this repository:
 2. Sequence Diagram, showing how the order of events fit together to create a playable game
 3. User Manual, describing how to play the game given the current implementation
 4. Design Decision Rationales
-
-## Known Bug(s)
-
-- If many moves (reproduced with millions of moves) then occasionally the foxes are
-  split into two pieces, leading to accepted moves that are not within the scope of the game
