@@ -1,8 +1,7 @@
-package view;
+package frontend;
 
-import helpers.Piece;
-
-import java.awt.*;
+import backend.helpers.Piece;
+import backend.helpers.Point;
 
 public interface View {
     void addPiece(Point point, Piece piece);

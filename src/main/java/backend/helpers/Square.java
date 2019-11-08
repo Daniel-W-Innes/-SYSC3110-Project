@@ -1,4 +1,4 @@
-package helpers;
+package backend.helpers;
 
 import java.util.Arrays;
 

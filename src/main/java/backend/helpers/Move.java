@@ -1,24 +1,23 @@
-package helpers;
+package backend.helpers;
 
-import java.awt.*;
 import java.util.Arrays;
 
 public class Move {
-    private final Point start;
-    private final Point end;
+    private final Piece start;
+    private final Piece end;
     private final int hashcode;
 
-    public Move(Point start, Point end) {
+    Move(Piece start, Piece end) {
         this.start = start;
         this.end = end;
         hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
     }
 
-    public Point getEnd() {
+    public Piece getEnd() {
         return end;
     }
 
-    public Point getStart() {
+    public Piece getStart() {
         return start;
     }
 
@@ -45,6 +44,6 @@ public class Move {
 
     @Override
     public String toString() {
-        return "{" + getStart().x + " , " + getStart().y + "} -> {" + getEnd().x + " , " + getEnd().y + "}";
+        return ""; //return "{" + getStart().x + " , " + getStart().y + "} -> {" + getEnd().x + " , " + getEnd().y + "}";
     }
 }

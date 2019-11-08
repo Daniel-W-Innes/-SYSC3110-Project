@@ -1,8 +1,8 @@
-package model;
+package backend.models;
 
-import view.View;
+import frontend.View;
 
-public interface Model {
+interface Model {
     void addView(View view);
 
     void removeView(View view);

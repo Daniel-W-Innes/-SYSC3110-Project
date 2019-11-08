@@ -1,17 +1,12 @@
-package controller;
+package backend.helpers;
 
-import helpers.Level;
-import helpers.Move;
-import view.Frame;
-import view.View;
+import frontend.View;
+import frontend.something;
 
-import java.awt.*;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
+import java.util.Set;
 
-import static helpers.GameBuilder.buildLevel;
-import static helpers.GameBuilder.getStartingBoard;
 
 public class Game {
     private final Map<Integer, Level> levels;
@@ -23,12 +18,11 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        Frame frame = new Frame();
-        game.setUp(frame.getBoard());
+        game.setUp(new something());
     }
 
-    public boolean move(Move move) {
-        return levels.get(levelNumber).move(move);
+    public boolean move(Point start, Point end) {
+        return levels.get(levelNumber).move(start, end);
     }
 
     public boolean changeLevel(int levelNumber) {
@@ -40,18 +34,15 @@ public class Game {
         }
     }
 
-    public List<Move> getMoves(Point point) {
-        return levels.get(levelNumber).getMove(point);
-    }
-
-    public void resetLevel() {
-        getLevels().get(levelNumber).resetPieces(getStartingBoard(levelNumber).getPieces());
+    public Set<Move> getMoves(Point point) {
+        return levels.get(levelNumber).getMoves(point);
     }
 
     public void setUp(View view) {
         levelNumber = 1;
-        levels.putAll(buildLevel(view));
+        levels.putAll(GameBuilder.buildLevel(view));
     }
+
     private Map<Integer, Level> getLevels() {
         return levels;
     }
