@@ -1,6 +1,9 @@
 package backend.models;
 
-import backend.helpers.*;
+import backend.helpers.Move;
+import backend.helpers.Piece;
+import backend.helpers.Point;
+import backend.helpers.Square;
 import frontend.View;
 
 import java.util.*;
@@ -39,33 +42,8 @@ public class MutableBoard extends Board implements Model {
         //TODO draw
     }
 
-    public boolean hasPiece(Point point) {
-        return getPieces().containsKey(point);
-    }
-
-    public Point getMax() {
-        return super.getMax();
-    }
-
     public ImmutableBoard getImmutableBoard() {
-        return new ImmutableBoard(new HashMap<>(getBoard()), new HashMap<>(getPieces()), getMax());
-    }
-
-    @Override
-    public String toString() {
-        StringBuilder stringBuilder = new StringBuilder();
-        Point point;
-        for (int x = 0; x <= getMax().x; x++) {
-            for (int y = 0; y <= getMax().y; y++) {
-                point = new Point(x, y);
-                stringBuilder.append('|');
-                stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "_");
-                stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
-            }
-            stringBuilder.append('|');
-//            stringBuilder.append("\n");
-        }
-        return stringBuilder.toString();
+        return new ImmutableBoard(getBoard(), getPieces(), getMax());
     }
 
     @Override
@@ -83,24 +61,6 @@ public class MutableBoard extends Board implements Model {
     @Override
     public int hashCode() {
         return Arrays.hashCode(new int[]{getBoard().hashCode(), getPieces().hashCode()});
-    }
-
-    private Piece getPiece(Point point) {
-        return getPieces().get(point);
-    }
-
-    private boolean hasSquare(Point point) {
-        return getBoard().containsKey(point);
-    }
-
-    private Square getSquare(Point point) {
-        return getBoard().get(point);
-    }
-
-    public boolean isVictory() {
-        return getPieces().entrySet().stream()
-                .filter(entry -> entry.getValue() instanceof Rabbit)
-                .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
     }
 
     @Override

@@ -2,6 +2,7 @@ package backend.models;
 
 import backend.helpers.Piece;
 import backend.helpers.Point;
+import backend.helpers.Rabbit;
 import backend.helpers.Square;
 
 import java.util.HashMap;
@@ -13,6 +14,7 @@ public abstract class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
+    private Boolean isVictory;
 
     Board(Map<Point, Square> board, Point max, Map<Point, Piece> pieces) {
         this.board = board;
@@ -28,8 +30,50 @@ public abstract class Board {
         return pieces;
     }
 
-    Point getMax() {
+    public Point getMax() {
         return max;
+    }
+
+    private boolean hasSquare(Point point) {
+        return getBoard().containsKey(point);
+    }
+
+    private Piece getPiece(Point point) {
+        return getPieces().get(point);
+    }
+
+    private Square getSquare(Point point) {
+        return getBoard().get(point);
+    }
+
+    public boolean hasPiece(Point point) {
+        return getPieces().containsKey(point);
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder stringBuilder = new StringBuilder();
+        Point point;
+        for (int x = 0; x <= getMax().x; x++) {
+            for (int y = 0; y <= getMax().y; y++) {
+                point = new Point(x, y);
+                stringBuilder.append('|');
+                stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "_");
+                stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
+            }
+            stringBuilder.append('|');
+//            stringBuilder.append("\n");
+        }
+        return stringBuilder.toString();
+    }
+
+    public boolean isVictory() {
+        if (isVictory == null) {
+            isVictory = getPieces().entrySet().stream()
+                    .filter(entry -> entry.getValue() instanceof Rabbit)
+                    .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
+        }
+        return isVictory;
     }
 
     public static class Builder {
@@ -92,6 +136,7 @@ public abstract class Board {
             return function.build(board, pieces, max);
         }
 
+
         public ImmutableBoard buildImmutableBoard() {
             return (ImmutableBoard) build(ImmutableBoard::new);
         }
@@ -100,4 +145,5 @@ public abstract class Board {
             return (MutableBoard) build(MutableBoard::new);
         }
     }
+
 }

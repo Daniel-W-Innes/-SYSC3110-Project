@@ -11,7 +11,7 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-public class Level {
+class Level {
     private final MutableBoard mutableBoard;
     private final ImmutableNetwork<ImmutableBoard, Move> graph;
 
