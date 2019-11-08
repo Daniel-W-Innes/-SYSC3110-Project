@@ -2,7 +2,7 @@ package backend.helpers;
 
 import java.util.Arrays;
 
-public class Point {
+public final class Point {
     public final int x;
     public final int y;
 

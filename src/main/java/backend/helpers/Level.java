@@ -92,9 +92,6 @@ public class Level {
                             start = board.getImmutableBoard();
                             board.movePiece(move);
                             end = board.getImmutableBoard();
-                            if (start.equals(end)) {
-                                System.out.println(move);
-                            }
                             mutableNetwork.addEdge(start, end, move);
                             expanded.add(start);
                             if (!expanded.contains(end) && !queue.contains(end)) {

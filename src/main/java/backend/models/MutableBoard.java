@@ -33,7 +33,9 @@ public class MutableBoard extends Board implements Model {
 
     public void movePiece(Move move) {
         move.getStart().occupies().forEach(getPieces()::remove);
-        move.getEnd().occupies().stream().map(point -> Map.entry(point, move.getEnd())).forEach(entry -> getPieces().put(entry.getKey(), entry.getValue()));
+        move.getEnd().occupies().stream()
+                .map(point -> Map.entry(point, move.getEnd()))
+                .forEach(entry -> getPieces().put(entry.getKey(), entry.getValue()));
         //TODO draw
     }
 
@@ -46,7 +48,7 @@ public class MutableBoard extends Board implements Model {
     }
 
     public ImmutableBoard getImmutableBoard() {
-        return new ImmutableBoard(getBoard(), getPieces(), getMax());
+        return new ImmutableBoard(new HashMap<>(getBoard()), new HashMap<>(getPieces()), getMax());
     }
 
     @Override
