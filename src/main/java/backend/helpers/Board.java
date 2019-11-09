@@ -2,19 +2,19 @@ package backend.helpers;
 
 import java.util.*;
 
-public abstract class Board {
+public class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
     private Boolean isVictory;
 
-    Board(Map<Point, Square> board, Point max, Map<Point, Piece> pieces) {
-        this.board = board;
+    private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
+        this.board = Map.copyOf(board);
         this.max = max;
-        this.pieces = pieces;
+        this.pieces = Map.copyOf(pieces);
     }
 
-    Map<Point, Square> getBoard() {
+    private Map<Point, Square> getBoard() {
         return board;
     }
 
@@ -22,7 +22,7 @@ public abstract class Board {
         return pieces;
     }
 
-    public Point getMax() {
+    Point getMax() {
         return max;
     }
 
@@ -38,7 +38,7 @@ public abstract class Board {
         return getBoard().get(point);
     }
 
-    public boolean hasPiece(Point point) {
+    boolean hasPiece(Point point) {
         return getPieces().containsKey(point);
     }
 
@@ -73,7 +73,7 @@ public abstract class Board {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Board)) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
         Board board = (Board) obj;
@@ -85,13 +85,13 @@ public abstract class Board {
         return Arrays.hashCode(new int[]{board.hashCode(), pieces.hashCode()});
     }
 
-    public static class Builder {
+    static class Builder {
         private final Set<Point> holes;
         private final Set<Point> raisedSquares;
         private final Map<Point, Piece> pieces;
 
 
-        public Builder(boolean useDefaultMap) {
+        Builder(boolean useDefaultMap) {
             if (useDefaultMap) {
                 holes = Set.of(new Point(0, 0), new Point(4, 4), new Point(0, 4), new Point(4, 0), new Point(2, 2));
                 raisedSquares = Set.of(new Point(0, 2), new Point(2, 0), new Point(2, 4), new Point(4, 2));
@@ -102,18 +102,20 @@ public abstract class Board {
             pieces = new HashMap<>();
         }
 
-        public Builder addHole(Point point) {
+        Builder addHole(Point point) {
             holes.add(point);
             return this;
         }
 
-        public Builder addRaisedSquares(Point point) {
+        Builder addRaisedSquares(Point point) {
             raisedSquares.add(point);
             return this;
         }
 
-        public Builder addPieces(Point loc, Piece piece) {
-            pieces.put(loc, piece);
+        Builder addPiece(Piece piece) {
+            piece.occupies().stream()
+                    .map(point -> Map.entry(point, piece))
+                    .forEach(entry -> pieces.put(entry.getKey(), entry.getValue()));
             return this;
         }
 
@@ -128,7 +130,7 @@ public abstract class Board {
         }
 
 
-        private Board build(BoardConstructor function) {
+        Board build() {
             Point max = new Point(0, 0);
             Map<Point, Square> board = new HashMap<>();
             for (Point point : raisedSquares) {
@@ -142,16 +144,29 @@ public abstract class Board {
             for (Point point : pieces.keySet()) {
                 max = updateMax(max, point);
             }
-            return function.build(board, pieces, max);
+            return new Board(board, pieces, max);
+        }
+    }
+
+    public static class Mover {
+        private final Board board;
+        private final Map<Point, Piece> pieces;
+
+        public Mover(Board board) {
+            this.board = board;
+            pieces = new HashMap<>(board.getPieces());
         }
 
-
-        public ImmutableBoard buildImmutableBoard() {
-            return (ImmutableBoard) build(ImmutableBoard::new);
+        public Mover movePiece(Move move) {
+            move.getStart().occupies().forEach(pieces::remove);
+            move.getEnd().occupies().stream()
+                    .map(point -> Map.entry(point, move.getEnd()))
+                    .forEach(entry -> pieces.put(entry.getKey(), entry.getValue()));
+            return this;
         }
 
-        public MutableBoard buildMutableBoard() {
-            return (MutableBoard) build(MutableBoard::new);
+        public Board build() {
+            return new Board(board.board, pieces, board.max);
         }
     }
 

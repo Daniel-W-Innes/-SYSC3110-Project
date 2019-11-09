@@ -13,7 +13,7 @@ public class Fox implements Piece {
         this.tail = tail;
     }
 
-    private Set<Move> getMoves(ImmutableBoard board, Point start, Point offset, boolean isMovingBackwards) {
+    private Set<Move> getMoves(Board board, Point start, Point offset, boolean isMovingBackwards) {
         Set<Move> moves = new HashSet<>();
         Point point = new Point(start);
         while (true) {
@@ -33,7 +33,7 @@ public class Fox implements Piece {
 
 
     @Override
-    public Set<Move> getMoves(ImmutableBoard board, Point point) {
+    public Set<Move> getMoves(Board board, Point point) {
         Set<Move> moves = new HashSet<>();
         if (head.x == tail.x) {
             moves.addAll(getMoves(board, point, new Point(0, 1), false));
@@ -65,7 +65,7 @@ public class Fox implements Piece {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Fox)) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
         Fox fox = (Fox) obj;

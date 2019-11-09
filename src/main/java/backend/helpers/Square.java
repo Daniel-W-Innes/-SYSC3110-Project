@@ -7,13 +7,13 @@ class Square {
     private final boolean isRaised;
     private final int hashCode;
 
-    public Square(boolean isHole, boolean isRaised) {
+    Square(boolean isHole, boolean isRaised) {
         this.isHole = isHole;
         this.isRaised = isRaised;
         hashCode = Arrays.hashCode(new boolean[]{isHole, isRaised});
     }
 
-    public boolean isHole() {
+    boolean isHole() {
         return isHole;
     }
 

@@ -2,21 +2,21 @@ package backend.helpers;
 
 public class Edge {
     private final Move move;
-    private final ImmutableBoard start;
-    private final ImmutableBoard end;
+    private final Board start;
+    private final Board end;
 
 
-    public Edge(Move move, ImmutableBoard start, ImmutableBoard end) {
+    public Edge(Move move, Board start, Board end) {
         this.move = move;
         this.start = start;
         this.end = end;
     }
 
-    public ImmutableBoard getEnd() {
+    public Board getEnd() {
         return end;
     }
 
-    public ImmutableBoard getStart() {
+    public Board getStart() {
         return start;
     }
 

@@ -11,20 +11,20 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
 public class Level implements Model {
-    private final ImmutableNetwork<ImmutableBoard, Edge> graph;
+    private final ImmutableNetwork<Board, Edge> graph;
     private final List<View> views;
-    private ImmutableBoard immutableBoard;
+    private Board board;
 
-    private Level(ImmutableNetwork<ImmutableBoard, Edge> graph, ImmutableBoard immutableBoard) {
+    private Level(ImmutableNetwork<Board, Edge> graph, Board board) {
         this.graph = graph;
-        this.immutableBoard = immutableBoard;
+        this.board = board;
         views = new ArrayList<>();
     }
 
     public boolean move(Point start, Point end) {
-        for (Edge edge : graph.outEdges(immutableBoard)) {
+        for (Edge edge : graph.outEdges(board)) {
             if (edge.getMove().getStart().occupies(start) && edge.getMove().getEnd().occupies(end)) {
-                immutableBoard = edge.getEnd();
+                board = edge.getEnd();
                 return true;
             }
         }
@@ -40,24 +40,24 @@ public class Level implements Model {
             return false;
         }
         Level level = (Level) obj;
-        return getImmutableBoard().equals(level.getImmutableBoard()) && getGraph().equals(level.getGraph());
+        return board.equals(level.board) && graph.equals(level.graph);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{immutableBoard.hashCode(), graph.hashCode()});
+        return Arrays.hashCode(new int[]{board.hashCode(), graph.hashCode()});
     }
 
-    private ImmutableNetwork<ImmutableBoard, Edge> getGraph() {
+    private ImmutableNetwork<Board, Edge> getGraph() {
         return graph;
     }
 
-    private ImmutableBoard getImmutableBoard() {
-        return immutableBoard;
+    private Board getBoard() {
+        return board;
     }
 
     public Set<Move> getMoves(Point point) {
-        return graph.outEdges(immutableBoard).stream().map(Edge::getMove).filter(move -> move.getStart().occupies(point)).collect(Collectors.toUnmodifiableSet());
+        return graph.outEdges(board).stream().map(Edge::getMove).filter(move -> move.getStart().occupies(point)).collect(Collectors.toUnmodifiableSet());
     }
 
     @Override
@@ -71,31 +71,28 @@ public class Level implements Model {
     }
 
     public static class Builder {
-        private final ImmutableBoard start;
+        private final Board start;
 
-        public Builder(ImmutableBoard start) {
+        public Builder(Board start) {
             this.start = start;
         }
 
         public Level build() {
-            MutableNetwork<ImmutableBoard, Edge> mutableNetwork = NetworkBuilder.directed()
-                    .allowsParallelEdges(false)
+            MutableNetwork<Board, Edge> mutableNetwork = NetworkBuilder.directed()
+                    .allowsParallelEdges(true)
                     .allowsSelfLoops(false)
                     .build();
-            ImmutableBoard start;
-            MutableBoard temp;
-            ImmutableBoard end;
-            Set<ImmutableBoard> expanded = new HashSet<>();
-            Queue<ImmutableBoard> queue = new ConcurrentLinkedQueue<>();
+            Board start;
+            Board end;
+            Set<Board> expanded = new HashSet<>();
+            Queue<Board> queue = new ConcurrentLinkedQueue<>();
             queue.add(this.start);
             while (!queue.isEmpty()) {
                 start = queue.poll();
                 for (Piece piece : start.getPieces().values()) {
                     for (Point point : piece.occupies()) {
                         for (Move move : piece.getMoves(start, point)) {
-                            temp = start.getMutableBoard();
-                            temp.movePiece(move);
-                            end = temp.getImmutableBoard();
+                            end = new Board.Mover(start).movePiece(move).build();
                             mutableNetwork.addEdge(start, end, new Edge(move, start, end));
                             expanded.add(start);
                             if (!expanded.contains(end) && !queue.contains(end)) {

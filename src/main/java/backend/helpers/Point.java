@@ -3,8 +3,8 @@ package backend.helpers;
 import java.util.Arrays;
 
 public final class Point {
-    public final int x;
-    public final int y;
+    final int x;
+    final int y;
 
     public Point(int x, int y) {
         this.x = x;

@@ -21,7 +21,7 @@ public class Mushroom implements Piece {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Mushroom)) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
         Mushroom mushroom = (Mushroom) obj;
@@ -34,7 +34,7 @@ public class Mushroom implements Piece {
     }
 
     @Override
-    public Set<Move> getMoves(ImmutableBoard board, Point point) {
+    public Set<Move> getMoves(Board board, Point point) {
         return new HashSet<>();
     }
 

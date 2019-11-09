@@ -15,7 +15,7 @@ public class Rabbit implements Piece {
         this.point = point;
     }
 
-    private void addMove(Set<Move> moves, ImmutableBoard board, Point offset) {
+    private void addMove(Set<Move> moves, Board board, Point offset) {
         boolean c = true;
         Point point = new Point(this.point);
         while (c) {
@@ -32,7 +32,7 @@ public class Rabbit implements Piece {
     }
 
     @Override
-    public Set<Move> getMoves(ImmutableBoard board, Point point) {
+    public Set<Move> getMoves(Board board, Point point) {
         Set<Move> moves = new HashSet<>();
         addMove(moves, board, new Point(0, 1));
         addMove(moves, board, new Point(0, -1));
@@ -61,7 +61,7 @@ public class Rabbit implements Piece {
         if (obj == this) {
             return true;
         }
-        if (!(obj instanceof Rabbit)) {
+        if (obj == null || obj.getClass() != this.getClass()) {
             return false;
         }
         Rabbit rabbit = (Rabbit) obj;

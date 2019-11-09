@@ -9,43 +9,39 @@ import java.util.Map;
 
 class GameBuilder {
 
-    private static ImmutableBoard getStartingBoard(int levelNumber) {
-        MutableBoard mutableBoard;
+    private static Board getStartingBoard(int levelNumber) {
         switch (levelNumber) {
             case 1:
-                mutableBoard = new MutableBoard.Builder(true).buildMutableBoard();
-                mutableBoard.addPiece(new Rabbit(new Color(0xCD853F), new Point(2, 3)));
-                mutableBoard.addPiece(new Mushroom(new Point(0, 1)));
-                mutableBoard.addPiece(new Mushroom(new Point(0, 2)));
-                mutableBoard.addPiece(new Mushroom(new Point(1, 3)));
-                break;
+                return new Board.Builder(true)
+                        .addPiece(new Rabbit(new Color(0xCD853F), new Point(2, 3)))
+                        .addPiece(new Mushroom(new Point(0, 1)))
+                        .addPiece(new Mushroom(new Point(0, 2)))
+                        .addPiece(new Mushroom(new Point(1, 3)))
+                        .build();
             case 20:
-                mutableBoard = new MutableBoard.Builder(true).buildMutableBoard();
-                mutableBoard.addPiece(new Rabbit(new Color(0xCD853F), new Point(1, 4)));
-                mutableBoard.addPiece(new Rabbit(new Color(0x808080), new Point(4, 2)));
-                mutableBoard.addPiece(new Rabbit(new Color(0xFFFFFF), new Point(3, 0)));
-                mutableBoard.addPiece(new Mushroom(new Point(2, 4)));
-                mutableBoard.addPiece(new Mushroom(new Point(3, 1)));
-                mutableBoard.addPiece(new Fox(new Point(1, 1), new Point(1, 0)));
-                mutableBoard.addPiece(new Fox(new Point(4, 3), new Point(3, 3)));
-                break;
+                return new Board.Builder(true)
+                        .addPiece(new Rabbit(new Color(0xCD853F), new Point(1, 4)))
+                        .addPiece(new Rabbit(new Color(0x808080), new Point(4, 2)))
+                        .addPiece(new Rabbit(new Color(0xFFFFFF), new Point(3, 0)))
+                        .addPiece(new Mushroom(new Point(2, 4)))
+                        .addPiece(new Mushroom(new Point(3, 1)))
+                        .addPiece(new Fox(new Point(1, 1), new Point(1, 0)))
+                        .addPiece(new Fox(new Point(4, 3), new Point(3, 3)))
+                        .build();
             case 60:
-                mutableBoard = new MutableBoard.Builder(true).buildMutableBoard();
-                mutableBoard.addPiece(new Rabbit(new Color(0xCD853F), new Point(1, 3)));
-                mutableBoard.addPiece(new Rabbit(new Color(0x808080), new Point(2, 4)));
-                mutableBoard.addPiece(new Rabbit(new Color(0xFFFFFF), new Point(4, 3)));
-                mutableBoard.addPiece(new Mushroom(new Point(0, 3)));
-                mutableBoard.addPiece(new Mushroom(new Point(2, 2)));
-                mutableBoard.addPiece(new Mushroom(new Point(3, 1)));
-                mutableBoard.addPiece(new Fox(new Point(1, 1), new Point(1, 0)));
-                mutableBoard.addPiece(new Fox(new Point(1, 1), new Point(1, 0)));
-                break;
+                return new Board.Builder(true)
+                        .addPiece(new Rabbit(new Color(0xCD853F), new Point(1, 3)))
+                        .addPiece(new Rabbit(new Color(0x808080), new Point(2, 4)))
+                        .addPiece(new Rabbit(new Color(0xFFFFFF), new Point(4, 3)))
+                        .addPiece(new Mushroom(new Point(0, 3)))
+                        .addPiece(new Mushroom(new Point(2, 2)))
+                        .addPiece(new Mushroom(new Point(3, 1)))
+                        .addPiece(new Fox(new Point(1, 1), new Point(1, 0)))
+                        .addPiece(new Fox(new Point(1, 1), new Point(1, 0)))
+                        .build();
             default:
-                mutableBoard = new MutableBoard.Builder(true).buildMutableBoard();
-                break;
-
+                return new Board.Builder(true).build();
         }
-        return mutableBoard.getImmutableBoard();
     }
 
     static Map<Integer, Level> buildLevel(View view) {
