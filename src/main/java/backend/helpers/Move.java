@@ -2,7 +2,7 @@ package backend.helpers;
 
 import java.util.Arrays;
 
-public class Move {
+public final class Move {
     private final Piece start;
     private final Piece end;
     private final int hashcode;

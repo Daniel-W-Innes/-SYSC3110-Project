@@ -1,26 +1,15 @@
 package backend.helpers;
 
-import java.util.Arrays;
-
-class Square {
+final class Square {
     private final boolean isHole;
-    private final boolean isRaised;
-    private final int hashCode;
 
-    Square(boolean isHole, boolean isRaised) {
+    Square(boolean isHole) {
         this.isHole = isHole;
-        this.isRaised = isRaised;
-        hashCode = Arrays.hashCode(new boolean[]{isHole, isRaised});
     }
 
     boolean isHole() {
         return isHole;
     }
-
-    private boolean isRaised() {
-        return isRaised;
-    }
-
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {
@@ -30,22 +19,20 @@ class Square {
             return false;
         }
         Square square = (Square) obj;
-        return isHole() == square.isHole() && isRaised() == square.isRaised();
+        return isHole() == square.isHole();
     }
 
     @Override
     public String toString() {
         if (isHole()) {
             return "H";
-        } else if (isRaised()) {
-            return "R";
         } else {
-            return "_";
+            return "R";
         }
     }
 
     @Override
     public int hashCode() {
-        return hashCode;
+        return Boolean.hashCode(isHole);
     }
 }

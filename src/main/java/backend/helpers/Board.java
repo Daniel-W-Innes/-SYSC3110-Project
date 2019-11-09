@@ -2,7 +2,7 @@ package backend.helpers;
 
 import java.util.*;
 
-public class Board {
+public final class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
@@ -134,11 +134,11 @@ public class Board {
             Point max = new Point(0, 0);
             Map<Point, Square> board = new HashMap<>();
             for (Point point : raisedSquares) {
-                board.put(point, new Square(false, true));
+                board.put(point, new Square(false));
                 max = updateMax(max, point);
             }
             for (Point point : holes) {
-                board.put(point, new Square(true, true));
+                board.put(point, new Square(true));
                 max = updateMax(max, point);
             }
             for (Point point : pieces.keySet()) {

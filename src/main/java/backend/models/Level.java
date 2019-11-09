@@ -105,4 +105,39 @@ public class Level implements Model {
             return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
         }
     }
+
+//    Board BFS(Board start) {
+//        Queue<Board> queue = new LinkedList<>();
+//        Set<Board> expanded = new HashSet<>();
+//        expanded.add(start);
+//        Map<Board, Board> listOfStepsPerBoard = new HashMap<>();
+//        queue.add(start);
+//        for (Board board: Traverser.forGraph(graph).breadthFirst(start)){
+//            if (board.isVictory()) {
+//                return listOfStepsPerBoard.get(board);
+//            } else if (listOfStepsPerBoard.containsKey(board)) {
+//                listOfStepsPerBoard.put(board, newMoves);
+//            }
+//            for (Board : graph.get(board).values()) {
+//                Board newBoard = new Board(board);
+//                newBoard.movePieces(moves);
+//                if (!expanded.contains(newBoard)) {
+//                    expanded.add(newBoard);
+//                    if (listOfStepsPerBoard.containsKey(board)) {
+//                        List<Move> newMoves = new ArrayList<>(listOfStepsPerBoard.get(board));
+//                        newMoves.addAll(moves);
+//                        if (!isVictories.containsKey(newBoard)) {
+//                            System.out.println(moves);
+//                            System.out.println(newBoard.toString());
+//                        }
+//                        listOfStepsPerBoard.put(newBoard, newMoves);
+//                    } else {
+//                        listOfStepsPerBoard.put(newBoard, moves);
+//                    }
+//                    queue.add(newBoard);
+//                }
+//            }
+//        }
+//        return null;
+//    }
 }

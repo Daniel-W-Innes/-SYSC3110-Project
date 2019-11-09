@@ -7,8 +7,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-class GameBuilder {
-
+final class GameBuilder {
     private static Board getStartingBoard(int levelNumber) {
         switch (levelNumber) {
             case 1:

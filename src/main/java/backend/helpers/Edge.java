@@ -1,6 +1,6 @@
 package backend.helpers;
 
-public class Edge {
+public final class Edge {
     private final Move move;
     private final Board start;
     private final Board end;
