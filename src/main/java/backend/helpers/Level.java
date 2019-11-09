@@ -76,22 +76,24 @@ class Level {
         }
 
         Level build() {
-            MutableNetwork<ImmutableBoard, Move> mutableNetwork = NetworkBuilder.undirected()
+            MutableNetwork<ImmutableBoard, Move> mutableNetwork = NetworkBuilder.directed()
                     .allowsParallelEdges(false)
                     .allowsSelfLoops(false)
                     .build();
             ImmutableBoard start;
+            MutableBoard temp;
             ImmutableBoard end;
             Set<ImmutableBoard> expanded = new HashSet<>();
             Queue<ImmutableBoard> queue = new ConcurrentLinkedQueue<>();
-            queue.add(board.getImmutableBoard());
+            queue.add(this.board.getImmutableBoard());
             while (!queue.isEmpty()) {
-                for (Piece piece : queue.poll().getPieces().values()) {
+                start = queue.poll();
+                for (Piece piece : start.getPieces().values()) {
                     for (Point point : piece.occupies()) {
                         for (Move move : piece.getMoves(point)) {
-                            start = board.getImmutableBoard();
-                            board.movePiece(move);
-                            end = board.getImmutableBoard();
+                            temp = start.getMutableBoard();
+                            temp.movePiece(move);
+                            end = temp.getImmutableBoard();
                             mutableNetwork.addEdge(start, end, move);
                             expanded.add(start);
                             if (!expanded.contains(end) && !queue.contains(end)) {

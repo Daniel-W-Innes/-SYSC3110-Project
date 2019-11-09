@@ -13,6 +13,10 @@ public final class ImmutableBoard extends Board {
         super(Map.copyOf(board), max, Map.copyOf(pieces));
     }
 
+    public MutableBoard getMutableBoard() {
+        return new MutableBoard(getBoard(), getPieces(), getMax());
+    }
+
     @Override
     public boolean equals(Object obj) {
         if (obj == this) {

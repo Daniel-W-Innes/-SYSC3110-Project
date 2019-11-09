@@ -25,7 +25,11 @@ public class Rabbit extends Piece {
             point = new Point(point.x + offset.x, point.y + offset.y);
             c = getMutableBoard().hasPiece(point);
         }
-        if (!this.point.equals(new Point(point.x - offset.x, point.y - offset.y)) && point.y <= getMutableBoard().getMax().y && point.x <= getMutableBoard().getMax().x && point.y >= 0 && point.x >= 0) {
+        if (!this.point.equals(new Point(point.x - offset.x, point.y - offset.y))
+                && point.y <= getMutableBoard().getMax().y
+                && point.x <= getMutableBoard().getMax().x
+                && point.y >= 0
+                && point.x >= 0) {
             moves.add(new Move(this, new Rabbit(getMutableBoard(), color, point)));
         }
     }

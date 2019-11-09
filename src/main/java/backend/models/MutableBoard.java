@@ -12,7 +12,7 @@ public class MutableBoard extends Board implements Model {
     private final List<View> views;
 
     MutableBoard(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
-        super(Collections.unmodifiableMap(board), max, new HashMap<>(pieces));
+        super(Map.copyOf(board), max, new HashMap<>(pieces));
         views = new ArrayList<>();
     }
 

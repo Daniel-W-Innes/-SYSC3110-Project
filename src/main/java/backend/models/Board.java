@@ -62,7 +62,7 @@ public abstract class Board {
                 stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
             }
             stringBuilder.append('|');
-//            stringBuilder.append("\n");
+            stringBuilder.append("\n");
         }
         return stringBuilder.toString();
     }
