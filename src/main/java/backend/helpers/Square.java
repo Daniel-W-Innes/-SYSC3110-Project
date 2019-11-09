@@ -1,10 +1,16 @@
 package backend.helpers;
 
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
 final class Square {
     private final boolean isHole;
+    private final HashCode hashCode;
 
     Square(boolean isHole) {
         this.isHole = isHole;
+        hashCode = Hashing.murmur3_128().newHasher().putBoolean(isHole).hash();
     }
 
     boolean isHole() {
@@ -27,8 +33,12 @@ final class Square {
         return isHole ? "H" : "R";
     }
 
+    public Funnel<Square> getFunnel() {
+        return (Funnel<Square>) (from, into) -> into.putBoolean(from.isHole);
+    }
+
     @Override
     public int hashCode() {
-        return Boolean.hashCode(isHole);
+        return hashCode.asInt();
     }
 }

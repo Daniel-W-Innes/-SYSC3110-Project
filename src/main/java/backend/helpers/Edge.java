@@ -1,17 +1,24 @@
 package backend.helpers;
 
-import java.util.Arrays;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
 public final class Edge {
     private final Move move;
     private final Board start;
     private final Board end;
-
+    private final HashCode hashCode;
 
     public Edge(Move move, Board start, Board end) {
         this.move = move;
         this.start = start;
         this.end = end;
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putObject(move, move.getFunnel())
+                .putObject(start, start.getFunnel())
+                .putObject(end, end.getFunnel())
+                .hash();
     }
 
     public Board getEnd() {
@@ -38,8 +45,16 @@ public final class Edge {
         return start.equals(edge.start) && end.equals(edge.end) && move.equals(edge.move);
     }
 
+    public Funnel<Edge> getFunnel() {
+        return (Funnel<Edge>) (from, into) -> {
+            from.move.getFunnel().funnel(from.move, into);
+            from.start.getFunnel().funnel(from.start, into);
+            from.end.getFunnel().funnel(from.end, into);
+        };
+    }
+
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{move.hashCode(), start.hashCode(), end.hashCode()});
+        return hashCode.asInt();
     }
 }

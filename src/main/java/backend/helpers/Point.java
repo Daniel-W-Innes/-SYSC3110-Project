@@ -1,19 +1,28 @@
 package backend.helpers;
 
-import java.util.Arrays;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 
 public final class Point {
     final int x;
     final int y;
+    private final HashCode hashCode;
 
     public Point(int x, int y) {
         this.x = x;
         this.y = y;
+        hashCode = Hashing.murmur3_128().newHasher().putInt(x).putInt(y).hash();
     }
 
     public Point(Point point) {
         x = point.x;
         y = point.y;
+        hashCode = Hashing.murmur3_128().newHasher().putInt(x).putInt(y).hash();
+    }
+
+    Funnel<Point> getFunnel() {
+        return (Funnel<Point>) (point, into) -> into.putInt(point.x).putInt(point.y);
     }
 
     @Override
@@ -30,7 +39,7 @@ public final class Point {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{x, y});
+        return hashCode.asInt();
     }
 
     @Override

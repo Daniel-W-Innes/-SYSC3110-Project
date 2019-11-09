@@ -1,17 +1,29 @@
 package backend.helpers;
 
-import java.util.*;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 
 public final class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
     private Boolean isVictory;
+    private final HashCode hashCode;
 
     private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         this.board = Map.copyOf(board);
         this.max = max;
         this.pieces = Map.copyOf(pieces);
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putInt(board.hashCode())
+                .putInt(pieces.hashCode())
+                .hash();
     }
 
     private Map<Point, Square> getBoard() {
@@ -80,9 +92,13 @@ public final class Board {
         return this.board.equals(board.board) && pieces.equals(board.pieces);
     }
 
+    public Funnel<Board> getFunnel() {
+        return (Funnel<Board>) (from, into) -> into.putInt(from.board.hashCode()).putInt(from.pieces.hashCode());
+    }
+
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{board.hashCode(), pieces.hashCode()});
+        return hashCode.asInt();
     }
 
     static class Builder {

@@ -1,18 +1,26 @@
 package backend.helpers;
 
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Rabbit implements Piece {
+public final class Rabbit extends Piece {
 
     private final Color color;
     private final Point point;
+    private final HashCode hashCode;
 
     Rabbit( Color color, Point point) {
         this.color = color;
         this.point = point;
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putInt(color.getRGB())
+                .putObject(point, point.getFunnel())
+                .hash();
     }
 
     private void addMove(Set<Move> moves, Board board, Point offset) {
@@ -69,8 +77,18 @@ public class Rabbit implements Piece {
     }
 
     @Override
+    public Funnel<Piece> getFunnel() {
+        return (Funnel<Piece>) (from, into) -> {
+            Rabbit rabbit = (Rabbit) from;
+            into.putInt(rabbit.color.getRGB());
+            rabbit.point.getFunnel().funnel(rabbit.point, into);
+
+        };
+    }
+
+    @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{color.hashCode(), point.hashCode()});
+        return hashCode.asInt();
     }
 
     public Color getColor() {

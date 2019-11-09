@@ -1,16 +1,23 @@
 package backend.helpers;
 
-import java.util.Arrays;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Fox implements Piece {
+public final class Fox extends Piece {
     private final Point head;
     private final Point tail;
+    private final HashCode hashCode;
 
     Fox(Point head, Point tail) {
         this.head = head;
         this.tail = tail;
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putObject(head, head.getFunnel())
+                .putObject(tail, tail.getFunnel())
+                .hash();
     }
 
     private Set<Move> getMoves(Board board, Point start, Point offset, boolean isMovingBackwards) {
@@ -74,6 +81,6 @@ public class Fox implements Piece {
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{head.hashCode(), tail.hashCode()});
+        return hashCode.asInt();
     }
 }

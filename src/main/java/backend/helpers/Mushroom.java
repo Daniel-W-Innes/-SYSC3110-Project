@@ -1,14 +1,21 @@
 package backend.helpers;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
+
 import java.util.HashSet;
 import java.util.Set;
 
-public class Mushroom implements Piece {
+public final class Mushroom extends Piece {
 
     private final Point point;
+    private final HashCode hashCode;
 
     Mushroom(Point point) {
         this.point = point;
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putObject(point, point.getFunnel())
+                .hash();
     }
 
     @Override
@@ -30,7 +37,7 @@ public class Mushroom implements Piece {
 
     @Override
     public int hashCode() {
-        return point.hashCode();
+        return hashCode.asInt();
     }
 
     @Override

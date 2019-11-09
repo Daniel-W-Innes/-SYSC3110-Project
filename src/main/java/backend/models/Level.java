@@ -4,6 +4,9 @@ import backend.helpers.*;
 import com.google.common.graph.ImmutableNetwork;
 import com.google.common.graph.MutableNetwork;
 import com.google.common.graph.NetworkBuilder;
+import com.google.common.hash.Funnel;
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import frontend.View;
 
 import java.util.*;
@@ -14,17 +17,27 @@ public class Level implements Model {
     private final ImmutableNetwork<Board, Edge> graph;
     private final List<View> views;
     private Board board;
+    private HashCode hashCode;
 
     private Level(ImmutableNetwork<Board, Edge> graph, Board board) {
         this.graph = graph;
         this.board = board;
         views = new ArrayList<>();
+        genHashing();
+    }
+
+    private void genHashing() {
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putInt(graph.hashCode())
+                .putObject(board, board.getFunnel())
+                .hash();
     }
 
     public boolean move(Point start, Point end) {
         for (Edge edge : graph.outEdges(board)) {
             if (edge.getMove().getStart().occupies(start) && edge.getMove().getEnd().occupies(end)) {
                 board = edge.getEnd();
+                genHashing();
                 return true;
             }
         }
@@ -43,9 +56,16 @@ public class Level implements Model {
         return board.equals(level.board) && graph.equals(level.graph);
     }
 
+    public Funnel<Level> getFunnel() {
+        return (Funnel<Level>) (from, into) -> {
+            into.putInt(from.graph.hashCode());
+            from.board.getFunnel().funnel(from.board, into);
+        };
+    }
+
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{board.hashCode(), graph.hashCode()});
+        return hashCode.asInt();
     }
 
     private ImmutableNetwork<Board, Edge> getGraph() {
