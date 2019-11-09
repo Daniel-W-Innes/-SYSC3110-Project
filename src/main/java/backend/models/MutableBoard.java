@@ -47,23 +47,6 @@ public class MutableBoard extends Board implements Model {
     }
 
     @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (obj == null || obj.getClass() != this.getClass()) {
-            return false;
-        }
-        MutableBoard mutableBoard = (MutableBoard) obj;
-        return getBoard().equals(mutableBoard.getBoard()) && getPieces().equals(mutableBoard.getPieces());
-    }
-
-    @Override
-    public int hashCode() {
-        return Arrays.hashCode(new int[]{getBoard().hashCode(), getPieces().hashCode()});
-    }
-
-    @Override
     public void addView(View view) {
         views.add(view);
     }

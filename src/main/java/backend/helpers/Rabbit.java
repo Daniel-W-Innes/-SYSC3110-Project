@@ -1,46 +1,45 @@
 package backend.helpers;
 
-import backend.models.MutableBoard;
+import backend.models.ImmutableBoard;
 
 import java.awt.*;
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Rabbit extends Piece {
+public class Rabbit implements Piece {
 
     private final Color color;
     private final Point point;
 
-    Rabbit(MutableBoard mutableBoard, Color color, Point point) {
-        super(mutableBoard);
+    Rabbit( Color color, Point point) {
         this.color = color;
         this.point = point;
     }
 
-    private void addMove(Set<Move> moves, Point offset) {
+    private void addMove(Set<Move> moves, ImmutableBoard board, Point offset) {
         boolean c = true;
         Point point = new Point(this.point);
         while (c) {
             point = new Point(point.x + offset.x, point.y + offset.y);
-            c = getMutableBoard().hasPiece(point);
+            c = board.hasPiece(point);
         }
         if (!this.point.equals(new Point(point.x - offset.x, point.y - offset.y))
-                && point.y <= getMutableBoard().getMax().y
-                && point.x <= getMutableBoard().getMax().x
+                && point.y <= board.getMax().y
+                && point.x <= board.getMax().x
                 && point.y >= 0
                 && point.x >= 0) {
-            moves.add(new Move(this, new Rabbit(getMutableBoard(), color, point)));
+            moves.add(new Move(this, new Rabbit(color, point)));
         }
     }
 
     @Override
-    public Set<Move> getMoves(Point point) {
+    public Set<Move> getMoves(ImmutableBoard board, Point point) {
         Set<Move> moves = new HashSet<>();
-        addMove(moves, new Point(0, 1));
-        addMove(moves, new Point(0, -1));
-        addMove(moves, new Point(1, 0));
-        addMove(moves, new Point(-1, 0));
+        addMove(moves, board, new Point(0, 1));
+        addMove(moves, board, new Point(0, -1));
+        addMove(moves, board, new Point(1, 0));
+        addMove(moves, board, new Point(-1, 0));
         return moves;
     }
 

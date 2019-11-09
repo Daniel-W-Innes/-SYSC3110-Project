@@ -1,17 +1,16 @@
 package backend.helpers;
 
-import backend.models.MutableBoard;
+import backend.models.ImmutableBoard;
 
 import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-public class Mushroom extends Piece {
+public class Mushroom implements Piece {
 
     private final Point point;
 
-    Mushroom(MutableBoard mutableBoard, Point point) {
-        super(mutableBoard);
+    Mushroom(Point point) {
         this.point = point;
     }
 
@@ -34,7 +33,7 @@ public class Mushroom extends Piece {
     }
 
     @Override
-    public Set<Move> getMoves(Point point) {
+    public Set<Move> getMoves(ImmutableBoard board, Point point) {
         return new HashSet<>();
     }
 

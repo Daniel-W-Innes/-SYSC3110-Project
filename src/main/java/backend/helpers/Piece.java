@@ -1,33 +1,14 @@
 package backend.helpers;
 
-import backend.models.MutableBoard;
+import backend.models.ImmutableBoard;
 
 import java.util.Set;
 
-public abstract class Piece {
-    private final MutableBoard mutableBoard;
+public interface Piece {
 
-    Piece(MutableBoard mutableBoard) {
-        this.mutableBoard = mutableBoard;
-    }
+    Set<Move> getMoves(ImmutableBoard board,  Point point);
 
-    abstract Set<Move> getMoves(Point point);
+    boolean occupies(Point point);
 
-    abstract boolean occupies(Point point);
-
-    public abstract Set<Point> occupies();
-
-    MutableBoard getMutableBoard() {
-        return mutableBoard;
-    }
-
-    @Override
-    public boolean equals(Object obj) {
-        return obj != null && obj.getClass() == getClass();
-    }
-
-    @Override
-    public int hashCode() {
-        return 1;
-    }
+    Set<Point> occupies();
 }

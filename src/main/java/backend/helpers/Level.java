@@ -90,7 +90,7 @@ class Level {
                 start = queue.poll();
                 for (Piece piece : start.getPieces().values()) {
                     for (Point point : piece.occupies()) {
-                        for (Move move : piece.getMoves(point)) {
+                        for (Move move : piece.getMoves(start, point)) {
                             temp = start.getMutableBoard();
                             temp.movePiece(move);
                             end = temp.getImmutableBoard();

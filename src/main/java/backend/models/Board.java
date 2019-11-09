@@ -5,10 +5,7 @@ import backend.helpers.Point;
 import backend.helpers.Rabbit;
 import backend.helpers.Square;
 
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 
 public abstract class Board {
     private final Map<Point, Square> board;
@@ -74,6 +71,23 @@ public abstract class Board {
                     .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
         }
         return isVictory;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (!(obj instanceof Board)) {
+            return false;
+        }
+        Board board = (Board) obj;
+        return this.board.equals(board.board) && pieces.equals(board.pieces);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new int[]{board.hashCode(), pieces.hashCode()});
     }
 
     public static class Builder {
