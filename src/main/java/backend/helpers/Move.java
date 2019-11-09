@@ -5,12 +5,10 @@ import java.util.Arrays;
 public final class Move {
     private final Piece start;
     private final Piece end;
-    private final int hashcode;
 
     Move(Piece start, Piece end) {
         this.start = start;
         this.end = end;
-        hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
     }
 
     public Piece getEnd() {
@@ -22,7 +20,7 @@ public final class Move {
     }
 
     public Move getReverse() {
-        return new Move(getEnd(), getStart());
+        return new Move(end, start);
     }
 
     @Override
@@ -34,12 +32,12 @@ public final class Move {
             return false;
         }
         Move move = (Move) obj;
-        return getStart().equals(move.getStart()) && getEnd().equals(move.getEnd());
+        return start.equals(move.start) && end.equals(move.end);
     }
 
     @Override
     public int hashCode() {
-        return hashcode;
+        return Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
     }
 
     @Override

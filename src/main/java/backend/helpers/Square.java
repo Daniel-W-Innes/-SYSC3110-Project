@@ -19,16 +19,12 @@ final class Square {
             return false;
         }
         Square square = (Square) obj;
-        return isHole() == square.isHole();
+        return isHole == square.isHole;
     }
 
     @Override
     public String toString() {
-        if (isHole()) {
-            return "H";
-        } else {
-            return "R";
-        }
+        return isHole ? "H" : "R";
     }
 
     @Override

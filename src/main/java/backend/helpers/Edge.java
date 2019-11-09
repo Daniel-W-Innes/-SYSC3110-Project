@@ -1,5 +1,7 @@
 package backend.helpers;
 
+import java.util.Arrays;
+
 public final class Edge {
     private final Move move;
     private final Board start;
@@ -22,5 +24,22 @@ public final class Edge {
 
     public Move getMove() {
         return move;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Edge edge = (Edge) obj;
+        return start.equals(edge.start) && end.equals(edge.end) && move.equals(edge.move);
+    }
+
+    @Override
+    public int hashCode() {
+        return Arrays.hashCode(new int[]{move.hashCode(), start.hashCode(), end.hashCode()});
     }
 }
