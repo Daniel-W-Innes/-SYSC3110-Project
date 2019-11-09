@@ -2,7 +2,7 @@ package backend.helpers;
 
 import java.util.Arrays;
 
-public class Square {
+class Square {
     private final boolean isHole;
     private final boolean isRaised;
     private final int hashCode;

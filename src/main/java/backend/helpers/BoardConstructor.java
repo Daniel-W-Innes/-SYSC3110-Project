@@ -1,8 +1,4 @@
-package backend.models;
-
-import backend.helpers.Piece;
-import backend.helpers.Point;
-import backend.helpers.Square;
+package backend.helpers;
 
 import java.util.Map;
 

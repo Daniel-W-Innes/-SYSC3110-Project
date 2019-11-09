@@ -1,7 +1,6 @@
-package backend.helpers;
+package backend.models;
 
-import backend.models.ImmutableBoard;
-import backend.models.MutableBoard;
+import backend.helpers.*;
 import com.google.common.graph.ImmutableNetwork;
 import com.google.common.graph.MutableNetwork;
 import com.google.common.graph.NetworkBuilder;
@@ -11,20 +10,21 @@ import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 import java.util.stream.Collectors;
 
-class Level {
-    private final MutableBoard mutableBoard;
-    private final ImmutableNetwork<ImmutableBoard, Move> graph;
+public class Level implements Model {
+    private final ImmutableNetwork<ImmutableBoard, Edge> graph;
+    private final List<View> views;
+    private ImmutableBoard immutableBoard;
 
-    private Level(ImmutableNetwork<ImmutableBoard, Move> graph, MutableBoard mutableBoard) {
+    private Level(ImmutableNetwork<ImmutableBoard, Edge> graph, ImmutableBoard immutableBoard) {
         this.graph = graph;
-        this.mutableBoard = mutableBoard;
-        //System.out.println(graph.BFS(board).toString());
+        this.immutableBoard = immutableBoard;
+        views = new ArrayList<>();
     }
 
-    boolean move(Point start, Point end) {
-        for (Move move : graph.outEdges(mutableBoard.getImmutableBoard())) {
-            if (move.getStart().occupies(start) && move.getEnd().occupies(end)) {
-                mutableBoard.movePiece(move);
+    public boolean move(Point start, Point end) {
+        for (Edge edge : graph.outEdges(immutableBoard)) {
+            if (edge.getMove().getStart().occupies(start) && edge.getMove().getEnd().occupies(end)) {
+                immutableBoard = edge.getEnd();
                 return true;
             }
         }
@@ -40,43 +40,45 @@ class Level {
             return false;
         }
         Level level = (Level) obj;
-        return getMutableBoard() == level.getMutableBoard() && getGraph() == level.getGraph();
+        return getImmutableBoard().equals(level.getImmutableBoard()) && getGraph().equals(level.getGraph());
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{getMutableBoard().hashCode(), getGraph().hashCode()});
+        return Arrays.hashCode(new int[]{immutableBoard.hashCode(), graph.hashCode()});
     }
 
-    private ImmutableNetwork<ImmutableBoard, Move> getGraph() {
+    private ImmutableNetwork<ImmutableBoard, Edge> getGraph() {
         return graph;
     }
 
-    private MutableBoard getMutableBoard() {
-        return mutableBoard;
+    private ImmutableBoard getImmutableBoard() {
+        return immutableBoard;
     }
 
-    public void resetPieces(Map<Point, Piece> piece) {
-        mutableBoard.setPieces(piece);
+    public Set<Move> getMoves(Point point) {
+        return graph.outEdges(immutableBoard).stream().map(Edge::getMove).filter(move -> move.getStart().occupies(point)).collect(Collectors.toUnmodifiableSet());
     }
 
-    Set<Move> getMoves(Point point) {
-        return graph.outEdges(mutableBoard.getImmutableBoard()).stream().filter(move -> move.getStart().occupies(point)).collect(Collectors.toUnmodifiableSet());
+    @Override
+    public void addView(View view) {
+        views.add(view);
     }
 
-    static class Builder {
-        private final MutableBoard start;
-        private final MutableBoard board;
-        private final View view;
+    @Override
+    public void removeView(View view) {
+        views.remove(view);
+    }
 
-        Builder(MutableBoard start, View view) {
+    public static class Builder {
+        private final ImmutableBoard start;
+
+        public Builder(ImmutableBoard start) {
             this.start = start;
-            board = new MutableBoard(start);
-            this.view = view;
         }
 
-        Level build() {
-            MutableNetwork<ImmutableBoard, Move> mutableNetwork = NetworkBuilder.directed()
+        public Level build() {
+            MutableNetwork<ImmutableBoard, Edge> mutableNetwork = NetworkBuilder.directed()
                     .allowsParallelEdges(false)
                     .allowsSelfLoops(false)
                     .build();
@@ -85,7 +87,7 @@ class Level {
             ImmutableBoard end;
             Set<ImmutableBoard> expanded = new HashSet<>();
             Queue<ImmutableBoard> queue = new ConcurrentLinkedQueue<>();
-            queue.add(this.board.getImmutableBoard());
+            queue.add(this.start);
             while (!queue.isEmpty()) {
                 start = queue.poll();
                 for (Piece piece : start.getPieces().values()) {
@@ -94,7 +96,7 @@ class Level {
                             temp = start.getMutableBoard();
                             temp.movePiece(move);
                             end = temp.getImmutableBoard();
-                            mutableNetwork.addEdge(start, end, move);
+                            mutableNetwork.addEdge(start, end, new Edge(move, start, end));
                             expanded.add(start);
                             if (!expanded.contains(end) && !queue.contains(end)) {
                                 queue.add(end);
@@ -103,7 +105,6 @@ class Level {
                     }
                 }
             }
-            this.start.addView(view);
             return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
         }
     }

@@ -1,5 +1,6 @@
 package backend.helpers;
 
+import backend.models.Level;
 import frontend.View;
 import frontend.something;
 

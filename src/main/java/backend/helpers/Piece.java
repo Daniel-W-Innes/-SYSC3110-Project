@@ -1,7 +1,5 @@
 package backend.helpers;
 
-import backend.models.ImmutableBoard;
-
 import java.util.Set;
 
 public interface Piece {

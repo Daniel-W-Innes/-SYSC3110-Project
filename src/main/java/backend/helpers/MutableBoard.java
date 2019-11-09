@@ -1,28 +1,16 @@
-package backend.models;
+package backend.helpers;
 
-import backend.helpers.Move;
-import backend.helpers.Piece;
-import backend.helpers.Point;
-import backend.helpers.Square;
-import frontend.View;
+import java.util.HashMap;
+import java.util.Map;
 
-import java.util.*;
-
-public class MutableBoard extends Board implements Model {
-    private final List<View> views;
+public class MutableBoard extends Board {
 
     MutableBoard(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         super(Map.copyOf(board), max, new HashMap<>(pieces));
-        views = new ArrayList<>();
     }
 
     public MutableBoard(MutableBoard mutableBoard) {
         super(mutableBoard.getBoard(), mutableBoard.getMax(), new HashMap<>(mutableBoard.getPieces()));
-        views = new ArrayList<>(mutableBoard.getViews());
-    }
-
-    private List<View> getViews() {
-        return views;
     }
 
     public void setPieces(Map<Point, Piece> piece) {
@@ -44,15 +32,5 @@ public class MutableBoard extends Board implements Model {
 
     public ImmutableBoard getImmutableBoard() {
         return new ImmutableBoard(getBoard(), getPieces(), getMax());
-    }
-
-    @Override
-    public void addView(View view) {
-        views.add(view);
-    }
-
-    @Override
-    public void removeView(View view) {
-        views.remove(view);
     }
 }
