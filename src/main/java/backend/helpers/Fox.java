@@ -64,14 +64,18 @@ public class Fox implements Piece {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Fox) {
-            return super.equals(obj) && head.equals(((Fox) obj).head) && tail.equals(((Fox) obj).tail);
+        if (obj == this) {
+            return true;
         }
-        return false;
+        if (!(obj instanceof Fox)) {
+            return false;
+        }
+        Fox fox = (Fox) obj;
+        return head.equals(fox.head) && tail.equals(fox.tail);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{super.hashCode(), head.hashCode(), tail.hashCode()});
+        return Arrays.hashCode(new int[]{head.hashCode(), tail.hashCode()});
     }
 }

@@ -60,15 +60,19 @@ public class Rabbit implements Piece {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Rabbit) {
-            return super.equals(obj) && color.equals(((Rabbit) obj).color) && point.equals(((Rabbit) obj).point);
+        if (obj == this) {
+            return true;
         }
-        return false;
+        if (!(obj instanceof Rabbit)) {
+            return false;
+        }
+        Rabbit rabbit = (Rabbit) obj;
+        return color.equals(rabbit.color) && point.equals(rabbit.point);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{super.hashCode(), color.hashCode(), point.hashCode()});
+        return Arrays.hashCode(new int[]{color.hashCode(), point.hashCode()});
     }
 
     public Color getColor() {

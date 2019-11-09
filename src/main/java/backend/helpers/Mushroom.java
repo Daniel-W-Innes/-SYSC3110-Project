@@ -2,7 +2,6 @@ package backend.helpers;
 
 import backend.models.ImmutableBoard;
 
-import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -21,15 +20,19 @@ public class Mushroom implements Piece {
 
     @Override
     public boolean equals(Object obj) {
-        if (obj instanceof Mushroom) {
-            return super.equals(obj) && point.equals(((Mushroom) obj).point);
+        if (obj == this) {
+            return true;
         }
-        return false;
+        if (!(obj instanceof Mushroom)) {
+            return false;
+        }
+        Mushroom mushroom = (Mushroom) obj;
+        return point.equals(mushroom.point);
     }
 
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{super.hashCode(), point.hashCode()});
+        return point.hashCode();
     }
 
     @Override
