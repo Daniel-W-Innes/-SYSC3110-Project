@@ -11,19 +11,25 @@ import frontend.View;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.ForkJoinPool;
+import java.util.concurrent.ForkJoinTask;
+import java.util.concurrent.RecursiveTask;
 import java.util.stream.Collectors;
 
 public class Level implements Model {
     private final ImmutableNetwork<Board, Edge> graph;
     private final List<View> views;
+    private final ForkJoinPool forkJoinPool;
     private Board board;
     private HashCode hashCode;
 
     private Level(ImmutableNetwork<Board, Edge> graph, Board board) {
         this.graph = graph;
         this.board = board;
+        forkJoinPool = new ForkJoinPool();
         views = new ArrayList<>();
         genHashing();
+        System.out.println(solve());
     }
 
     private void genHashing() {
@@ -31,6 +37,10 @@ public class Level implements Model {
                 .putInt(graph.hashCode())
                 .putObject(board, board.getFunnel())
                 .hash();
+    }
+
+    public Optional<List<Move>> solve() {
+        return forkJoinPool.invoke(new BFS(this));
     }
 
     public boolean move(Point start, Point end) {
@@ -66,14 +76,6 @@ public class Level implements Model {
     @Override
     public int hashCode() {
         return hashCode.asInt();
-    }
-
-    private ImmutableNetwork<Board, Edge> getGraph() {
-        return graph;
-    }
-
-    private Board getBoard() {
-        return board;
     }
 
     public Set<Move> getMoves(Point point) {
@@ -126,38 +128,53 @@ public class Level implements Model {
         }
     }
 
-//    Board BFS(Board start) {
-//        Queue<Board> queue = new LinkedList<>();
-//        Set<Board> expanded = new HashSet<>();
-//        expanded.add(start);
-//        Map<Board, Board> listOfStepsPerBoard = new HashMap<>();
-//        queue.add(start);
-//        for (Board board: Traverser.forGraph(graph).breadthFirst(start)){
-//            if (board.isVictory()) {
-//                return listOfStepsPerBoard.get(board);
-//            } else if (listOfStepsPerBoard.containsKey(board)) {
-//                listOfStepsPerBoard.put(board, newMoves);
-//            }
-//            for (Board : graph.get(board).values()) {
-//                Board newBoard = new Board(board);
-//                newBoard.movePieces(moves);
-//                if (!expanded.contains(newBoard)) {
-//                    expanded.add(newBoard);
-//                    if (listOfStepsPerBoard.containsKey(board)) {
-//                        List<Move> newMoves = new ArrayList<>(listOfStepsPerBoard.get(board));
-//                        newMoves.addAll(moves);
-//                        if (!isVictories.containsKey(newBoard)) {
-//                            System.out.println(moves);
-//                            System.out.println(newBoard.toString());
-//                        }
-//                        listOfStepsPerBoard.put(newBoard, newMoves);
-//                    } else {
-//                        listOfStepsPerBoard.put(newBoard, moves);
-//                    }
-//                    queue.add(newBoard);
-//                }
-//            }
-//        }
-//        return null;
-//    }
+
+    private static class BFS extends RecursiveTask<Optional<List<Move>>> {
+        private final Board board;
+        private final ImmutableNetwork<Board, Edge> graph;
+        private final List<Board> visited;
+        private final List<Move> prerequisites;
+
+        BFS(Level level) {
+            board = level.board;
+            graph = level.graph;
+            visited = List.of();
+            prerequisites = new ArrayList<>();
+        }
+
+        BFS(ImmutableNetwork<Board, Edge> graph, Board board, List<Board> visited, List<Move> prerequisites) {
+            this.graph = graph;
+            this.board = board;
+            this.visited = List.copyOf(visited);
+            this.prerequisites = List.copyOf(prerequisites);
+        }
+
+        @Override
+        protected Optional<List<Move>> compute() {
+            if (board.isVictory()) {
+                return Optional.of(prerequisites);
+            } else if (visited.contains(board)) {
+                return Optional.empty();
+            } else {
+                return ForkJoinTask.invokeAll(createSubTasks())
+                        .stream()
+                        .map(ForkJoinTask::join)
+                        .filter(Optional::isPresent)
+                        .map(Optional::get)
+                        .min(Comparator.comparingInt(List::size));
+            }
+        }
+
+        private Collection<BFS> createSubTasks() {
+            List<BFS> subTasks = new ArrayList<>();
+            graph.outEdges(board).forEach(edge -> {
+                List<Board> newVisited = new ArrayList<>(visited);
+                newVisited.add(board);
+                List<Move> newPrerequisites = new ArrayList<>(prerequisites);
+                newPrerequisites.add(edge.getMove());
+                subTasks.add(new BFS(graph, edge.getEnd(), newVisited, newPrerequisites));
+            });
+            return subTasks;
+        }
+    }
 }
