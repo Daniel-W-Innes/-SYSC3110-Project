@@ -13,13 +13,16 @@ public final class Board {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
-    private Boolean isVictory;
+    private final Boolean isVictory;
     private final HashCode hashCode;
 
     private Board(Map<Point, Square> board, Map<Point, Piece> pieces, Point max) {
         this.board = Map.copyOf(board);
         this.max = max;
         this.pieces = Map.copyOf(pieces);
+        isVictory = getPieces().entrySet().stream()
+                .filter(entry -> entry.getValue() instanceof Rabbit)
+                .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
         hashCode = Hashing.murmur3_128().newHasher()
                 .putInt(board.hashCode())
                 .putInt(pieces.hashCode())
@@ -72,11 +75,6 @@ public final class Board {
     }
 
     public boolean isVictory() {
-        if (isVictory == null) {
-            isVictory = getPieces().entrySet().stream()
-                    .filter(entry -> entry.getValue() instanceof Rabbit)
-                    .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
-        }
         return isVictory;
     }
 
