@@ -34,7 +34,7 @@ final class Square {
     }
 
     public Funnel<Square> getFunnel() {
-        return (Funnel<Square>) (from, into) -> into.putBoolean(from.isHole);
+        return (from, into) -> into.putBoolean(from.isHole);
     }
 
     @Override

@@ -46,7 +46,7 @@ public final class Edge {
     }
 
     public Funnel<Edge> getFunnel() {
-        return (Funnel<Edge>) (from, into) -> {
+        return (from, into) -> {
             from.move.getFunnel().funnel(from.move, into);
             from.start.getFunnel().funnel(from.start, into);
             from.end.getFunnel().funnel(from.end, into);

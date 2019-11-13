@@ -13,7 +13,7 @@ public abstract class Piece {
     public abstract Set<Point> occupies();
 
     public Funnel<Piece> getFunnel() {
-        return (Funnel<Piece>) (from, into) -> {
+        return (from, into) -> {
             for (Point point : from.occupies()) {
                 point.getFunnel().funnel(point, into);
             }

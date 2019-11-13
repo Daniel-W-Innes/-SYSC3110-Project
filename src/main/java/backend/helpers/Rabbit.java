@@ -78,7 +78,7 @@ public final class Rabbit extends Piece {
 
     @Override
     public Funnel<Piece> getFunnel() {
-        return (Funnel<Piece>) (from, into) -> {
+        return (from, into) -> {
             Rabbit rabbit = (Rabbit) from;
             into.putInt(rabbit.color.getRGB());
             rabbit.point.getFunnel().funnel(rabbit.point, into);

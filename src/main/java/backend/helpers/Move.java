@@ -43,7 +43,7 @@ public final class Move {
     }
 
     public Funnel<Move> getFunnel() {
-        return (Funnel<Move>) (from, into) -> {
+        return (from, into) -> {
             from.start.getFunnel().funnel(from.start, into);
             from.end.getFunnel().funnel(from.end, into);
         };

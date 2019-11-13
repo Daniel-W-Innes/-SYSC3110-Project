@@ -24,8 +24,18 @@ public final class Board {
                 .filter(entry -> entry.getValue() instanceof Rabbit)
                 .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
         hashCode = Hashing.murmur3_128().newHasher()
-                .putInt(board.hashCode())
-                .putInt(pieces.hashCode())
+                .putObject(board, (from, into) -> {
+                    for (Map.Entry<Point, Square> entry : from.entrySet()) {
+                        entry.getKey().getFunnel().funnel(entry.getKey(), into);
+                        entry.getValue().getFunnel().funnel(entry.getValue(), into);
+                    }
+                })
+                .putObject(pieces, (from, into) -> {
+                    for (Map.Entry<Point, Piece> entry : from.entrySet()) {
+                        entry.getKey().getFunnel().funnel(entry.getKey(), into);
+                        entry.getValue().getFunnel().funnel(entry.getValue(), into);
+                    }
+                })
                 .hash();
     }
 
@@ -91,7 +101,7 @@ public final class Board {
     }
 
     public Funnel<Board> getFunnel() {
-        return (Funnel<Board>) (from, into) -> into.putInt(from.board.hashCode()).putInt(from.pieces.hashCode());
+        return (from, into) -> into.putInt(from.board.hashCode()).putInt(from.pieces.hashCode());
     }
 
     @Override
