@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class Level implements Model {
     private final ImmutableNetwork<Board, Edge> graph;
     private final List<View> views;
+    private HistoryNode history;
     private final ForkJoinPool forkJoinPool;
     private Board board;
     private HashCode hashCode;
@@ -26,6 +27,7 @@ public class Level implements Model {
     private Level(ImmutableNetwork<Board, Edge> graph, Board board) {
         this.graph = graph;
         this.board = board;
+        history = new HistoryNode(board);
         forkJoinPool = new ForkJoinPool();
         views = new ArrayList<>();
         genHashing();
@@ -47,11 +49,22 @@ public class Level implements Model {
         for (Edge edge : graph.outEdges(board)) {
             if (edge.getMove().getStart().occupies(start) && edge.getMove().getEnd().occupies(end)) {
                 board = edge.getEnd();
+                history.setNext(board);
                 genHashing();
                 return true;
             }
         }
         return false;
+    }
+
+    public void undo() {
+        history = history.getPrevious();
+        board = history.getBoard();
+    }
+
+    public void redo() {
+        history = history.getNext();
+        board = history.getBoard();
     }
 
     @Override
