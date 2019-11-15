@@ -27,9 +27,9 @@ public final class Fox extends Piece {
             point = new Point(point.x + offset.x, point.y + offset.y);
             if (!board.hasPiece(point) && point.y <= board.getMax().y && point.x <= board.getMax().x && point.y >= 0 && point.x >= 0) {
                 if ((!isMovingBackwards && start.equals(head)) || isMovingBackwards && start.equals(tail)) {
-                    moves.add(new Move(this, new Fox(point, new Point(point.x - offset.x, point.y - offset.y))));
-                } else {
                     moves.add(new Move(this, new Fox(new Point(point.x - offset.x, point.y - offset.y), point)));
+                } else {
+                    moves.add(new Move(this, new Fox(point, new Point(point.x - offset.x, point.y - offset.y))));
                 }
             } else {
                 break;

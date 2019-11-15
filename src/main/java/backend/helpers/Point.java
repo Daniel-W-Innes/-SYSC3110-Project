@@ -22,7 +22,7 @@ public final class Point {
     }
 
     Funnel<Point> getFunnel() {
-        return (Funnel<Point>) (point, into) -> into.putInt(point.x).putInt(point.y);
+        return (Funnel<Point>) (from, into) -> into.putInt(from.x).putInt(from.y);
     }
 
     @Override

@@ -24,18 +24,8 @@ public final class Board {
                 .filter(entry -> entry.getValue() instanceof Rabbit)
                 .allMatch(entry -> hasSquare(entry.getKey()) && getSquare(entry.getKey()).isHole());
         hashCode = Hashing.murmur3_128().newHasher()
-                .putObject(board, (from, into) -> {
-                    for (Map.Entry<Point, Square> entry : from.entrySet()) {
-                        entry.getKey().getFunnel().funnel(entry.getKey(), into);
-                        entry.getValue().getFunnel().funnel(entry.getValue(), into);
-                    }
-                })
-                .putObject(pieces, (from, into) -> {
-                    for (Map.Entry<Point, Piece> entry : from.entrySet()) {
-                        entry.getKey().getFunnel().funnel(entry.getKey(), into);
-                        entry.getValue().getFunnel().funnel(entry.getValue(), into);
-                    }
-                })
+                .putInt(board.hashCode())
+                .putInt(pieces.hashCode())
                 .hash();
     }
 
