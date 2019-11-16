@@ -5,8 +5,8 @@ import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
 
 public final class Point {
-    final int x;
-    final int y;
+    public final int x;
+    public final int y;
     private final HashCode hashCode;
 
     public Point(int x, int y) {
@@ -46,4 +46,5 @@ public final class Point {
     public String toString() {
         return "{" + x + "," + y + "}";
     }
+
 }

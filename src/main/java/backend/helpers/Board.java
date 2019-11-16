@@ -1,15 +1,17 @@
 package backend.helpers;
 
+import backend.models.Model;
 import com.google.common.hash.Funnel;
 import com.google.common.hash.HashCode;
 import com.google.common.hash.Hashing;
+import frontend.View;
 
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-public final class Board {
+public final class Board implements Model {
     private final Map<Point, Square> board;
     private final Point max;
     private final Map<Point, Piece> pieces;
@@ -37,7 +39,7 @@ public final class Board {
         return pieces;
     }
 
-    Point getMax() {
+    public Point getMax() {
         return max;
     }
 
@@ -97,6 +99,11 @@ public final class Board {
     @Override
     public int hashCode() {
         return hashCode.asInt();
+    }
+
+    @Override
+    public void setView(View v) {
+
     }
 
     static class Builder {

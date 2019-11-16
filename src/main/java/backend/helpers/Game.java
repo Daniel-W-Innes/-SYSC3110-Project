@@ -9,7 +9,7 @@ import java.util.Map;
 import java.util.Set;
 
 
-class Game {
+public class Game {
     private final Map<Integer, Level> levels;
     private int levelNumber;
 
