@@ -40,7 +40,7 @@ public class Gui extends JFrame implements View {
         toolbar = new JToolBar();
 
         addToolbarButton("Reset Game", e -> game.resetLevel(this));
-        addToolbarButton("Load Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Load Game", e -> game.applyMove());
         addToolbarButton("Save Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
         addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));

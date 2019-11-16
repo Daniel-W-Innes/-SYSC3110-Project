@@ -51,7 +51,7 @@ public class Graph {
         //TODO: This thing is running forever... (Frank Y.)
         int branchCount = 0;
         //Create a tree to track it's path
-        traversalPath = new Tree<>(new TreeNode<Board>(startingBoard));
+        traversalPath = new Tree<>(new TreeNode<Board>(startingBoard.cloneBoard()));
         currQueue.add(traversalPath.root); //Add starting root node
 
         outer: while(!currQueue.isEmpty()) {
@@ -68,7 +68,6 @@ public class Graph {
                 }
                 //Stop traversing if you've already seen this node
                 if(visited.contains(currNode.contents)) {
-                    System.out.println("In here");
                     continue;
                 } else {
                     //Mark as visited
@@ -84,7 +83,7 @@ public class Graph {
 
                             Board end = currNode.contents.cloneBoard();
 
-                            end.movePiece(piece, move.getEndPoint());
+                            end.movePiece(piece.clonePiece(), move.getEndPoint(), true);
 
                             //Get a Board object that represents the result of the move
                           //  Board end = new Board.Mover(currNode.contents).movePiece(move).build();

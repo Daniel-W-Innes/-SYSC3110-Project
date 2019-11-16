@@ -39,7 +39,7 @@ public class Move {
      * @return The start point
      */
 
-    Point getStartPoint() {
+    public Point getStartPoint() {
         return start;
     }
 

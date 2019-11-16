@@ -11,6 +11,8 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 import static helpers.GameBuilder.getStartingBoard;
 
@@ -34,7 +36,7 @@ public class Game {
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new Gui(game), 20);
+        game.setUp(new Gui(game), 60);
     }
 
     /**
@@ -48,9 +50,12 @@ public class Game {
     }
 
     public void movePiece(Move move) {
+
+        System.out.println(move.toString());
+
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(lastClickedPiece, move.getEndPoint());
+        board.movePiece(lastClickedPiece, move.getEndPoint(), false);
     }
 
     public List<Move> getMoves(Point point) {
@@ -78,13 +83,25 @@ public class Game {
         board.setView(observer);
         Graph graph = new Graph(board);
 
-        Graph.TreeNode curr = graph.getSolution().solution;
-        System.out.println(graph.getSolution().solution == null);
+        currentNode = graph.getSolution().solution;
 
-//        while(curr.parent != null) {
-//            System.out.println(curr.move);
-//            curr = curr.parent;
-//        }
+        while(currentNode.parent != null) {
+            solution.push(currentNode.move);
+            currentNode = currentNode.parent;
+        }
+
+        System.out.println("Ready");
+    }
+
+    Graph.TreeNode currentNode = null;
+
+    Stack<Move> solution = new Stack<>();
+
+    public void applyMove() {
+
+        Move move = solution.pop();
+
+        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), false);
     }
     
     /**
