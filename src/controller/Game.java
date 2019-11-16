@@ -77,6 +77,14 @@ public class Game {
         observer.sendInitialBoard(board);
         board.setView(observer);
         Graph graph = new Graph(board);
+
+        Graph.TreeNode curr = graph.getSolution().solution;
+        System.out.println(graph.getSolution().solution == null);
+
+//        while(curr.parent != null) {
+//            System.out.println(curr.move);
+//            curr = curr.parent;
+//        }
     }
     
     /**

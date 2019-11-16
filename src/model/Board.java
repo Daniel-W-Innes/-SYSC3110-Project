@@ -277,7 +277,7 @@ public class Board implements Model {
             return false;
         }
         Board board = (Board) obj;
-        return terrain.equals(board.terrain);
+        return this.terrain.equals(board.terrain) && this.pieces.equals(board.pieces);
     }
 
     /**

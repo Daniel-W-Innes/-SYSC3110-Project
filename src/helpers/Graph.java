@@ -68,6 +68,7 @@ public class Graph {
                 }
                 //Stop traversing if you've already seen this node
                 if(visited.contains(currNode.contents)) {
+                    System.out.println("In here");
                     continue;
                 } else {
                     //Mark as visited
@@ -82,6 +83,7 @@ public class Graph {
                         for (Move move : piece.getMoves(currNode.contents, point)) {
 
                             Board end = currNode.contents.cloneBoard();
+
                             end.movePiece(piece, move.getEndPoint());
 
                             //Get a Board object that represents the result of the move

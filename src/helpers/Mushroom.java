@@ -22,6 +22,18 @@ public class Mushroom implements Piece {
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
     @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (obj == null || obj.getClass() != this.getClass()) {
+            return false;
+        }
+        Mushroom mushroom = (Mushroom) obj;
+        return mushroom.boardSpot.equals(boardSpot);
+    }
+
+    @Override
     public Mushroom clonePiece() {
         return new Mushroom(boardSpot);
     }
