@@ -31,7 +31,8 @@ public class Level implements Model {
         forkJoinPool = new ForkJoinPool();
         views = new ArrayList<>();
         genHashing();
-        System.out.println(solve());
+        //Print out the solution
+        System.out.println("Level solution: " + solve());
     }
 
     private void genHashing() {
@@ -105,39 +106,112 @@ public class Level implements Model {
         views.remove(view);
     }
 
+    //Tree that represents the BFS traversal of the graph.
+    public static class Tree<E> {
+        TreeNode<E> root;
+        public TreeNode<E> solution;
+
+        public Tree(TreeNode<E> root) {
+            this.root = root;
+        }
+    }
+
+    //Individual node of the tree. Each node contains a Board object and a Move object that resulted in it.
+    public static class TreeNode<E> {
+        public E contents;
+        public Move move; //The move done for the parent to become this node
+
+        public TreeNode<E> parent; //Parent for backtracking
+        public Set<TreeNode<E>> children; //TODO: I don't need this, I only need to backtrack.
+
+        public TreeNode(E e) {
+            this.contents = e;
+            this.children = new HashSet<>();
+        }
+
+        public void addNode(TreeNode<E> node) {
+            this.children.add(node);
+            node.parent = this;
+        }
+    }
+
     public static class Builder {
         private final Board start;
 
+        //Create a graph with the starting board state
         public Builder(Board start) {
             this.start = start;
         }
 
-        public Level build() {
+        //Build the graph
+        public Tree<Board> build() {
             MutableNetwork<Board, Edge> mutableNetwork = NetworkBuilder.directed()
-                    .allowsParallelEdges(true)
                     .allowsSelfLoops(false)
                     .build();
-            Board start;
-            Board end;
-            Set<Board> expanded = new HashSet<>();
-            Queue<Board> queue = new ConcurrentLinkedQueue<>();
-            queue.add(this.start);
-            while (!queue.isEmpty()) {
-                start = queue.poll();
-                for (Piece piece : start.getPieces().values()) {
-                    for (Point point : piece.occupies()) {
-                        for (Move move : piece.getMoves(start, point)) {
-                            end = new Board.Mover(start).movePiece(move).build();
-                            mutableNetwork.addEdge(start, end, new Edge(move, start, end));
-                            expanded.add(start);
-                            if (!expanded.contains(end) && !queue.contains(end)) {
-                                queue.add(end);
+
+            //Keep track of which nodes we visited
+            Set<Board> visited = new HashSet<>();
+
+            //Two queues, one for the current depth and another for the next one. This is so we can distinguish at which depth is the node at.
+            Queue<TreeNode> currQueue = new ConcurrentLinkedQueue<>();
+            Queue<TreeNode> nextQueue = new ConcurrentLinkedQueue<>();
+
+            //TODO: This thing is running forever... (Frank Y.)
+            int branchCount = 0;
+            //Create a tree to track it's path
+            Tree<Board> traversalPath = new Tree<>(new TreeNode<Board>(this.start));
+            currQueue.add(traversalPath.root); //Add starting root node
+
+            while(!currQueue.isEmpty()) {
+                while (!currQueue.isEmpty()) {
+                    TreeNode<Board> currNode = currQueue.poll(); //Get node to expand
+
+                    if(currNode.contents.isVictory()) {
+                        //System.out.println(start);
+                        //System.out.println(start.getPieces());
+                        System.out.println("Branch count: " + branchCount);
+                        traversalPath.solution = currNode;
+                        return traversalPath;
+                        //return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
+                    }
+                    //Stop traversing if you've already seen this node
+                    if(visited.contains(currNode.contents)) {
+                        continue;
+                    } else {
+                        //Mark as visited
+                        visited.add(currNode.contents);
+                    }
+
+                    //For each piece on the board
+                    for (Piece piece : currNode.contents.getPieces().values()) {
+                        //For every point the piece occupies
+                        for (Point point : piece.occupies()) {
+                            //For every move that the piece has
+                            for (Move move : piece.getMoves(currNode.contents, point)) {
+                                //Get a Board object that represents the result of the move
+                                Board end = new Board.Mover(currNode.contents).movePiece(move).build();
+
+                                //Add each new Board state to the next queue to process
+                                //TODO: remove this
+                                branchCount++;
+
+                                //Make a new node
+                                TreeNode<Board> newNode = new TreeNode<>(end);
+                                newNode.move = move; //Assign it the move that caused the board state
+                                //Add it to the tree
+                                currNode.addNode(newNode);
+                                newNode.parent = currNode;
+
+                                //Add it to the queue to expand
+                                nextQueue.add(newNode);
                             }
                         }
                     }
                 }
+                currQueue = nextQueue;
+                nextQueue = new ConcurrentLinkedQueue<>();
             }
-            return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
+            throw new IllegalStateException("No solution");
         }
     }
 

@@ -45,9 +45,21 @@ final class GameBuilder {
 
     static Map<Integer, Level> buildLevel(View view) {
         Map<Integer, Level> levels = new HashMap<>();
-        levels.put(1, new Level.Builder(getStartingBoard(1)).build());
-        levels.put(20, new Level.Builder(getStartingBoard(20)).build());
-        levels.put(60, new Level.Builder(getStartingBoard(60)).build());
+        //levels.put(1, new Level.Builder(getStartingBoard(1)).build());
+        Level.Tree tree = new Level.Builder(getStartingBoard(20)).build();
+        Level.TreeNode curr = tree.solution;
+        while(curr.parent != null) {
+            System.out.println(curr.move);
+            curr = curr.parent;
+        }
+        Level.Tree tree2 = new Level.Builder(getStartingBoard(60)).build();
+        Level.TreeNode curr2 = tree2.solution;
+        while(curr2.parent != null) {
+            System.out.println(curr2.move);
+            curr2 = curr2.parent;
+        }
+        //levels.put(20, new Level.Builder(getStartingBoard(20)).build());
+        //levels.put(60, new Level.Builder(getStartingBoard(60)).build());
         levels.values().forEach(level -> level.addView(view));
         return levels;
     }
