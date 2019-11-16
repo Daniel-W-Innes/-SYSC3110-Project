@@ -41,7 +41,7 @@ public final class Mushroom extends Piece {
     }
 
     @Override
-    public Set<Move> getMoves(Board board, Point point) {
+    public Set<Move> getMoves(Board board) {
         return new HashSet<>();
     }
 

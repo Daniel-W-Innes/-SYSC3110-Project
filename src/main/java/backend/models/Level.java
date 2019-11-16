@@ -125,14 +125,12 @@ public class Level implements Model {
             while (!queue.isEmpty()) {
                 start = queue.poll();
                 for (Piece piece : start.getPieces().values()) {
-                    for (Point point : piece.occupies()) {
-                        for (Move move : piece.getMoves(start, point)) {
-                            end = new Board.Mover(start).movePiece(move).build();
-                            mutableNetwork.addEdge(start, end, new Edge(move, start, end));
-                            expanded.add(start);
-                            if (!expanded.contains(end) && !queue.contains(end)) {
-                                queue.add(end);
-                            }
+                    for (Move move : piece.getMoves(start)) {
+                        end = new Board.Mover(start).movePiece(move).build();
+                        mutableNetwork.addEdge(start, end, new Edge(move, start, end));
+                        expanded.add(start);
+                        if (!expanded.contains(end) && !queue.contains(end)) {
+                            queue.add(end);
                         }
                     }
                 }

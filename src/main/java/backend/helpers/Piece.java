@@ -6,7 +6,7 @@ import java.util.Set;
 
 public abstract class Piece {
 
-    public abstract Set<Move> getMoves(Board board, Point point);
+    public abstract Set<Move> getMoves(Board board);
 
     public abstract boolean occupies(Point point);
 

@@ -40,7 +40,7 @@ public final class Rabbit extends Piece {
     }
 
     @Override
-    public Set<Move> getMoves(Board board, Point point) {
+    public Set<Move> getMoves(Board board) {
         Set<Move> moves = new HashSet<>();
         addMove(moves, board, new Point(0, 1));
         addMove(moves, board, new Point(0, -1));
