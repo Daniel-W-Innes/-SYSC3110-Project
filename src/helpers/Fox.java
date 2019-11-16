@@ -32,6 +32,11 @@ public class Fox implements Piece {
     private Point tailLocation;
     private Set<Point> occupiedBoardSpots;
 
+    @Override
+    public Fox clonePiece() {
+        return new Fox(direction, headLocation);
+    }
+
     /**
      * Constructor that initializes the Fox to the given location and direction.
      *

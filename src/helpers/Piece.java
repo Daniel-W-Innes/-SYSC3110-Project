@@ -12,6 +12,7 @@ import java.util.Set;
  */
 
 public interface Piece {
+    Piece clonePiece();
     Set<Point> boardSpotsUsed();
     List<Move> getMoves(Board board, Point clickedPoint);
 

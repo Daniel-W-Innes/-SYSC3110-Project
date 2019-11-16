@@ -26,6 +26,20 @@ public class Board implements Model {
         pieces = new HashMap<>();
     }
 
+    public Board cloneBoard() {
+        Board board = new Board();
+
+        for(Map.Entry<Point, Square> square : terrain.entrySet()) {
+            board.terrain.put(new Point(square.getKey()), square.getValue().cloneSquare());
+        }
+
+        for(Map.Entry<Point, Piece> piece : pieces.entrySet()) {
+            board.pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
+        }
+
+        return board;
+    }
+
     /**
      * Checks to make sure that the passed in location is within the size of the board.
      *
@@ -154,8 +168,8 @@ public class Board implements Model {
             if (Direction.X_AXIS == removedPiece.getDirection()) {
                 pieces.remove(removedPiece.getHeadLocation()); // Remove fox head
                 pieces.remove(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail
-                view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
-                view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
+//                view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
+            //    view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
 
                 // Since the piece has moved, its internal representation has to be updated as well to match the new location
                 // of it stored in the board
@@ -163,13 +177,13 @@ public class Board implements Model {
 
                 pieces.put(newLocation, removedPiece); // Add new fox head
                 pieces.put(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail
-                view.addPiece(newLocation, removedPiece); // Add new fox head to view
-                view.addPiece(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail to view
+              //  view.addPiece(newLocation, removedPiece); // Add new fox head to view
+              //  view.addPiece(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail to view
             } else {
                 pieces.remove(removedPiece.getHeadLocation());
                 pieces.remove(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
-                view.removePiece(removedPiece.getHeadLocation());
-                view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
+             //   view.removePiece(removedPiece.getHeadLocation());
+             //   view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
 
                 // Since the piece has moved, its internal representation has to be updated as well to match the new location
                 // of it stored in the board
@@ -177,24 +191,24 @@ public class Board implements Model {
 
                 pieces.put(newLocation, removedPiece);
                 pieces.put(new Point(newLocation.x, newLocation.y - 1), removedPiece);
-                view.addPiece(newLocation, removedPiece);
-                view.addPiece(new Point(newLocation.x, newLocation.y - 1), removedPiece);
+              //  view.addPiece(newLocation, removedPiece);
+              //  view.addPiece(new Point(newLocation.x, newLocation.y - 1), removedPiece);
             }
         } else {
             // Since every piece that is not a fox takes only one board square, the collection returned by boardSpotsUsed()
             // can only have one result, which corresponds to the location of the piece
             for(Point point : piece.boardSpotsUsed()) {
                 pieces.remove(point);
-                view.removePiece(point);
+//                view.removePiece(point);
             }
             // Since the piece has moved, its internal representation has to be updated as well to match the new location
             // of it stored in the board
             piece.updateBoardSpotUsed(newLocation);
             pieces.put(newLocation, piece);
-            view.addPiece(newLocation, piece);
+           // view.addPiece(newLocation, piece);
         }
         if (isVictory()) {
-            view.notifyWin();
+          //  view.notifyWin();
         }
     }
 
@@ -237,7 +251,7 @@ public class Board implements Model {
      *
      * @return If the board is victory
      */
-    private boolean isVictory() {
+    public boolean isVictory() {
         for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
             //Return false if a rabbit is not in a hole
             if (Rabbit.class == entry.getValue().getClass()

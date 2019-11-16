@@ -22,6 +22,11 @@ public class Rabbit implements Piece {
     private Point boardSpot;
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
+    @Override
+    public Rabbit clonePiece() {
+        return new Rabbit(boardSpot);
+    }
+
     /**
      * Constructor that initializes the rabbit to the given location
      *

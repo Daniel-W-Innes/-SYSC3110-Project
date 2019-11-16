@@ -1,5 +1,6 @@
 package controller;
 
+import helpers.Graph;
 import helpers.Move;
 import helpers.Piece;
 import model.Board;
@@ -75,6 +76,7 @@ public class Game {
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
         board.setView(observer);
+        Graph graph = new Graph(board);
     }
     
     /**

@@ -20,6 +20,10 @@ public class Square {
      */
     private final int hashCode;
 
+    public Square cloneSquare() {
+        return new Square(isHole, isRaised);
+    }
+
     /**
      * Initialize a new piece with the given properties.
      *
