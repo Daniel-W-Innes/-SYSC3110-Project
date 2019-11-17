@@ -21,9 +21,10 @@ import static helpers.GameBuilder.getStartingBoard;
  */
 public class Game {
     public static final String resourcesFolder = "resources" + File.separator;
-    private Graph graph = null;
-    private Stack<Move> moveHistory = null;
-    private View view = null;
+    private static final int STARTING_LEVEL_NUMBER = 20;
+    private Graph graph;
+    private Stack<Move> moveHistory;
+    private View view;
     /**
      * A reference to the board modal
      */
@@ -32,12 +33,12 @@ public class Game {
      * The level number of the game
      */
     private int levelNumber;
-    private boolean redoSolution = false;
+    private boolean redoSolution;
     private Piece lastClickedPiece;
 
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new Gui(game), 20);
+        game.setUp(new Gui(game), STARTING_LEVEL_NUMBER);
     }
 
     /**
