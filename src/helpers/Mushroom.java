@@ -12,14 +12,24 @@ import java.util.Set;
 import static controller.Game.resourcesFolder;
 
 /**
- *  Class that represents a mushroom piece in the game.
+ * Class that represents a mushroom piece in the game.
  */
 
 public class Mushroom implements Piece {
 
-    private Point boardSpot;
-    public static final String imageIconLocation = resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png";
+    static final String imageIconLocation = resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png";
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
+    private Point boardSpot;
+
+    /**
+     * Constructor that initializes the mushroom to the given location
+     *
+     * @param boardSpot the initial location to place the mushroom
+     */
+
+    public Mushroom(Point boardSpot) {
+        this.boardSpot = boardSpot;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -35,16 +45,6 @@ public class Mushroom implements Piece {
 
     public Piece clonePiece() {
         return new Mushroom(boardSpot);
-    }
-
-    /**
-     * Constructor that initializes the mushroom to the given location
-     *
-     * @param boardSpot the initial location to place the mushroom
-     */
-
-    public Mushroom(Point boardSpot) {
-        this.boardSpot = boardSpot;
     }
 
     /**
@@ -72,7 +72,7 @@ public class Mushroom implements Piece {
     /**
      * Find the possible moves the mushroom can take given the current state of the board.
      *
-     * @param board the model of the board
+     * @param board        the model of the board
      * @param clickedPoint the point the user click in the BoardPanel
      * @return list of moves that the mushroom can take
      */

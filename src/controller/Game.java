@@ -20,26 +20,20 @@ import static helpers.GameBuilder.getStartingBoard;
  * Each of the functions in the game function similar to a "in game command"
  */
 public class Game {
+    public static final String resourcesFolder = "resources" + File.separator;
+    private Graph graph = null;
+    private Stack<Move> moveHistory = null;
+    private View view = null;
     /**
      * A reference to the board modal
      */
     private Board board;
-
     /**
      * The level number of the game
      */
     private int levelNumber;
-
     private boolean redoSolution = false;
-
-    public static final String resourcesFolder = "resources" + File.separator;
     private Piece lastClickedPiece;
-
-    Graph graph = null;
-
-    Stack<Move> moveHistory = null;
-
-    View view = null;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -49,7 +43,7 @@ public class Game {
     /**
      * Sets up the board with the given observer, and level.
      *
-     * @param observer A view to add to the new board
+     * @param observer    A view to add to the new board
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
     public void setUp(View observer, int levelNumber) {
@@ -71,7 +65,7 @@ public class Game {
         // This is deferred until the user presses "Hint" again, as otherwise this would cause a pause every time the user tries to solve the game differently than
         // the calculated solution.
         // TODO: Note that an optimization could be done where the user's moves are backtracked until a board a part of the original solution is achieved.
-        if(!hintMove.equals(move)) {
+        if (!hintMove.equals(move)) {
             redoSolution = true;
         }
 
@@ -92,8 +86,8 @@ public class Game {
     /**
      * Set the level of game to the passed in level.
      *
-     *   @param observer the view reference
-     *   @param levelNumber the level to set the game to
+     * @param observer    the view reference
+     * @param levelNumber the level to set the game to
      */
 
     public void setLevel(View observer, int levelNumber) {
@@ -109,9 +103,9 @@ public class Game {
     }
 
     /**
-     *  Reset the game to the passed in level.
+     * Reset the game to the passed in level.
      *
-     *  @param observer A view to add to the new board
+     * @param observer A view to add to the new board
      */
 
     public void resetLevel(View observer) {
@@ -129,7 +123,7 @@ public class Game {
     public void hint() {
 
         // See comment in fn movePiece() for an explanation of this
-        if(redoSolution) {
+        if (redoSolution) {
             graph = new Graph(board);
             redoSolution = false;
         }
@@ -137,20 +131,19 @@ public class Game {
         Move hintMove = graph.getHintMove();
 
         // If the user is at the starting board, there are no hints to give
-        if(hintMove != null)
-        {
+        if (hintMove != null) {
             view.showHint(hintMove);
         }
     }
 
     public void undo() {
         // TODO: Functionality is present when calling the move function, which is not the case with the hint function above!
-        if(!moveHistory.empty()) {
+        if (!moveHistory.empty()) {
 
             Move move = moveHistory.pop().getReverse();
 
             // If the user back tracks on a correct solution, then the next hint has to be synchronized with that fact.
-            if(graph.getUndoMove() != null && graph.getUndoMove().equals(move)) {
+            if (graph.getUndoMove() != null && graph.getUndoMove().equals(move)) {
                 graph.backtrackSolutionIndex();
             }
 

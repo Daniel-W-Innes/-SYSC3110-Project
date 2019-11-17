@@ -13,29 +13,17 @@ import java.util.Map;
  */
 public class Board implements Model {
 
+    public static final Point maxBoardLength = new Point(5, 5);
+    private final Map<Point, Piece> pieces;
     /**
      * The Board map containing all squares.
      */
     private Map<Point, Square> terrain;
-    private final Map<Point, Piece> pieces;
-    public static final Point maxBoardLength = new Point(5, 5);
     private View view;
 
     public Board() {
         terrain = new HashMap<>();
         pieces = new HashMap<>();
-    }
-
-    public Board cloneBoard() {
-        Board newBoard = new Board();
-
-        newBoard.terrain = terrain;
-
-        for(Map.Entry<Point, Piece> piece : pieces.entrySet()) {
-            newBoard.pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
-        }
-
-        return newBoard;
     }
 
     /**
@@ -56,12 +44,23 @@ public class Board implements Model {
         }
     }
 
+    public Board cloneBoard() {
+        Board newBoard = new Board();
+
+        newBoard.terrain = terrain;
+
+        for (Map.Entry<Point, Piece> piece : pieces.entrySet()) {
+            newBoard.pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
+        }
+
+        return newBoard;
+    }
+
     /**
      * Add a square to board at the given point.
      *
      * @param location The location on the board to add to
-     * @param square The square to add
-     *
+     * @param square   The square to add
      * @throws IllegalArgumentException If trying to add a new square to a location with an existing square
      */
 
@@ -109,8 +108,7 @@ public class Board implements Model {
      * Adds a game piece to the board at the given point.
      *
      * @param location The location on the board to add to
-     * @param piece The piece to add
-     *
+     * @param piece    The piece to add
      * @throws IllegalArgumentException If trying to add a new piece to a location with an existing piece
      */
 
@@ -128,12 +126,12 @@ public class Board implements Model {
             object. Hence there is a need to loop over all of the board spots of the piece to ensure that all of
             the piece locations refer to the same object.
          */
-        for(Point occupiedPoint : piece.boardSpotsUsed()) {
-            if(pieces.containsKey(occupiedPoint)) {
+        for (Point occupiedPoint : piece.boardSpotsUsed()) {
+            if (pieces.containsKey(occupiedPoint)) {
                 throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
             }
             if (piece instanceof Fox) {
-                if(terrain.containsKey(occupiedPoint)) {
+                if (terrain.containsKey(occupiedPoint)) {
                     throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
                 }
             }
@@ -145,7 +143,7 @@ public class Board implements Model {
     /**
      * Move the given piece to the new location
      *
-     * @param piece the piece to move
+     * @param piece       the piece to move
      * @param newLocation the new location to move the piece to
      */
 
@@ -167,7 +165,7 @@ public class Board implements Model {
                 pieces.remove(removedPiece.getHeadLocation()); // Remove fox head
                 pieces.remove(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail
 
-                if(applyChangesView) {
+                if (applyChangesView) {
                     view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
                     view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
                 }
@@ -179,7 +177,7 @@ public class Board implements Model {
                 pieces.put(newLocation, removedPiece); // Add new fox head
                 pieces.put(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail
 
-                if(applyChangesView) {
+                if (applyChangesView) {
                     view.addPiece(newLocation, removedPiece); // Add new fox head to view
                     view.addPiece(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail to view
                 }
@@ -187,7 +185,7 @@ public class Board implements Model {
                 pieces.remove(removedPiece.getHeadLocation());
                 pieces.remove(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
 
-                if(applyChangesView) {
+                if (applyChangesView) {
                     view.removePiece(removedPiece.getHeadLocation());
                     view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
                 }
@@ -199,7 +197,7 @@ public class Board implements Model {
                 pieces.put(newLocation, removedPiece);
                 pieces.put(new Point(newLocation.x, newLocation.y - 1), removedPiece);
 
-                if(applyChangesView) {
+                if (applyChangesView) {
                     view.addPiece(newLocation, removedPiece);
                     view.addPiece(new Point(newLocation.x, newLocation.y - 1), removedPiece);
                 }
@@ -207,10 +205,10 @@ public class Board implements Model {
         } else {
             // Since every piece that is not a fox takes only one board square, the collection returned by boardSpotsUsed()
             // can only have one result, which corresponds to the location of the piece
-            for(Point point : piece.boardSpotsUsed()) {
+            for (Point point : piece.boardSpotsUsed()) {
                 pieces.remove(point);
 
-                if(applyChangesView) {
+                if (applyChangesView) {
                     view.removePiece(point);
                 }
             }
@@ -219,7 +217,7 @@ public class Board implements Model {
             piece.updateBoardSpotUsed(newLocation);
             pieces.put(newLocation, piece);
 
-            if(applyChangesView) {
+            if (applyChangesView) {
                 view.addPiece(newLocation, piece);
             }
         }
@@ -307,11 +305,11 @@ public class Board implements Model {
     }
 
     /**
-    *  Set the view reference so that the board can notify the view of changes.
-    *
-    *  @param view the view reference
-    */
-    
+     * Set the view reference so that the board can notify the view of changes.
+     *
+     * @param view the view reference
+     */
+
     @Override
     public void setView(View view) {
         this.view = view;

@@ -12,15 +12,60 @@ import java.util.Set;
 import static controller.Game.resourcesFolder;
 
 /**
- *  Class that represents a rabbit piece in the game.
+ * Class that represents a rabbit piece in the game.
  */
 
 public class Rabbit implements Piece {
 
     static final String imageIconLocation = resourcesFolder + File.separator + "pieces" + File.separator + "Rabbit_white.png";
-
-    private Point boardSpot;
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
+    private Point boardSpot;
+
+    /**
+     * Constructor that initializes the rabbit to the given location
+     *
+     * @param boardSpot the initial location to place the rabbit
+     */
+
+    public Rabbit(Point boardSpot) {
+        this.boardSpot = boardSpot;
+    }
+
+    /**
+     * Internal function to help find possible moves for the rabbit for a given direction.
+     *
+     * @param board     the model of the board
+     * @param start     the point at which to start looking for possible moves
+     * @param direction the direction to check for possible moves
+     * @return the list of possible moves for the given direction starting at the passed in point
+     */
+
+    private static List<Move> getMoveDirection(Board board, Point start, Point direction) {
+        /*
+             To find possible moves for the rabbits, search the given direction for obstacles. While
+             there are obstacles, continue searching the next square in the given direction. Once no more
+             obstacles are found, then the end point for a move has been found.
+         */
+        Point startingPointCopy = new Point(start);
+        List<Move> possibleMoves = new ArrayList<>();
+        boolean objectToJump = true;
+        while (objectToJump) {
+            startingPointCopy.x += direction.x;
+            startingPointCopy.y += direction.y;
+            objectToJump = board.hasPiece(startingPointCopy);
+        }
+        // If there are no pieces in the immediate square adjacent to the rabbit in the given rabbit, there are no moves
+        if (start.equals(new Point(startingPointCopy.x - direction.x, startingPointCopy.y - direction.y))) {
+            return possibleMoves;
+        }
+        // Make sure that the possible move is within valid coordinates of the game. The '-1' seen is because
+        // the coordinates star at 0, not 1.
+        if (0 <= startingPointCopy.x && startingPointCopy.x <= Board.maxBoardLength.x - 1 && 0 <= startingPointCopy.y && startingPointCopy.y <= Board.maxBoardLength.y - 1) {
+            possibleMoves.add(new Move(new Point(start), new Point(startingPointCopy)));
+            return possibleMoves;
+        }
+        return possibleMoves;
+    }
 
     @Override
     public boolean equals(Object obj) {
@@ -40,16 +85,6 @@ public class Rabbit implements Piece {
     }
 
     /**
-     * Constructor that initializes the rabbit to the given location
-     *
-     * @param boardSpot the initial location to place the rabbit
-     */
-
-    public Rabbit(Point boardSpot) {
-        this.boardSpot = boardSpot;
-    }
-
-    /**
      * Update the internal variables holding the location of the rabbit
      *
      * @param newLocation the new location of the head of the rabbit
@@ -62,45 +97,9 @@ public class Rabbit implements Piece {
     }
 
     /**
-     * Internal function to help find possible moves for the rabbit for a given direction.
-     *
-     * @param board the model of the board
-     * @param start the point at which to start looking for possible moves
-     * @param direction the direction to check for possible moves
-     * @return the list of possible moves for the given direction starting at the passed in point
-     */
-
-    private static List<Move> getMoveDirection(Board board, Point start, Point direction) {
-        /*
-             To find possible moves for the rabbits, search the given direction for obstacles. While
-             there are obstacles, continue searching the next square in the given direction. Once no more
-             obstacles are found, then the end point for a move has been found.
-         */
-        Point startingPointCopy = new Point(start);
-        List<Move> possibleMoves = new ArrayList<>();
-        boolean objectToJump = true;
-        while(objectToJump){
-            startingPointCopy.x += direction.x;
-            startingPointCopy.y += direction.y;
-            objectToJump = board.hasPiece(startingPointCopy);
-        }
-        // If there are no pieces in the immediate square adjacent to the rabbit in the given rabbit, there are no moves
-        if(start.equals(new Point(startingPointCopy.x - direction.x, startingPointCopy.y - direction.y))) {
-            return possibleMoves;
-        }
-        // Make sure that the possible move is within valid coordinates of the game. The '-1' seen is because
-        // the coordinates star at 0, not 1.
-        if (0 <= startingPointCopy.x && startingPointCopy.x <= Board.maxBoardLength.x - 1 && 0 <= startingPointCopy.y && startingPointCopy.y <= Board.maxBoardLength.y - 1) {
-                possibleMoves.add(new Move(new Point(start), new Point(startingPointCopy)));
-                return possibleMoves;
-        }
-        return possibleMoves;
-    }
-
-    /**
      * Find the possible moves the rabbit can take given the current state of the board.
      *
-     * @param board the model of the board
+     * @param board        the model of the board
      * @param clickedPoint the point the user click in the BoardPanel
      * @return list of moves that the rabbit can take
      */

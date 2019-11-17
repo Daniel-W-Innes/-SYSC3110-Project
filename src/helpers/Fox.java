@@ -32,27 +32,10 @@ public class Fox implements Piece {
     private Point tailLocation;
     private Set<Point> occupiedBoardSpots;
 
-    @Override
-    public boolean equals(Object obj) {
-        if (obj == this) {
-            return true;
-        }
-        if (null == obj || obj.getClass() != getClass()) {
-            return false;
-        }
-        Fox fox = (Fox) obj;
-        return direction.equals(fox.direction) && headLocation.equals(fox.headLocation);
-    }
-
-    @Override
-    public Piece clonePiece() {
-        return new Fox(direction, new Point(headLocation));
-    }
-
     /**
      * Constructor that initializes the Fox to the given location and direction.
      *
-     * @param direction The direction the fox faces
+     * @param direction    The direction the fox faces
      * @param headLocation The location of the head of the fox
      */
 
@@ -76,6 +59,23 @@ public class Fox implements Piece {
         this.headLocation = headLocation;
         tailLocation = calculateTailLocation();
         occupiedBoardSpots = Set.of(headLocation, tailLocation);
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (null == obj || obj.getClass() != getClass()) {
+            return false;
+        }
+        Fox fox = (Fox) obj;
+        return direction.equals(fox.direction) && headLocation.equals(fox.headLocation);
+    }
+
+    @Override
+    public Piece clonePiece() {
+        return new Fox(direction, new Point(headLocation));
     }
 
     /**
@@ -125,7 +125,7 @@ public class Fox implements Piece {
     /**
      * Find the possible moves the fox can take given the current state of the board.
      *
-     * @param board the model of the board
+     * @param board        the model of the board
      * @param clickedPoint the point the user click in the BoardPanel
      * @return list of moves that the fox can take
      */

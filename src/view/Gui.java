@@ -21,6 +21,7 @@ public class Gui extends JFrame implements View {
 
     /**
      * Starts up an instance of the TextView GUI
+     *
      * @param game - The Central controller to interact with
      */
     public Gui(Game game) {
@@ -48,10 +49,7 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));
 
         toolbar.add(Box.createHorizontalGlue());
-        addToolbarButton("Hint", e ->
-                {
-                    game.hint();
-                });
+        addToolbarButton("Hint", e -> game.hint());
         addToolbarButton("Undo", e -> game.undo());
         addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
@@ -59,9 +57,9 @@ public class Gui extends JFrame implements View {
     }
 
     /**
-     *  Adds a button to the tool bar of this class.
+     * Adds a button to the tool bar of this class.
      *
-     * @param text the name of the button
+     * @param text           the name of the button
      * @param actionListener the ActionListener to be triggered when the button is pressed
      */
 
@@ -72,7 +70,7 @@ public class Gui extends JFrame implements View {
     }
 
     /**
-     *  Add the board panel to this frame.
+     * Add the board panel to this frame.
      */
 
     private void populateBoard() {
@@ -104,7 +102,7 @@ public class Gui extends JFrame implements View {
     }
 
     /**
-     *  Show a pop-up menu telling the user that they won.
+     * Show a pop-up menu telling the user that they won.
      */
 
     @Override

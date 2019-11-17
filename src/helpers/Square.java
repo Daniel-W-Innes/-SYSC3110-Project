@@ -4,6 +4,7 @@ import java.util.Arrays;
 
 /**
  * The Square class represents one square in the Board.
+ *
  * @author frank liu
  */
 public class Square {
@@ -23,7 +24,7 @@ public class Square {
     /**
      * Initialize a new piece with the given properties.
      *
-     * @param isHole If the square is a rabbit hole
+     * @param isHole   If the square is a rabbit hole
      * @param isRaised If the square is raised
      */
     public Square(boolean isHole, boolean isRaised) {
@@ -31,6 +32,7 @@ public class Square {
         this.isRaised = isRaised;
         hashCode = Arrays.hashCode((new boolean[]{isHole, isRaised}));
     }
+
     /**
      * Get if the square is a raised.
      * Note: All holes are raised.

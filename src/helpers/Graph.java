@@ -3,45 +3,16 @@ package helpers;
 import model.Board;
 
 import java.awt.*;
+import java.util.Queue;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {
 
-    //Tree that represents the BFS traversal of the graph.
-    public static class Tree<E> {
-        TreeNode<E> root;
-        public TreeNode<E> solution;
-
-        public Tree(TreeNode<E> root) {
-            this.root = root;
-        }
-    }
-
-    public static class TreeNode<E> {
-        public E contents;
-        public Move move; //The move done for the parent to become this node
-
-        public TreeNode<E> parent; //Parent for backtracking
-        public Set<TreeNode<E>> children; //TODO: I don't need this, I only need to backtrack.
-
-        public TreeNode(E e) {
-            this.contents = e;
-            this.children = new HashSet<>();
-        }
-
-        public void addNode(TreeNode<E> node) {
-            this.children.add(node);
-            node.parent = this;
-        }
-    }
-
-    ArrayList<Move> solution = null;
-    ArrayList<Board> intermediateBoards = null;
-    int solutionIndex;
-
-    Tree<Board> traversalPath = null;
-
+    private final ArrayList<Move> solution;
+    private final ArrayList<Board> intermediateBoards;
+    private int solutionIndex;
+    private Tree<Board> traversalPath;
     public Graph(Board startingBoard) {
         //Keep track of which nodes we visited
         Set<Board> visited = new HashSet<>();
@@ -53,14 +24,15 @@ public class Graph {
         //TODO: This thing is running forever... (Frank Y.)
         int branchCount = 0;
         //Create a tree to track it's path
-        traversalPath = new Tree<>(new TreeNode<Board>(startingBoard.cloneBoard()));
+        traversalPath = new Tree<>(new TreeNode<>(startingBoard.cloneBoard()));
         currQueue.add(traversalPath.root); //Add starting root node
 
-        outer: while(!currQueue.isEmpty()) {
+        outer:
+        while (!currQueue.isEmpty()) {
             while (!currQueue.isEmpty()) {
                 TreeNode<Board> currNode = currQueue.poll(); //Get node to expand
 
-                if(currNode.contents.isVictory()) {
+                if (currNode.contents.isVictory()) {
                     //System.out.println(start);
                     //System.out.println(start.getPieces());
                     System.out.println("Branch count: " + branchCount);
@@ -69,7 +41,7 @@ public class Graph {
                     //return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
                 }
                 //Stop traversing if you've already seen this node
-                if(visited.contains(currNode.contents)) {
+                if (visited.contains(currNode.contents)) {
                     continue;
                 } else {
                     //Mark as visited
@@ -115,7 +87,7 @@ public class Graph {
         intermediateBoards = new ArrayList<>();
         TreeNode<Board> currentNode = traversalPath.solution;
 
-        while(currentNode != null) {
+        while (currentNode != null) {
             solution.add(currentNode.move);
             intermediateBoards.add(currentNode.contents);
             currentNode = currentNode.parent;
@@ -134,7 +106,7 @@ public class Graph {
     }
 
     public Move getUndoMove() {
-        if(solutionIndex == solution.size() - 2) {
+        if (solutionIndex == solution.size() - 2) {
             return null;
         }
 
@@ -143,20 +115,20 @@ public class Graph {
     }
 
     public void advanceSolutionIndex() {
-        if(solutionIndex != 0) {
+        if (solutionIndex != 0) {
             solutionIndex -= 1;
         }
     }
 
     public void backtrackSolutionIndex() {
-        if(solutionIndex != solution.size() - 2) {
+        if (solutionIndex != solution.size() - 2) {
             solutionIndex += 1;
         }
     }
 
     public void changeSolution(int numberMoveRemove, ArrayList<Move> newMoves, ArrayList<Board> newBoards) {
 
-        for(int i = numberMoveRemove + 1; i < newMoves.size(); i++) {
+        for (int i = numberMoveRemove + 1; i < newMoves.size(); i++) {
             solution.remove(i);
         }
 
@@ -169,5 +141,32 @@ public class Graph {
 
     public int equivalentBoardIndex(Board board) {
         return intermediateBoards.indexOf(board);
+    }
+
+    //Tree that represents the BFS traversal of the graph.
+    static class Tree<E> {
+        final TreeNode<E> root;
+        TreeNode<E> solution;
+
+        Tree(TreeNode<E> root) {
+            this.root = root;
+        }
+    }
+
+    static class TreeNode<E> {
+        final E contents;
+        final Set<TreeNode<E>> children; //TODO: I don't need this, I only need to backtrack.
+        Move move; //The move done for the parent to become this node
+        TreeNode<E> parent; //Parent for backtracking
+
+        TreeNode(E e) {
+            this.contents = e;
+            this.children = new HashSet<>();
+        }
+
+        void addNode(TreeNode<E> node) {
+            this.children.add(node);
+            node.parent = this;
+        }
     }
 }

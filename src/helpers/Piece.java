@@ -16,8 +16,10 @@ public interface Piece {
     Piece clonePiece();
 
     Set<Point> boardSpotsUsed();
+
     List<Move> getMoves(Board board, Point clickedPoint);
 
     ImageIcon getImageIcon(Point location);
+
     void updateBoardSpotUsed(Point newLocation);
 }

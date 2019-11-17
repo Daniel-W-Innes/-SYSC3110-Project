@@ -17,11 +17,10 @@ import java.util.Map;
 import static model.Board.maxBoardLength;
 
 class BoardPanel extends JPanel implements ActionListener {
-    private Point clickedSquare;
-    private List<Move> availableMoves;
-
     private final Map<Point, Tile> boardMap = new HashMap<>();
     private final Game game;
+    private Point clickedSquare;
+    private List<Move> availableMoves;
 
     /**
      * Initializes the panel with Tiles to represent the game
@@ -48,6 +47,7 @@ class BoardPanel extends JPanel implements ActionListener {
 
     /**
      * Update the visual representation of the board terrain. Call it when you first load a level.
+     *
      * @param board the new board
      */
     void updateBoardTerrain(Board board) {
@@ -88,7 +88,7 @@ class BoardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Point point = ((Tile) e.getSource()).getPoint();
 
-        for(Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
+        for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
             tile.getValue().setHintPiece(false);
             tile.getValue().setHighlighted(false);
         }
@@ -137,7 +137,7 @@ class BoardPanel extends JPanel implements ActionListener {
 
     void showHint(Move move) {
 
-        for(Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
+        for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
             tile.getValue().setHintPiece(false);
             tile.getValue().setHighlighted(false);
         }

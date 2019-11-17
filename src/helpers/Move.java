@@ -27,7 +27,7 @@ public class Move {
      * @param end   The end point for the new move
      */
 
-    public Move(Point start, Point end){
+    public Move(Point start, Point end) {
         this.start = start;
         this.end = end;
         hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));

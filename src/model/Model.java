@@ -3,8 +3,8 @@ package model;
 import view.View;
 
 /**
-* The interface that a model must implement.
-*/
+ * The interface that a model must implement.
+ */
 
 @FunctionalInterface
 interface Model {

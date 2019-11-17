@@ -15,15 +15,14 @@ class Tile extends JButton {
     private static final Color raised = new Color(0x0000FF);
     private static final Color available = new Color(0xFFFF00);
     private static final Color hintPiece = new Color(0xFF5B58);
+    private final Point location;
+    private final Border innerBorder;
+    private final Border outerBorder;
+    private final Border hintPieceBorder;
     private boolean isHole;
     private boolean isRaised;
     private boolean isHighlighted;
     private boolean isHintPiece;
-    private final Point location;
-
-    private final Border innerBorder;
-    private final Border outerBorder;
-    private final Border hintPieceBorder;
 
     /**
      * Initializes the tile to correspond with the location passed in.
@@ -62,7 +61,7 @@ class Tile extends JButton {
     }
 
     /**
-     *  Reset the tile to a default state.
+     * Reset the tile to a default state.
      */
 
     void reset() {
@@ -97,7 +96,7 @@ class Tile extends JButton {
     }
 
     /**
-     *  Highlight the border of the tile based off of the properties of the tile.
+     * Highlight the border of the tile based off of the properties of the tile.
      */
 
     private void updateBorder() {
