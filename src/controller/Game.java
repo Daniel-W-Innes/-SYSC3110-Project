@@ -2,14 +2,12 @@ package controller;
 
 import helpers.Graph;
 import helpers.Move;
-import helpers.Piece;
 import model.Board;
 import view.Gui;
 import view.View;
 
 import java.awt.*;
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -35,7 +33,6 @@ public class Game {
      */
     private int levelNumber;
     private boolean redoSolution;
-    private Piece lastClickedPiece;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -55,7 +52,7 @@ public class Game {
     public void movePiece(Move move) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(lastClickedPiece, move.getEndPoint(), true);
+        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
 
         // Must be called before the advance solution index!
         Move hintMove = graph.getHintMove();
@@ -75,13 +72,6 @@ public class Game {
     }
 
     public List<Move> getMoves(Point point) {
-        // When a user clicks a location on the view, a point is generated. If there are any
-        // corresponding pieces at that given point, then the list of possible moves are passed to the view.
-        lastClickedPiece = board.getPieces().get(point);
-        if (null == lastClickedPiece) {
-            return new ArrayList<>();
-        }
-
         return board.getPieces().get(point).getMoves(board, point);
     }
 
