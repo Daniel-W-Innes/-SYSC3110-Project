@@ -115,7 +115,7 @@ class Tile extends JButton {
         }
     }
 
-    public void setHintPiece(boolean showHintPiece) {
+    void setHintPiece(boolean showHintPiece) {
         this.isHintPiece = showHintPiece;
         updateBorder();
     }

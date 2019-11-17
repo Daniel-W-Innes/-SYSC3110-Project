@@ -51,7 +51,7 @@ public class Gui extends JFrame implements View {
         toolbar.add(Box.createHorizontalGlue());
         addToolbarButton("Hint", e -> game.hint());
         addToolbarButton("Undo", e -> game.undo());
-        addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Redo", e -> game.redo());
 
         add(toolbar, BorderLayout.PAGE_START);
     }

@@ -23,7 +23,8 @@ public class Game {
     public static final String resourcesFolder = "resources" + File.separator;
     private static final int STARTING_LEVEL_NUMBER = 20;
     private Graph graph;
-    private Stack<Move> moveHistory;
+    private Stack<Move> undoHistory;
+    private Stack<Move> redoHistory;
     private View view;
     /**
      * A reference to the board modal
@@ -70,7 +71,7 @@ public class Game {
             redoSolution = true;
         }
 
-        moveHistory.push(move);
+        undoHistory.push(move);
     }
 
     public List<Move> getMoves(Point point) {
@@ -100,7 +101,8 @@ public class Game {
         this.view = observer;
 
         graph = new Graph(board);
-        moveHistory = new Stack<>();
+        undoHistory = new Stack<>();
+        redoHistory = new Stack<>();
     }
 
     /**
@@ -137,11 +139,18 @@ public class Game {
         }
     }
 
+    public void redo() {
+        if (!redoHistory.empty()) {
+            movePiece(redoHistory.pop().getReverse());
+        }
+    }
+
     public void undo() {
         // TODO: Functionality is present when calling the move function, which is not the case with the hint function above!
-        if (!moveHistory.empty()) {
+        if (!undoHistory.empty()) {
 
-            Move move = moveHistory.pop().getReverse();
+            Move move = undoHistory.pop().getReverse();
+            redoHistory.push(move);
 
             // If the user back tracks on a correct solution, then the next hint has to be synchronized with that fact.
             if (graph.getUndoMove() != null && graph.getUndoMove().equals(move)) {
