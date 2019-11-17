@@ -141,8 +141,9 @@ public class Board implements Model {
     /**
      * Move the given piece to the new location
      *
-     * @param piece       the piece to move
-     * @param newLocation the new location to move the piece to
+     * @param piece       The piece to move
+     * @param newLocation The new location to move the piece to
+     * @param applyChangesView If the board should notify the view
      */
 
     public void movePiece(Piece piece, Point newLocation, boolean applyChangesView) {

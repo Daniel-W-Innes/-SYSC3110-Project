@@ -2835,6 +2835,7 @@
     var rsingleTag = (/^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i);
 
 
+
 // Implement the identical functionality for filter and not
     function winnow(elements, qualifier, not) {
         if (isFunction(qualifier)) {
@@ -3215,6 +3216,7 @@
         };
     });
     var rnothtmlwhite = (/[^\x20\t\r\n\f]+/g);
+
 
 
 // Convert String-formatted options into Object-formatted ones
@@ -3855,6 +3857,8 @@
     };
 
 
+
+
 // The deferred used on DOM ready
     var readyList = jQuery.Deferred();
 
@@ -3930,6 +3934,8 @@
         // A fallback to window.onload, that will always work
         window.addEventListener("load", completed);
     }
+
+
 
 
 // Multifunctional method to get and set values of a collection
@@ -4175,6 +4181,7 @@
     var dataPriv = new Data();
 
     var dataUser = new Data();
+
 
 
 //	Implementation Summary
@@ -4711,6 +4718,7 @@
     var rtagName = (/<([a-z][^\/\0>\x20\t\r\n\f]*)/i);
 
     var rscriptType = (/^$|^module$|\/(?:java|ecma)script/i);
+
 
 
 // We have to close these tags to support XHTML (#13200)
@@ -8353,6 +8361,8 @@
     });
 
 
+
+
 // Return jQuery for attributes-only inclusion
 
 
@@ -8590,6 +8600,7 @@
     var nonce = Date.now();
 
     var rquery = (/\?/);
+
 
 
 // Cross-browser xml parsing
@@ -9838,6 +9849,8 @@
     });
 
 
+
+
 // Prevent auto-execution of scripts when no explicit dataType was provided (See gh-2432)
     jQuery.ajaxPrefilter(function (s) {
         if (s.crossDomain) {
@@ -9997,6 +10010,8 @@
     });
 
 
+
+
 // Support: Safari 8 only
 // In Safari 8 documents created via document.implementation.createHTMLDocument
 // collapse sibling forms: the second one becomes a child of the first one.
@@ -10122,6 +10137,8 @@
 
         return this;
     };
+
+
 
 
 // Attach a bunch of functions for handling common AJAX events
@@ -10508,6 +10525,8 @@
             // subtraction forces infinities to NaN
             !isNaN(obj - parseFloat(obj));
     };
+
+
 
 
 // Register as a named AMD module, since jQuery can be concatenated with other
