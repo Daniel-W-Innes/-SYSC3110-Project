@@ -32,6 +32,11 @@ public class Mushroom implements Piece {
     }
 
     @Override
+    public String toString() {
+        return "M";
+    }
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;

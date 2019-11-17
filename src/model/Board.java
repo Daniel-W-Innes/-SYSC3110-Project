@@ -251,12 +251,17 @@ public class Board implements Model {
             for (int y = 0; y <= maxBoardLength.y; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
-                stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "__");
+                stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "_");
+                stringBuilder.append(hasPiece(point) ? getPiece(point).toString() : "_");
             }
             stringBuilder.append('|');
             stringBuilder.append("\n");
         }
         return stringBuilder.toString();
+    }
+
+    private Piece getPiece(Point point) {
+        return pieces.get(point);
     }
 
     /**

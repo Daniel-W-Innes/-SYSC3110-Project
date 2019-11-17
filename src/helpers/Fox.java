@@ -68,6 +68,12 @@ public class Fox implements Piece {
     }
 
     @Override
+    public String toString() {
+        return "F";
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;

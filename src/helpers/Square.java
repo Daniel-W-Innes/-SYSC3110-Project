@@ -53,6 +53,11 @@ public class Square {
         return isHole == square.isHole;
     }
 
+    @Override
+    public String toString() {
+        return isHole ? "H" : "R";
+    }
+
     /**
      * Get the hashcode for the square. This hashcode is generated with stringBuilders when the move is initialized. The hashcode is regenerated when {@code setPiece} or {@code removePiece} is called.
      *

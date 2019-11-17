@@ -68,6 +68,12 @@ public class Rabbit implements Piece {
     }
 
     @Override
+    public String toString() {
+        return "R";
+    }
+
+
+    @Override
     public boolean equals(Object obj) {
         if (obj == this) {
             return true;
