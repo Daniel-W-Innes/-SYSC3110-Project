@@ -19,13 +19,13 @@ public class Graph {
         Set<Board> visited = new HashSet<>();
 
         //Two queues, one for the current depth and another for the next one. This is so we can distinguish at which depth is the node at.
-        Queue<TreeNode> currQueue = new ConcurrentLinkedQueue<>();
-        Queue<TreeNode> nextQueue = new ConcurrentLinkedQueue<>();
+        Queue<TreeNode<Board>> currQueue = new ConcurrentLinkedQueue<>();
+        Queue<TreeNode<Board>> nextQueue = new ConcurrentLinkedQueue<>();
 
         //TODO: This thing is running forever... (Frank Y.)
         int branchCount = 0;
         //Create a tree to track it's path
-        Tree<Board> traversalPath = new Tree<>(new TreeNode<>(startingBoard.cloneBoard()));
+        Tree<Board> traversalPath = new Tree<>(new TreeNode<>(new Board(startingBoard)));
         currQueue.add(traversalPath.root); //Add starting root node
 
         outer:
@@ -56,7 +56,7 @@ public class Graph {
                         //For every move that the piece has
                         for (Move move : piece.getMoves(currNode.contents, point)) {
 
-                            Board end = currNode.contents.cloneBoard();
+                            Board end = new Board(currNode.contents);
 
                             end.movePiece(piece.clonePiece(), move.getEndPoint(), false);
 
@@ -118,17 +118,14 @@ public class Graph {
 
     static class TreeNode<E> {
         final E contents;
-        final Set<TreeNode<E>> children; //TODO: I don't need this, I only need to backtrack.
         Move move; //The move done for the parent to become this node
         TreeNode<E> parent; //Parent for backtracking
 
         TreeNode(E e) {
             this.contents = e;
-            this.children = new HashSet<>();
         }
 
         void addNode(TreeNode<E> node) {
-            this.children.add(node);
             node.parent = this;
         }
     }

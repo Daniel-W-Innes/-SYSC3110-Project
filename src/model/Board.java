@@ -26,6 +26,16 @@ public class Board implements Model {
         pieces = new HashMap<>();
     }
 
+    public Board(Board board) {
+        terrain = board.terrain;
+        view = board.view;
+        pieces = new HashMap<>();
+
+        for (Map.Entry<Point, Piece> piece : board.pieces.entrySet()) {
+            pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
+        }
+    }
+
     /**
      * Checks to make sure that the passed in location is within the size of the board.
      *
@@ -42,18 +52,6 @@ public class Board implements Model {
         if (location.x > (maxBoardLength.x - 1) || location.y > (maxBoardLength.y - 1)) {
             throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location + ".\nMax Board length = " + maxBoardLength);
         }
-    }
-
-    public Board cloneBoard() {
-        Board newBoard = new Board();
-
-        newBoard.terrain = terrain;
-
-        for (Map.Entry<Point, Piece> piece : pieces.entrySet()) {
-            newBoard.pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
-        }
-
-        return newBoard;
     }
 
     /**

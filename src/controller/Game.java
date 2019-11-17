@@ -8,6 +8,7 @@ import view.View;
 
 import java.awt.*;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
@@ -78,7 +79,11 @@ public class Game {
     }
 
     public List<Move> getMoves(Point point) {
-        return board.getPieces().get(point).getMoves(board, point);
+        if (board.hasPiece(point)) {
+            return board.getPieces().get(point).getMoves(board, point);
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     /**
