@@ -10,6 +10,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.Stack;
 
 import static helpers.GameBuilder.getStartingBoard;
@@ -33,7 +34,6 @@ public class Game {
      * The level number of the game
      */
     private int levelNumber;
-    private boolean redoSolution;
 
     public static void main(String[] args) {
         Game game = new Game();
@@ -61,18 +61,19 @@ public class Game {
         board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
 
         // Must be called before the advance solution index!
-        Move hintMove = graph.getHintMove();
+        Optional<Move> hintMove = graph.getHintMove();
 
         // The solution has to remain synchronized by pointing to the next hint. Note that this is redundant if an incorrect move is made. See below hintMove.equals() check.
-        graph.advanceSolutionIndex();
-
         // The user has moved away from the correct solution; therefore the current solution is invalid and has to be redone.
         // This is deferred until the user presses "Hint" again, as otherwise this would cause a pause every time the user tries to solve the game differently than
         // the calculated solution.
         // TODO: Note that an optimization could be done where the user's moves are backtracked until a board a part of the original solution is achieved.
-        if (!hintMove.equals(move)) {
-            redoSolution = true;
+        if (hintMove.isEmpty() || !hintMove.get().equals(move)) {
+            graph = new Graph(board);
+        } else {
+            graph.advanceSolutionIndex();
         }
+
         if (addToUndoHistory) {
             undoHistory.push(move);
         }
@@ -124,20 +125,8 @@ public class Game {
            is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
      */
 
-    public void hint() {
-
-        // See comment in fn movePiece() for an explanation of this
-        if (redoSolution) {
-            graph = new Graph(board);
-            redoSolution = false;
-        }
-
-        Move hintMove = graph.getHintMove();
-
-        // If the user is at the starting board, there are no hints to give
-        if (hintMove != null) {
-            view.showHint(hintMove);
-        }
+    public Optional<Move> hint() {
+        return graph.getHintMove();
     }
 
     public void redo() {

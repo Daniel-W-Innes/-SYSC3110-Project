@@ -8,6 +8,7 @@ import model.Board;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.util.Optional;
 
 /**
  * Gui
@@ -49,7 +50,14 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));
 
         toolbar.add(Box.createHorizontalGlue());
-        addToolbarButton("Hint", e -> game.hint());
+        addToolbarButton("Hint", e -> {
+            Optional<Move> hint = game.hint();
+            if (hint.isPresent()) {
+                boardPanel.showHint(hint.get());
+            } else {
+                JOptionPane.showMessageDialog(this, "Hint is still loading try again later");
+            }
+        });
         addToolbarButton("Undo", e -> game.undo());
         addToolbarButton("Redo", e -> game.redo());
 
@@ -121,9 +129,5 @@ public class Gui extends JFrame implements View {
         boardPanel.reset();
         boardPanel.updateBoardTerrain(board);
         board.getPieces().forEach((point, piece) -> boardPanel.addPiece(point, piece));
-    }
-
-    public void showHint(Move move) {
-        boardPanel.showHint(move);
     }
 }
