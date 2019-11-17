@@ -7,8 +7,7 @@ import org.junit.jupiter.api.Test;
 import java.awt.*;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class RabbitTest {
 
@@ -17,6 +16,23 @@ class RabbitTest {
     @BeforeEach
     void setUp() {
         rabbit = new Rabbit(new Point(1, 2));
+    }
+
+    @Test
+    void testClone() {
+        Piece newRabbit = rabbit.clonePiece();
+
+        assertTrue(newRabbit instanceof Rabbit);
+        assertEquals(newRabbit, rabbit);
+    }
+
+    @Test
+    void testHash() {
+        Rabbit  similarRabbit = (Rabbit)rabbit.clonePiece();
+        Rabbit differentRabbit = new Rabbit(new Point(0, 1));
+
+        assertEquals(similarRabbit.hashCode(), rabbit.hashCode());
+        assertNotEquals(differentRabbit.hashCode(), rabbit.hashCode());
     }
 
     @Test

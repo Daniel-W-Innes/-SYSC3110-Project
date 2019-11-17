@@ -22,6 +22,11 @@ class MoveTest {
     }
 
     @Test
+    void testGetReverse() {
+        assertEquals(new Move(new Point(2, 2), new Point(1, 1)), move.getReverse());
+    }
+
+    @Test
     void getEnd() {
         assertEquals(new Point(2, 2), move.getEndPoint());
         assertEquals(new Point(2, 2), differentMove.getEndPoint());

@@ -9,8 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class FoxTest {
 
@@ -26,6 +25,23 @@ class FoxTest {
     @BeforeEach
     void setUp() {
         fox = new Fox(Direction.X_AXIS, new Point(2, 0));
+    }
+
+    @Test
+    void testClone() {
+        Piece newFox = fox.clonePiece();
+
+        assertTrue(newFox instanceof  Fox);
+        assertEquals(newFox, fox);
+    }
+
+    @Test
+    void testHash() {
+        Fox similarFox = (Fox)fox.clonePiece();
+        Fox differentFox = new Fox(Direction.Y_AXIS, new Point(0, 1));
+
+        assertEquals(similarFox.hashCode(), fox.hashCode());
+        assertNotEquals(differentFox.hashCode(), fox.hashCode());
     }
 
     @Test

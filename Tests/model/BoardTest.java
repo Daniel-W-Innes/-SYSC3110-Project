@@ -9,8 +9,7 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class BoardTest {
 
@@ -19,6 +18,36 @@ class BoardTest {
     @BeforeEach
     void setUp() {
         board = new Board();
+    }
+
+    @Test
+    void testCopyConstructor() {
+        Board newBoard = new Board(board);
+
+        assertEquals(newBoard, board);
+    }
+
+    @Test
+    void testEquals() {
+        Board sameBoard = new Board(board);
+
+        Board differentBoard = new Board();
+        differentBoard.addPiece(new Point(0, 0), new Mushroom(new Point(0, 0)));
+
+        assertEquals(sameBoard, board);
+        assertNotEquals(differentBoard, board);
+    }
+
+    @Test
+    void testHashCode() {
+        Board sameBoard = new Board();
+
+        Board differentBoard = new Board();
+        differentBoard.addPiece(new Point(4, 0), new Rabbit(new Point(4, 0)));
+
+        assertEquals(sameBoard.hashCode(), board.hashCode());
+
+        assertNotEquals(differentBoard.hashCode(), sameBoard.hashCode());
     }
 
     @Test

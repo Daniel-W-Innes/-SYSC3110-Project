@@ -6,8 +6,7 @@ import org.junit.jupiter.api.Test;
 
 import java.awt.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class MushroomTest {
     Mushroom mushroom = null;
@@ -15,6 +14,23 @@ class MushroomTest {
     @BeforeEach
     void setUp() {
         mushroom = new Mushroom(new Point(0, 0));
+    }
+
+    @Test
+    void testClone() {
+        Piece newMushroom = mushroom.clonePiece();
+
+        assertTrue(newMushroom instanceof  Mushroom);
+        assertEquals(newMushroom, mushroom);
+    }
+
+    @Test
+    void testHash() {
+        Mushroom similarMushroom = (Mushroom)mushroom.clonePiece();
+        Mushroom differentMushroom = new Mushroom( new Point(0, 1));
+
+        assertEquals(similarMushroom.hashCode(), mushroom.hashCode());
+        assertNotEquals(differentMushroom.hashCode(), mushroom.hashCode());
     }
 
     @Test
