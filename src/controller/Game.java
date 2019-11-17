@@ -25,7 +25,6 @@ public class Game {
     private Graph graph;
     private Stack<Move> undoHistory;
     private Stack<Move> redoHistory;
-    private View view;
     /**
      * A reference to the board modal
      */
@@ -99,8 +98,6 @@ public class Game {
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
         board.setView(observer);
-
-        this.view = observer;
 
         graph = new Graph(board);
         undoHistory = new Stack<>();

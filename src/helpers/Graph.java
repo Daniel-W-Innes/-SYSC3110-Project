@@ -107,7 +107,7 @@ public class Graph {
     }
 
     public void advanceSolutionIndex() {
-        if (solutionIndex != 0 && !isReady) {
+        if (solutionIndex != 0 && isReady) {
             solutionIndex -= 1;
         }
     }
