@@ -1,6 +1,7 @@
 package view;
 
 import controller.Game;
+import helpers.Move;
 import helpers.Piece;
 import model.Board;
 
@@ -31,6 +32,7 @@ public class Gui extends JFrame implements View {
         createToolbar();
         populateBoard();
         setVisible(true);
+
     }
 
     /**
@@ -46,7 +48,13 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));
 
         toolbar.add(Box.createHorizontalGlue());
-        addToolbarButton("Hint", e -> game.hint());
+        addToolbarButton("Hint", e ->
+                {
+                    // TODO: Need a splash screen here around this function to stop user from asking for a solution before its done
+                    game.createSolution();
+
+                    game.hint();
+                });
         addToolbarButton("Undo", e -> game.undo());
         addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
@@ -118,5 +126,9 @@ public class Gui extends JFrame implements View {
         boardPanel.reset();
         boardPanel.updateBoardTerrain(board);
         board.getPieces().forEach((point, piece) -> boardPanel.addPiece(point, piece));
+    }
+
+    public void showHint(Move move) {
+        boardPanel.showHint(move);
     }
 }

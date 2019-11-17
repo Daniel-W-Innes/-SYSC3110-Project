@@ -87,6 +87,12 @@ class BoardPanel extends JPanel implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Point point = ((Tile) e.getSource()).getPoint();
+
+        for(Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
+            tile.getValue().setHintPiece(false);
+            tile.getValue().setHighlighted(false);
+        }
+
         if (null == clickedSquare) {
             //1st part of the move: update currently selected square
             clickedSquare = point;
@@ -126,5 +132,19 @@ class BoardPanel extends JPanel implements ActionListener {
 
     void reset() {
         boardMap.values().forEach(Tile::reset);
+        clickedSquare = null;
+    }
+
+    void showHint(Move move) {
+
+        for(Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
+            tile.getValue().setHintPiece(false);
+            tile.getValue().setHighlighted(false);
+        }
+
+        boardMap.get(move.getStartPoint()).setHintPiece(true);
+        boardMap.get(move.getEndPoint()).setHighlighted(true);
+
+        clickedSquare = null;
     }
 }

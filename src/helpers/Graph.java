@@ -3,10 +3,7 @@ package helpers;
 import model.Board;
 
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.Queue;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {
@@ -40,6 +37,7 @@ public class Graph {
     }
 
     ArrayList<Move> solution = null;
+    ArrayList<Board> intermediateBoards = null;
     int solutionIndex;
 
     Tree<Board> traversalPath = null;
@@ -114,10 +112,12 @@ public class Graph {
         }
 
         solution = new ArrayList<>();
-        TreeNode currentNode = traversalPath.solution;
+        intermediateBoards = new ArrayList<>();
+        TreeNode<Board> currentNode = traversalPath.solution;
 
         while(currentNode != null) {
             solution.add(currentNode.move);
+            intermediateBoards.add(currentNode.contents);
             currentNode = currentNode.parent;
         }
 
@@ -127,6 +127,10 @@ public class Graph {
     public Move getHintMove() {
 
         return solutionIndex == -1 ? null : solution.get(solutionIndex);
+    }
+
+    public Board getCurrentBoard() {
+        return solutionIndex == -1 ? null : intermediateBoards.get(solutionIndex);
     }
 
     public Move getUndoMove() {
@@ -139,5 +143,22 @@ public class Graph {
 
     public void backtrackSolutionIndex() {
         solutionIndex += 1;
+    }
+
+    public void changeSolution(int numberMoveRemove, ArrayList<Move> newMoves, ArrayList<Board> newBoards) {
+
+        for(int i = numberMoveRemove + 1; i < newMoves.size(); i++) {
+            solution.remove(i);
+        }
+
+        Collections.reverse(newMoves);
+        Collections.reverse(newBoards);
+
+        solution.addAll(newMoves);
+        intermediateBoards.addAll(newBoards);
+    }
+
+    public int equivalentBoardIndex(Board board) {
+        return intermediateBoards.indexOf(board);
     }
 }

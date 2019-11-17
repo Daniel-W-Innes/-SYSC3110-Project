@@ -14,13 +14,16 @@ class Tile extends JButton {
     private static final Color empty = new Color(0x009900);
     private static final Color raised = new Color(0x0000FF);
     private static final Color available = new Color(0xFFFF00);
+    private static final Color hintPiece = new Color(0xFF5B58);
     private boolean isHole;
     private boolean isRaised;
     private boolean isHighlighted;
+    private boolean isHintPiece;
     private final Point location;
 
     private final Border innerBorder;
     private final Border outerBorder;
+    private final Border hintPieceBorder;
 
     /**
      * Initializes the tile to correspond with the location passed in.
@@ -34,6 +37,7 @@ class Tile extends JButton {
         setBackground(empty);
         innerBorder = BorderFactory.createLineBorder(raised, 8);
         outerBorder = BorderFactory.createLineBorder(available, 8);
+        hintPieceBorder = BorderFactory.createLineBorder(hintPiece, 8);
     }
 
     /**
@@ -64,6 +68,9 @@ class Tile extends JButton {
     void reset() {
         isHole = false;
         isRaised = false;
+        isHintPiece = false;
+        isHighlighted = false;
+        updateBorder();
         setIcon(null);
     }
 
@@ -94,7 +101,7 @@ class Tile extends JButton {
      */
 
     private void updateBorder() {
-        setBorder(new CompoundBorder(isHighlighted ? outerBorder : null, isRaised ? innerBorder : null));
+        setBorder(new CompoundBorder(isHighlighted ? outerBorder : isHintPiece ? hintPieceBorder : null, isRaised ? innerBorder : null));
     }
 
     /**
@@ -107,5 +114,10 @@ class Tile extends JButton {
         } else {
             setBackground(empty);
         }
+    }
+
+    public void setHintPiece(boolean showHintPiece) {
+        this.isHintPiece = showHintPiece;
+        updateBorder();
     }
 }
