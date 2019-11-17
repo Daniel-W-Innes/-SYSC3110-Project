@@ -3,16 +3,17 @@ package helpers;
 import model.Board;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Queue;
-import java.util.*;
+import java.util.Set;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {
 
     private final ArrayList<Move> solution;
-    private final ArrayList<Board> intermediateBoards;
     private int solutionIndex;
-    private Tree<Board> traversalPath;
+
     public Graph(Board startingBoard) {
         //Keep track of which nodes we visited
         Set<Board> visited = new HashSet<>();
@@ -24,7 +25,7 @@ public class Graph {
         //TODO: This thing is running forever... (Frank Y.)
         int branchCount = 0;
         //Create a tree to track it's path
-        traversalPath = new Tree<>(new TreeNode<>(startingBoard.cloneBoard()));
+        Tree<Board> traversalPath = new Tree<>(new TreeNode<>(startingBoard.cloneBoard()));
         currQueue.add(traversalPath.root); //Add starting root node
 
         outer:
@@ -84,12 +85,10 @@ public class Graph {
         }
 
         solution = new ArrayList<>();
-        intermediateBoards = new ArrayList<>();
         TreeNode<Board> currentNode = traversalPath.solution;
 
         while (currentNode != null) {
             solution.add(currentNode.move);
-            intermediateBoards.add(currentNode.contents);
             currentNode = currentNode.parent;
         }
 
@@ -99,10 +98,6 @@ public class Graph {
     public Move getHintMove() {
 
         return solutionIndex == -1 ? null : solution.get(solutionIndex);
-    }
-
-    public Board getCurrentBoard() {
-        return solutionIndex == -1 ? null : intermediateBoards.get(solutionIndex);
     }
 
     public Move getUndoMove() {
@@ -124,23 +119,6 @@ public class Graph {
         if (solutionIndex != solution.size() - 2) {
             solutionIndex += 1;
         }
-    }
-
-    public void changeSolution(int numberMoveRemove, ArrayList<Move> newMoves, ArrayList<Board> newBoards) {
-
-        for (int i = numberMoveRemove + 1; i < newMoves.size(); i++) {
-            solution.remove(i);
-        }
-
-        Collections.reverse(newMoves);
-        Collections.reverse(newBoards);
-
-        solution.addAll(newMoves);
-        intermediateBoards.addAll(newBoards);
-    }
-
-    public int equivalentBoardIndex(Board board) {
-        return intermediateBoards.indexOf(board);
     }
 
     //Tree that represents the BFS traversal of the graph.
