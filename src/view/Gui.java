@@ -50,9 +50,6 @@ public class Gui extends JFrame implements View {
         toolbar.add(Box.createHorizontalGlue());
         addToolbarButton("Hint", e ->
                 {
-                    // TODO: Need a splash screen here around this function to stop user from asking for a solution before its done
-                    game.createSolution();
-
                     game.hint();
                 });
         addToolbarButton("Undo", e -> game.undo());

@@ -134,15 +134,24 @@ public class Graph {
     }
 
     public Move getUndoMove() {
+        if(solutionIndex == solution.size() - 2) {
+            return null;
+        }
+
+
         return solutionIndex == solution.size() - 2 ? null : solution.get(solutionIndex).getReverse();
     }
 
     public void advanceSolutionIndex() {
-        solutionIndex -= 1;
+        if(solutionIndex != 0) {
+            solutionIndex -= 1;
+        }
     }
 
     public void backtrackSolutionIndex() {
-        solutionIndex += 1;
+        if(solutionIndex != solution.size() - 2) {
+            solutionIndex += 1;
+        }
     }
 
     public void changeSolution(int numberMoveRemove, ArrayList<Move> newMoves, ArrayList<Board> newBoards) {
