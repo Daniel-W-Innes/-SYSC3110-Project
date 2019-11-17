@@ -50,6 +50,11 @@ public class Game {
     }
 
     public void movePiece(Move move) {
+        movePiece(move, true);
+        redoHistory.clear();
+    }
+
+    private void movePiece(Move move, boolean addToUndoHistory) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
         board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
@@ -67,8 +72,9 @@ public class Game {
         if (!hintMove.equals(move)) {
             redoSolution = true;
         }
-
-        undoHistory.push(move);
+        if (addToUndoHistory) {
+            undoHistory.push(move);
+        }
     }
 
     public List<Move> getMoves(Point point) {
@@ -131,23 +137,15 @@ public class Game {
 
     public void redo() {
         if (!redoHistory.empty()) {
-            movePiece(redoHistory.pop().getReverse());
+            movePiece(redoHistory.pop().getReverse(), true);
         }
     }
 
     public void undo() {
-        // TODO: Functionality is present when calling the move function, which is not the case with the hint function above!
         if (!undoHistory.empty()) {
-
             Move move = undoHistory.pop().getReverse();
+            movePiece(move, false);
             redoHistory.push(move);
-
-            // If the user back tracks on a correct solution, then the next hint has to be synchronized with that fact.
-            if (graph.getUndoMove() != null && graph.getUndoMove().equals(move)) {
-                graph.backtrackSolutionIndex();
-            }
-
-            board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
         }
     }
 }

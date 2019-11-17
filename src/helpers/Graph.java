@@ -100,24 +100,9 @@ public class Graph {
         return solutionIndex == -1 ? null : solution.get(solutionIndex);
     }
 
-    public Move getUndoMove() {
-        if (solutionIndex == solution.size() - 2) {
-            return null;
-        }
-
-
-        return solutionIndex == solution.size() - 2 ? null : solution.get(solutionIndex).getReverse();
-    }
-
     public void advanceSolutionIndex() {
         if (solutionIndex != 0) {
             solutionIndex -= 1;
-        }
-    }
-
-    public void backtrackSolutionIndex() {
-        if (solutionIndex != solution.size() - 2) {
-            solutionIndex += 1;
         }
     }
 
