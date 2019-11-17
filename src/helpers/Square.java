@@ -1,7 +1,5 @@
 package helpers;
 
-import java.util.Arrays;
-
 /**
  * The Square class represents one square in the Board.
  *
@@ -13,10 +11,6 @@ public class Square {
      */
     private final boolean isHole;
     /**
-     * If the square is a raised.
-     */
-    private final boolean isRaised;
-    /**
      * The hashcode for the move generated with {@code Arrays.hashCode} when the move is initialized.
      */
     private final int hashCode;
@@ -25,22 +19,10 @@ public class Square {
      * Initialize a new piece with the given properties.
      *
      * @param isHole   If the square is a rabbit hole
-     * @param isRaised If the square is raised
      */
-    public Square(boolean isHole, boolean isRaised) {
+    public Square(boolean isHole) {
         this.isHole = isHole;
-        this.isRaised = isRaised;
-        hashCode = Arrays.hashCode((new boolean[]{isHole, isRaised}));
-    }
-
-    /**
-     * Get if the square is a raised.
-     * Note: All holes are raised.
-     *
-     * @return If the square is a raised
-     */
-    public boolean isRaised() {
-        return isRaised;
+        hashCode = Boolean.hashCode(isHole);
     }
 
     /**
@@ -54,7 +36,7 @@ public class Square {
     }
 
     /**
-     * Two squares are equal when they both contain the same square properties {@code isHole} and {@code isRaised} and contains the same piece.
+     * Two squares are equal when they both contain the same square properties {@code isHole}.
      *
      * @param obj The object to test against
      * @return If obj is the same as this
@@ -68,7 +50,7 @@ public class Square {
             return false;
         }
         Square square = (Square) obj;
-        return isHole == square.isHole && isRaised == square.isRaised;
+        return isHole == square.isHole;
     }
 
     /**

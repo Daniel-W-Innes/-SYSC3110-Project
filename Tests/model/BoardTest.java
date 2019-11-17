@@ -24,9 +24,9 @@ class BoardTest {
     @Test
     void addSquare() {
         Map<Point, Square> squareLocations = Map.of(
-                new Point(0, 0), new Square(true, false),
-                new Point(1, 1), new Square(true, true),
-                new Point(4, 4), new Square(false, false));
+                new Point(0, 0), new Square(true),
+                new Point(1, 1), new Square(true),
+                new Point(4, 4), new Square(false));
         for (Map.Entry<Point, Square> squareEntry : squareLocations.entrySet()) {
             board.addSquare(squareEntry.getKey(), squareEntry.getValue());
         }
@@ -39,12 +39,12 @@ class BoardTest {
     @Test
     void addInvalidSquare() {
         Map<Point, Square> invalidSquareLocations = Map.of(
-                new Point(-1, -1), new Square(false, false),
-                new Point(5, 5), new Square(false, false),
-                new Point(-1, 0), new Square(false, false),
-                new Point(0, -1), new Square(false, false),
-                new Point(5, 4), new Square(false, false),
-                new Point(4, 5), new Square(false, false));
+                new Point(-1, -1), new Square(false),
+                new Point(5, 5), new Square(false),
+                new Point(-1, 0), new Square(false),
+                new Point(0, -1), new Square(false),
+                new Point(5, 4), new Square(false),
+                new Point(4, 5), new Square(false));
         for (Map.Entry<Point, Square> squareEntry : invalidSquareLocations.entrySet()) {
             assertThrows(IllegalArgumentException.class, () -> board.addSquare(squareEntry.getKey(), squareEntry.getValue()));
         }
@@ -64,7 +64,7 @@ class BoardTest {
 
     @Test
     void addInvalidPiece() {
-        board.addSquare(new Point(0, 0), new Square(true, true));
+        board.addSquare(new Point(0, 0), new Square(true));
         assertThrows(IllegalArgumentException.class, () -> board.addPiece(new Point(1, 0), new Fox(Direction.X_AXIS, new Point(1, 0))));
     }
 
@@ -74,9 +74,9 @@ class BoardTest {
         board.addPiece(new Point(1, 1), new Rabbit(new Point(1, 1)));
         board.addPiece(new Point(2, 2), new Mushroom(new Point( 3, 4)));
 
-        board.addSquare(new Point(0, 0), new Square(true, true));
-        board.addSquare(new Point(1, 1), new Square(true, false));
-        board.addSquare(new Point(2, 3), new Square(false, false));
+        board.addSquare(new Point(0, 0), new Square(true));
+        board.addSquare(new Point(1, 1), new Square(true));
+        board.addSquare(new Point(2, 3), new Square(false));
 
     }
 

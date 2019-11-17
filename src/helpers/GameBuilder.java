@@ -88,16 +88,16 @@ public class GameBuilder {
      */
 
     private static void setDefaultTerrain(Board board) {
-        board.addSquare(new Point(0, 0), new Square(true, true));
-        board.addSquare(new Point(2, 0), new Square(false, true));
-        board.addSquare(new Point(4, 0), new Square(true, true));
+        board.addSquare(new Point(0, 0), new Square(true));
+        board.addSquare(new Point(2, 0), new Square(false));
+        board.addSquare(new Point(4, 0), new Square(true));
 
-        board.addSquare(new Point(0, 2), new Square(false, true));
-        board.addSquare(new Point(2, 2), new Square(true, true));
-        board.addSquare(new Point(4, 2), new Square(false, true));
+        board.addSquare(new Point(0, 2), new Square(false));
+        board.addSquare(new Point(2, 2), new Square(true));
+        board.addSquare(new Point(4, 2), new Square(false));
 
-        board.addSquare(new Point(0, 4), new Square(true, true));
-        board.addSquare(new Point(2, 4), new Square(false, true));
-        board.addSquare(new Point(4, 4), new Square(true, true));
+        board.addSquare(new Point(0, 4), new Square(true));
+        board.addSquare(new Point(2, 4), new Square(false));
+        board.addSquare(new Point(4, 4), new Square(true));
     }
 }

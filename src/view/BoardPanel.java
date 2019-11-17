@@ -52,7 +52,7 @@ class BoardPanel extends JPanel implements ActionListener {
      */
     void updateBoardTerrain(Board board) {
         board.getTerrain().forEach((point, square) -> {
-            boardMap.get(point).setRaised(square.isRaised());
+            boardMap.get(point).setRaised();
             boardMap.get(point).setHole(square.isHole());
         });
     }

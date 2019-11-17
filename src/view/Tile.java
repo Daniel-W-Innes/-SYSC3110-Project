@@ -75,12 +75,9 @@ class Tile extends JButton {
 
     /**
      * Set the current tile to represent a raised square.
-     *
-     * @param isRaised true if there is a raised square on the point represented by the tile; otherwise false
      */
-
-    void setRaised(boolean isRaised) {
-        this.isRaised = isRaised;
+    void setRaised() {
+        this.isRaised = true;
         updateBorder();
     }
 

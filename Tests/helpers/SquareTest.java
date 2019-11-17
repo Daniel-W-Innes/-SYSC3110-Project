@@ -13,19 +13,14 @@ class SquareTest {
 
     @BeforeEach
     void setUp() {
-        square = new Square(true, false);
-        similarSquare = new Square(true, false);
-        differentSquare = new Square(false, false);
+        square = new Square(true);
+        similarSquare = new Square(true);
+        differentSquare = new Square(false);
     }
 
     @Test
     void isHole() {
         assertTrue(square.isHole());
-    }
-
-    @Test
-    void isRaised() {
-        assertFalse(square.isRaised());
     }
 
     @Test

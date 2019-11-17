@@ -66,8 +66,8 @@ class FoxTest {
     void testGetMovesX() {
         Board board = new Board();
 
-        board.addSquare(new Point(0, 0), new Square(false, false));
-        board.addSquare(new Point(4, 0), new Square(false, false));
+        board.addSquare(new Point(0, 0), new Square(false));
+        board.addSquare(new Point(4, 0), new Square(false));
 
         board.addPiece(new Point(2, 0), fox);
 
