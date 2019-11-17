@@ -22,10 +22,8 @@ public class Fox implements Piece {
     static final String horizontalHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_right.jpg";
     static final String horizontalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_left.jpg";
 
-    private static final ImageIcon verticalHeadIcon = new ImageIcon(vertexHeadImageLocation);
-    private static final ImageIcon verticalTailIcon = new ImageIcon(verticalTailImageLocation);
-    private static final ImageIcon horizontalHeadIcon = new ImageIcon(horizontalHeadImageLocation);
-    private static final ImageIcon horizontalTailIcon = new ImageIcon(horizontalTailImageLocation);
+    private final ImageIcon headIcon;
+    private final ImageIcon tailIcon;
 
     private final Direction direction;
     private Point headLocation;
@@ -50,10 +48,18 @@ public class Fox implements Piece {
          * Due to this tail placement, if the head was along the first row or column, the index of the tail would be -1 along the respective
          * axis, which is not a valid index.
          */
-        if (Direction.X_AXIS == direction && 0 == headLocation.x) {
-            throw new IllegalArgumentException("The head of the fox must not be along the first column!");
-        } else if (Direction.Y_AXIS == direction && 0 == headLocation.y) {
-            throw new IllegalArgumentException("The head of the fox must not be along the first row!");
+        if (Direction.X_AXIS == direction) {
+            headIcon = new ImageIcon(vertexHeadImageLocation);
+            tailIcon = new ImageIcon(verticalTailImageLocation);
+            if (0 == headLocation.x) {
+                throw new IllegalArgumentException("The head of the fox must not be along the first column!");
+            }
+        } else {
+            headIcon = new ImageIcon(horizontalHeadImageLocation);
+            tailIcon = new ImageIcon(horizontalTailImageLocation);
+            if (0 == headLocation.y) {
+                throw new IllegalArgumentException("The head of the fox must not be along the first row!");
+            }
         }
         this.direction = direction;
         this.headLocation = headLocation;
@@ -206,22 +212,12 @@ public class Fox implements Piece {
 
     @Override
     public ImageIcon getImageIcon(Point location) {
-        if (Direction.Y_AXIS == direction) {
-            if (headLocation.equals(location)) {
-                return horizontalHeadIcon;
-            } else if (tailLocation.equals(location)) {
-                return horizontalTailIcon;
-            } else {
-                throw new IllegalStateException("Illegal fox state");
-            }
+        if (headLocation.equals(location)) {
+            return headIcon;
+        } else if (tailLocation.equals(location)) {
+            return tailIcon;
         } else {
-            if (headLocation.equals(location)) {
-                return verticalHeadIcon;
-            } else if (tailLocation.equals(location)) {
-                return verticalTailIcon;
-            } else {
-                throw new IllegalStateException("Illegal fox state");
-            }
+            throw new IllegalStateException("Illegal fox state");
         }
     }
 
