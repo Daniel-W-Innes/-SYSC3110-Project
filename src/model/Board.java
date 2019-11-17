@@ -135,7 +135,6 @@ public class Board implements Model {
                 }
             }
             pieces.put(occupiedPoint, piece);
-            //this.view.addPiece(occupiedPoint, piece);
         }
     }
 

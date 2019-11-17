@@ -23,8 +23,6 @@ public class Graph {
             Queue<TreeNode<Board>> currQueue = new ConcurrentLinkedQueue<>();
             Queue<TreeNode<Board>> nextQueue = new ConcurrentLinkedQueue<>();
 
-            //TODO: This thing is running forever... (Frank Y.)
-            int branchCount = 0;
             //Create a tree to track it's path
             Tree<Board> traversalPath = new Tree<>(new TreeNode<>(new Board(startingBoard)));
             currQueue.add(traversalPath.root); //Add starting root node
