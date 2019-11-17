@@ -1,5 +1,7 @@
 package helpers;
 
+import com.google.common.hash.HashCode;
+import com.google.common.hash.Hashing;
 import model.Board;
 
 import javax.swing.*;
@@ -21,6 +23,8 @@ public class Rabbit implements Piece {
 
     private Point boardSpot;
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
+
+    private final HashCode hashCode;
 
     @Override
     public boolean equals(Object obj) {
@@ -47,6 +51,10 @@ public class Rabbit implements Piece {
 
     public Rabbit(Point boardSpot) {
         this.boardSpot = boardSpot;
+
+        hashCode = Hashing.murmur3_128().newHasher()
+                .putObject(boardSpot, new HashPoint(boardSpot).getFunnel())
+                .hash();
     }
 
     /**
@@ -141,4 +149,6 @@ public class Rabbit implements Piece {
     public ImageIcon getImageIcon(Point location) {
         return icon;
     }
+
+
 }
