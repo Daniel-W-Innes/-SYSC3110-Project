@@ -32,6 +32,23 @@ public class Fox implements Piece {
     private Point tailLocation;
     private Set<Point> occupiedBoardSpots;
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (null == obj || obj.getClass() != getClass()) {
+            return false;
+        }
+        Fox fox = (Fox) obj;
+        return direction.equals(fox.direction) && headLocation.equals(fox.headLocation);
+    }
+
+    @Override
+    public Piece clonePiece() {
+        return new Fox(direction, new Point(headLocation));
+    }
+
     /**
      * Constructor that initializes the Fox to the given location and direction.
      *

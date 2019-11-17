@@ -22,6 +22,23 @@ public class Rabbit implements Piece {
     private Point boardSpot;
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (null == obj || obj.getClass() != getClass()) {
+            return false;
+        }
+        Rabbit rabbit = (Rabbit) obj;
+        return boardSpot.equals(rabbit.boardSpot);
+    }
+
+    @Override
+    public Piece clonePiece() {
+        return new Rabbit(new Point(boardSpot));
+    }
+
     /**
      * Constructor that initializes the rabbit to the given location
      *

@@ -21,6 +21,22 @@ public class Mushroom implements Piece {
     public static final String imageIconLocation = resourcesFolder + File.separator + "pieces" + File.separator + "Mushroom.png";
     private static final ImageIcon icon = new ImageIcon(imageIconLocation);
 
+    @Override
+    public boolean equals(Object obj) {
+        if (obj == this) {
+            return true;
+        }
+        if (null == obj || obj.getClass() != getClass()) {
+            return false;
+        }
+        Mushroom mushroom = (Mushroom) obj;
+        return boardSpot.equals(mushroom.boardSpot);
+    }
+
+    public Piece clonePiece() {
+        return new Mushroom(boardSpot);
+    }
+
     /**
      * Constructor that initializes the mushroom to the given location
      *

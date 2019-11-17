@@ -1,5 +1,6 @@
 package controller;
 
+import helpers.Graph;
 import helpers.Move;
 import helpers.Piece;
 import model.Board;
@@ -10,6 +11,7 @@ import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import static helpers.GameBuilder.getStartingBoard;
 
@@ -28,12 +30,19 @@ public class Game {
      */
     private int levelNumber;
 
+    private boolean redoSolution = false;
+
     public static final String resourcesFolder = "resources" + File.separator;
     private Piece lastClickedPiece;
 
+    Graph graph = null;
+
+    Stack<Move> moveHistory = null;
+    ;
+
     public static void main(String[] args) {
         Game game = new Game();
-        game.setUp(new Gui(game), 20);
+        game.setUp(new Gui(game), 60);
     }
 
     /**
@@ -49,7 +58,23 @@ public class Game {
     public void movePiece(Move move) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(lastClickedPiece, move.getEndPoint());
+        board.movePiece(lastClickedPiece, move.getEndPoint(), true);
+
+        // Must be called before the advance solution index!
+        Move hintMove = graph.getHintMove();
+
+        // The solution has to remain synchronized by pointing to the next hint. Note that this is redundant if an incorrect move is made. See below hintMove.equals() check.
+        graph.advanceSolutionIndex();
+
+        // The user has moved away from the correct solution; therefore the current solution is invalid and has to be redone.
+        // This is deferred until the user presses "Hint" again, as otherwise this would cause a pause every time the user tries to solve the game differently than
+        // the calculated solution.
+        // TODO: Note that an optimization could be done where the user's moves are backtracked until a board a part of the original solution is achieved.
+        if(!hintMove.equals(move)) {
+            redoSolution = true;
+        }
+
+        moveHistory.push(move);
     }
 
     public List<Move> getMoves(Point point) {
@@ -75,6 +100,9 @@ public class Game {
         board = getStartingBoard(levelNumber);
         observer.sendInitialBoard(board);
         board.setView(observer);
+
+        graph = new Graph(board);
+        moveHistory = new Stack<>();
     }
     
     /**
@@ -85,5 +113,49 @@ public class Game {
 
     public void resetLevel(View observer) {
         setLevel(observer, levelNumber);
+    }
+
+        /*
+        There are two cases to consider with the hint and undo buttons:
+
+        1. The user moves with the correct move. In that case, regardless if a hint was requested, the graph can continue using
+           then next hint move, or the back track move. An undo will have to be synchronized with the solution.
+
+        2. The user moves incorrectly. In that case, regardless if a hint was requested, the solution is regenerated.  The history of moves
+           is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
+     */
+
+    public void hint() {
+
+        // See comment in fn movePiece() for an explanation of this
+        if(redoSolution) {
+            graph = new Graph(getStartingBoard(levelNumber));
+        }
+
+        Move hintMove = graph.getHintMove();
+
+        // If the user is at the starting board, there are no hints to give
+        if(hintMove != null)
+        {
+            // TODO: This is ONLY here to check that the hints are right. In the final version, this function will tell the view
+            // TODO: to show the user where to move a piece, and only that.
+            board.movePiece(board.getPieces().get(hintMove.getStartPoint()), hintMove.getEndPoint(), true);
+            graph.advanceSolutionIndex();
+        }
+    }
+
+    public void undo() {
+        // TODO: Functionality is present when calling the move function, which is not the case with the hint function above!
+        if(!moveHistory.empty()) {
+
+            Move move = moveHistory.pop().getReverse();
+
+            // If the user back tracks on a correct solution, then the next hint has to be synchronized with that fact.
+            if(graph.getUndoMove().equals(move)) {
+                graph.backtrackSolutionIndex();
+            }
+
+            board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
+        }
     }
 }

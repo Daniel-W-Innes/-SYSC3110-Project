@@ -46,7 +46,8 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));
 
         toolbar.add(Box.createHorizontalGlue());
-        addToolbarButton("Undo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Hint", e -> game.hint());
+        addToolbarButton("Undo", e -> game.undo());
         addToolbarButton("Redo", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
         add(toolbar, BorderLayout.PAGE_START);

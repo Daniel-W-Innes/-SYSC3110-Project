@@ -39,7 +39,7 @@ public class Move {
      * @return The start point
      */
 
-    Point getStartPoint() {
+    public Point getStartPoint() {
         return start;
     }
 
@@ -90,4 +90,9 @@ public class Move {
     public String toString() {
         return "{" + start.x + ", " + start.y + "} -> {" + end.x + ", " + end.y + "}";
     }
+
+    public Move getReverse() {
+        return new Move(new Point(end), new Point(start));
+    }
+
 }
