@@ -18,14 +18,12 @@ public class Board implements Model {
     /**
      * The Board map containing all squares.
      */
-    private final Map<Point, Square> terrain;
+    private Map<Point, Square> terrain;
     private final Map<Point, Piece> pieces;
     public static final Point maxBoardLength = new Point(5, 5);
     private View view;
     private final HashCode hashCode;
-
-    static int number = 0;
-
+    
     public Board() {
         terrain = new HashMap<>();
         pieces = new HashMap<>();
@@ -38,9 +36,11 @@ public class Board implements Model {
     public Board cloneBoard() {
         Board board = new Board();
 
-        for(Map.Entry<Point, Square> square : terrain.entrySet()) {
-            board.terrain.put(new Point(square.getKey()), square.getValue().cloneSquare());
-        }
+        board.terrain = terrain;
+
+//        for(Map.Entry<Point, Square> square : terrain.entrySet()) {
+//            board.terrain.put(new Point(square.getKey()), square.getValue().cloneSquare());
+//        }
 
         for(Map.Entry<Point, Piece> piece : pieces.entrySet()) {
             board.pieces.put(new Point(piece.getKey()), piece.getValue().clonePiece());
