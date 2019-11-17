@@ -23,6 +23,7 @@ public class Board implements Model {
     public static final Point maxBoardLength = new Point(5, 5);
     private View view;
     private final HashCode hashCode;
+
     
     public Board() {
         terrain = new HashMap<>();
