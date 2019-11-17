@@ -98,10 +98,6 @@ public class Graph {
         }).start();
     }
 
-    public boolean isReady() {
-        return isReady;
-    }
-
     public Optional<Move> getHintMove() {
         return solutionIndex == -1 || !isReady ? Optional.empty() : Optional.of(solution.get(solutionIndex));
     }

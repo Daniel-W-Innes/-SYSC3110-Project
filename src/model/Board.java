@@ -18,7 +18,7 @@ public class Board implements Model {
     /**
      * The Board map containing all squares.
      */
-    private Map<Point, Square> terrain;
+    private final Map<Point, Square> terrain;
     private View view;
 
     public Board() {
