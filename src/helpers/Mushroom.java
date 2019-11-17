@@ -43,6 +43,11 @@ public class Mushroom implements Piece {
         return boardSpot.equals(mushroom.boardSpot);
     }
 
+    @Override
+    public int hashCode() {
+        return boardSpot.hashCode();
+    }
+
     public Piece clonePiece() {
         return new Mushroom(boardSpot);
     }

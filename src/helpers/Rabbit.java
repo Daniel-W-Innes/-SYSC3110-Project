@@ -79,6 +79,12 @@ public class Rabbit implements Piece {
         return boardSpot.equals(rabbit.boardSpot);
     }
 
+
+    @Override
+    public int hashCode() {
+        return boardSpot.hashCode();
+    }
+
     @Override
     public Piece clonePiece() {
         return new Rabbit(new Point(boardSpot));

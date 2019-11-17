@@ -80,6 +80,11 @@ public class Fox implements Piece {
     }
 
     @Override
+    public int hashCode() {
+        return occupiedBoardSpots.hashCode();
+    }
+
+    @Override
     public Piece clonePiece() {
         return new Fox(direction, new Point(headLocation));
     }

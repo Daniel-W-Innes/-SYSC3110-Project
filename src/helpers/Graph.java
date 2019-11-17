@@ -35,9 +35,6 @@ public class Graph {
                     TreeNode<Board> currNode = currQueue.poll(); //Get node to expand
 
                     if (currNode.contents.isVictory()) {
-                        //System.out.println(start);
-                        //System.out.println(start.getPieces());
-                        System.out.println("Branch count: " + branchCount);
                         traversalPath.solution = currNode;
                         break outer;
                         //return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
@@ -61,18 +58,11 @@ public class Graph {
 
                                 end.movePiece(piece.clonePiece(), move.getEndPoint(), false);
 
-                                //Get a Board object that represents the result of the move
-                                //  Board end = new Board.Mover(currNode.contents).movePiece(move).build();
-
-                                //Add each new Board state to the next queue to process
-                                //TODO: remove this
-                                branchCount++;
-
                                 //Make a new node
                                 TreeNode<Board> newNode = new TreeNode<>(end);
                                 newNode.move = move; //Assign it the move that caused the board state
                                 //Add it to the tree
-                                currNode.addNode(newNode);
+                                newNode.addParent(currNode);
                                 newNode.parent = currNode;
 
                                 //Add it to the queue to expand
@@ -127,8 +117,8 @@ public class Graph {
             this.contents = e;
         }
 
-        void addNode(TreeNode<E> node) {
-            node.parent = this;
+        void addParent(TreeNode<E> node) {
+            parent = node;
         }
     }
 }

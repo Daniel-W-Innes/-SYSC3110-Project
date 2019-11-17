@@ -4,6 +4,7 @@ import helpers.*;
 import view.View;
 
 import java.awt.*;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -299,7 +300,7 @@ public class Board implements Model {
      */
     @Override
     public int hashCode() {
-        return terrain.hashCode();
+        return Arrays.hashCode(new int[]{terrain.hashCode(), pieces.hashCode()});
     }
 
     /**
