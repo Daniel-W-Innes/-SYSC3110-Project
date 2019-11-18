@@ -32,7 +32,7 @@ class BoardTest {
         Board sameBoard = new Board(board);
 
         Board differentBoard = new Board();
-        differentBoard.addPiece(new Point(0, 0), new Mushroom(new Point(0, 0)));
+        differentBoard.addPiece(new Mushroom(new Point(0, 0)));
 
         assertEquals(sameBoard, board);
         assertNotEquals(differentBoard, board);
@@ -40,17 +40,18 @@ class BoardTest {
 
     @Test
     void testHashCode() {
+        assertEquals(board.hashCode(), board.hashCode());
+
         Board sameBoard = new Board();
 
         Board differentBoard = new Board();
-        differentBoard.addPiece(new Point(4, 0), new Rabbit(new Point(4, 0)));
+        differentBoard.addPiece(new Rabbit(new Point(4, 0)));
 
+        System.out.println(board);
+        System.out.println(sameBoard);
         assertEquals(sameBoard.hashCode(), board.hashCode());
-
-        // Note: This MAY fail. It is unknown why. However, where this hashcode is used, in
-        // the contains function in the hash set, equal hashCodes will default to the .equals()
-        // method that is know to work.
         assertNotEquals(differentBoard.hashCode(), board.hashCode());
+        assertEquals(differentBoard.hashCode(), differentBoard.hashCode());
     }
 
     @Test
@@ -87,7 +88,7 @@ class BoardTest {
         Map<Point, Piece> pieceLocations = new HashMap<>();
         pieceLocations.put(new Point(1, 1), new Fox(Direction.X_AXIS, new Point(1, 1)));
         for (Map.Entry<Point, Piece> pieceEntry : pieceLocations.entrySet()) {
-            board.addPiece(pieceEntry.getKey(), pieceEntry.getValue());
+            board.addPiece(pieceEntry.getValue());
         }
         for (Map.Entry<Point, Piece> pieceEntry : pieceLocations.entrySet()) {
             assertTrue(board.hasPiece(pieceEntry.getKey()));
@@ -97,14 +98,14 @@ class BoardTest {
     @Test
     void addInvalidPiece() {
         board.addSquare(new Point(0, 0), new Square(true));
-        assertThrows(IllegalArgumentException.class, () -> board.addPiece(new Point(1, 0), new Fox(Direction.X_AXIS, new Point(1, 0))));
+        assertThrows(IllegalArgumentException.class, () -> board.addPiece(new Fox(Direction.X_AXIS, new Point(1, 0))));
     }
 
     @Test
     void testIsVictory() {
-        board.addPiece(new Point(0, 0), new Rabbit(new Point(0, 0)));
-        board.addPiece(new Point(1, 1), new Rabbit(new Point(1, 1)));
-        board.addPiece(new Point(2, 2), new Mushroom(new Point( 3, 4)));
+        board.addPiece(new Rabbit(new Point(0, 0)));
+        board.addPiece(new Rabbit(new Point(1, 1)));
+        board.addPiece(new Mushroom(new Point(3, 4)));
 
         board.addSquare(new Point(0, 0), new Square(true));
         board.addSquare(new Point(1, 1), new Square(true));

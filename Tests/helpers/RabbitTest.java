@@ -40,13 +40,13 @@ class RabbitTest {
 
         Board board = new Board();
 
-        board.addPiece(new Point(1, 1), new Rabbit(new Point(1, 1)));
-        board.addPiece(new Point(1, 3), new Rabbit(new Point(1, 3)));
-        board.addPiece(new Point(2, 2), new Rabbit(new Point(2, 2)));
-        board.addPiece(new Point(3, 2), new Rabbit(new Point(3, 2)));
-        board.addPiece(new Point(0, 1), new Rabbit(new Point(0, 1)));
+        board.addPiece(new Rabbit(new Point(1, 1)));
+        board.addPiece(new Rabbit(new Point(1, 3)));
+        board.addPiece(new Rabbit(new Point(2, 2)));
+        board.addPiece(new Rabbit(new Point(3, 2)));
+        board.addPiece(new Rabbit(new Point(0, 1)));
 
-        board.addPiece(new Point(1, 2), rabbit);
+        board.addPiece(rabbit);
 
         Set<Move> possibleMoves = Set.of(
                 new Move(new Point(1, 2), new Point(1, 4)),

@@ -4,8 +4,8 @@ import helpers.*;
 import view.View;
 
 import java.awt.*;
-import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 
 /**
@@ -133,35 +133,31 @@ public class Board implements Model {
     /**
      * Adds a game piece to the board at the given point.
      *
-     * @param location The location on the board to add to
      * @param piece    The piece to add
      * @throws IllegalArgumentException If trying to add a new piece to a location with an existing piece
      */
 
-    public void addPiece(Point location, Piece piece) {
-        checkValidLocation(location);
-        // Once a piece has been placed, it is considered an error to try to replace it with something else.
-        if (pieces.containsKey(location)) {
-            String errorMessage = "Trying to overwrite a piece at: " + location;
-            errorMessage += "Original piece: " + pieces.get(location);
-            errorMessage += "Attempting to replace with: " + piece;
-            throw new IllegalArgumentException(errorMessage);
-        }
+    public void addPiece(Piece piece) {
+        for (Point point : piece.boardSpotsUsed()) {
+            checkValidLocation(point);
+            // Once a piece has been placed, it is considered an error to try to replace it with something else.
+            if (pieces.containsKey(point)) {
+                String errorMessage = "Trying to overwrite a piece at: " + point;
+                errorMessage += "Original piece: " + pieces.get(point);
+                errorMessage += "Attempting to replace with: " + piece;
+                throw new IllegalArgumentException(errorMessage);
+            }
         /*
             If the piece being added is a fox, then it takes up two points. Both points must refer to the same
             object. Hence there is a need to loop over all of the board spots of the piece to ensure that all of
             the piece locations refer to the same object.
          */
-        for (Point occupiedPoint : piece.boardSpotsUsed()) {
-            if (pieces.containsKey(occupiedPoint)) {
-                throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
-            }
             if (piece instanceof Fox) {
-                if (terrain.containsKey(occupiedPoint)) {
+                if (terrain.containsKey(point)) {
                     throw new IllegalArgumentException("Attempting to add fox to an invalid location!");
                 }
             }
-            pieces.put(occupiedPoint, piece);
+            pieces.put(point, piece);
         }
     }
 
@@ -332,7 +328,7 @@ public class Board implements Model {
      */
     @Override
     public int hashCode() {
-        return Arrays.hashCode(new int[]{terrain.hashCode(), pieces.hashCode()});
+        return terrain.hashCode() ^ (new HashSet<>(pieces.values())).hashCode();
     }
 
     /**

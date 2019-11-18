@@ -106,7 +106,7 @@ public class Rabbit implements Piece {
 
     @Override
     public int hashCode() {
-        return boardSpot.hashCode();
+        return boardSpot.hashCode() ^ toString().hashCode();
     }
 
     /**

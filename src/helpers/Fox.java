@@ -105,7 +105,7 @@ public class Fox implements Piece {
 
     @Override
     public int hashCode() {
-        return occupiedBoardSpots.hashCode();
+        return occupiedBoardSpots.hashCode() ^ toString().hashCode();
     }
 
     /**

@@ -85,7 +85,7 @@ class FoxTest {
         board.addSquare(new Point(0, 0), new Square(false));
         board.addSquare(new Point(4, 0), new Square(false));
 
-        board.addPiece(new Point(2, 0), fox);
+        board.addPiece(fox);
 
         assertEquals(1, fox.getMoves(board, new Point(2, 0)).size());
         assertEquals(new Move(new Point(2, 0), new Point(3, 0)), fox.getMoves(board, new Point(2, 0)).get(0));
@@ -97,7 +97,7 @@ class FoxTest {
 
         Fox fox = new Fox(Direction.Y_AXIS, new Point(0, 2));
 
-        board.addPiece(new Point(0, 2), fox);
+        board.addPiece(fox);
 
         Set<Move> possibleMoves = Set.of(
                 new Move(new Point(0, 2), new Point(0, 3)),
