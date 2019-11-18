@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import static helpers.GameBuilder.getStartingBoard;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class GraphTest {
+class GraphTest {
 
     @Test
     void testLevelOneSolution() throws InterruptedException {

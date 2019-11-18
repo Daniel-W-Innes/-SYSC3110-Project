@@ -1,9 +1,6 @@
 package helpers;
 
-import model.Board;
 import org.junit.jupiter.api.Test;
-
-import static org.junit.jupiter.api.Assertions.*;
 
 class GameBuilderTest {
 

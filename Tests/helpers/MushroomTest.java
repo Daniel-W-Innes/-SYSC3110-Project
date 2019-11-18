@@ -9,7 +9,7 @@ import java.awt.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class MushroomTest {
-    Mushroom mushroom = null;
+    private Mushroom mushroom;
 
     @BeforeEach
     void setUp() {

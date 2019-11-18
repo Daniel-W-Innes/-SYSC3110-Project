@@ -24,6 +24,7 @@ public class Graph {
 
     public Graph(Board startingBoard) {
         isReady = false;
+        solution = new Stack<>();
         // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
         // being generated while the solution is being created.
         new Thread(() -> {
@@ -90,8 +91,6 @@ public class Graph {
 
             // Convert the solution to a collection that allows for easy access. Since the last tree points to the
             // last hint to obtain a victory board, the best data structure is a stack for its LIFO property
-
-            solution = new Stack<>();
             TreeNode<Board> currentNode = traversalPath.solution;
 
             while (currentNode != null) {

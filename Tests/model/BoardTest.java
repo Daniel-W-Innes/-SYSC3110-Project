@@ -48,7 +48,7 @@ class BoardTest {
         assertEquals(sameBoard.hashCode(), board.hashCode());
 
         // Note: This MAY fail. It is unknown why. However, where this hashcode is used, in
-        // the contains function in the hash set, equal hashcodes will default to the .equals()
+        // the contains function in the hash set, equal hashCodes will default to the .equals()
         // method that is know to work.
         assertNotEquals(differentBoard.hashCode(), board.hashCode());
     }

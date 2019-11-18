@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GameTest {
-    Game game = null;
+    private Game game;
 
     // Note:  Window will briefly appear as a new GUI is temporarily created in each of the tests
 
@@ -32,7 +32,7 @@ class GameTest {
     @Test
     void movePiece() {
         game.setUp(new Gui(game), 1);
-        List<Move> possibleMoves =  game.getMoves(new Point(2, 3));
+        List<Move> possibleMoves;
         game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
         assertTrue(game.getMoves(new Point(2, 3)).isEmpty());
