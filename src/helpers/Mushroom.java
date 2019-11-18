@@ -31,10 +31,23 @@ public class Mushroom implements Piece {
         this.boardSpot = boardSpot;
     }
 
+    /**
+     * Returns the String representation of the mushroom.
+     *
+     * @return String showing a textual representation of the mushroom
+     */
+
     @Override
     public String toString() {
         return "M";
     }
+
+    /**
+     * Determines if two mushroom objects are either the same object or are logically equivalent.
+     *
+     * @param obj the object to compare
+     * @return true if the two are the same
+     */
 
     @Override
     public boolean equals(Object obj) {
@@ -48,10 +61,22 @@ public class Mushroom implements Piece {
         return boardSpot.equals(mushroom.boardSpot);
     }
 
+    /**
+     * The hash code for the mushroom object.
+     *
+     * @return the hashcode for this mushroom object.
+     */
+
     @Override
     public int hashCode() {
         return boardSpot.hashCode();
     }
+
+    /**
+     * Get a new equivalent copy of this mushroom. The new object is a separate object.
+     *
+     * @return a copy of this mushroom object
+     */
 
     public Piece clonePiece() {
         return new Mushroom(boardSpot);

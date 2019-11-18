@@ -7,14 +7,25 @@ import java.util.Queue;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
+/**
+ * Class that generates a solution for a given board.
+ */
+
 public class Graph {
 
-    private ArrayList<Move> solution;
-    private int solutionIndex;
+    private Stack<Move> solution;
     private boolean isReady;
+
+    /**
+     * Constructor that takes in a board and creates a solution from that board.
+     *
+     * @param startingBoard the board that needs a solution to be created
+     */
 
     public Graph(Board startingBoard) {
         isReady = false;
+        // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
+        // being generated while the solution is being created.
         new Thread(() -> {
             //Keep track of which nodes we visited
             Set<Board> visited = new HashSet<>();
@@ -35,8 +46,8 @@ public class Graph {
                     if (currNode.contents.isVictory()) {
                         traversalPath.solution = currNode;
                         break outer;
-                        //return new Level(ImmutableNetwork.copyOf(mutableNetwork), this.start);
                     }
+
                     //Stop traversing if you've already seen this node
                     if (visited.contains(currNode.contents)) {
                         continue;
@@ -52,8 +63,12 @@ public class Graph {
                             //For every move that the piece has
                             for (Move move : piece.getMoves(currNode.contents, point)) {
 
+                                // Apply the move to a fresh copy of the current board to get a board representing the state
+                                // of the game after the move has been applied
                                 Board end = new Board(currNode.contents);
 
+                                // The piece being passed in has to be cloned so that the updating of the position of the piece
+                                // within the movePiece function does not affect the location of the equivalent piece in the current board
                                 end.movePiece(piece.clonePiece(), move.getEndPoint(), false);
 
                                 //Make a new node
@@ -73,7 +88,10 @@ public class Graph {
                 nextQueue = new ConcurrentLinkedQueue<>();
             }
 
-            solution = new ArrayList<>();
+            // Convert the solution to a collection that allows for easy access. Since the last tree points to the
+            // last hint to obtain a victory board, the best data structure is a stack for its LIFO property
+
+            solution = new Stack<>();
             TreeNode<Board> currentNode = traversalPath.solution;
 
             while (currentNode != null) {
@@ -81,22 +99,22 @@ public class Graph {
                 currentNode = currentNode.parent;
             }
 
-            solutionIndex = solution.size() - 2;
+            // For some reason the last hint move is null; it is removed to prevent a null move being attempted to be used
+            solution.pop();
+
             isReady = true;
         }).start();
     }
 
     public Optional<Move> getHintMove() {
-        return solutionIndex == -1 || !isReady ? Optional.empty() : Optional.of(solution.get(solutionIndex));
+        return solution.empty() || !isReady ? Optional.empty() : Optional.of(solution.peek());
     }
 
     public void advanceSolutionIndex() {
-        if (solutionIndex != 0 && isReady) {
-            solutionIndex -= 1;
-        }
+        solution.pop();
     }
 
-    //Tree that represents the BFS traversal of the graph.
+    // Tree that represents the BFS traversal of the graph.
     static class Tree<E> {
         final TreeNode<E> root;
         TreeNode<E> solution;
@@ -106,6 +124,7 @@ public class Graph {
         }
     }
 
+    // Class that represent a node in the graph
     static class TreeNode<E> {
         final E contents;
         Move move; //The move done for the parent to become this node

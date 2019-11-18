@@ -11,7 +11,7 @@ import java.awt.event.ActionListener;
 import java.util.Optional;
 
 /**
- * Gui
+ * GUI for the game.
  */
 public class Gui extends JFrame implements View {
     private static final int WIDTH = 900;
@@ -51,11 +51,16 @@ public class Gui extends JFrame implements View {
 
         toolbar.add(Box.createHorizontalGlue());
         addToolbarButton("Hint", e -> {
-            Optional<Move> hint = game.hint();
-            if (hint.isPresent()) {
-                boardPanel.showHint(hint.get());
+
+            if (game.gameWon()) {
+                JOptionPane.showMessageDialog(this, "The game is already won.");
             } else {
-                JOptionPane.showMessageDialog(this, "Hint is still loading try again later");
+                Optional<Move> hint = game.hint();
+                if (hint.isPresent()) {
+                    boardPanel.showHint(hint.get());
+                } else {
+                    JOptionPane.showMessageDialog(this, "Hint is still loading try again later");
+                }
             }
         });
         addToolbarButton("Undo", e -> game.undo());

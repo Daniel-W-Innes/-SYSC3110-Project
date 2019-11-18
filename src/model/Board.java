@@ -16,6 +16,7 @@ public class Board implements Model {
 
     public static final Point maxBoardLength = new Point(5, 5);
     private final Map<Point, Piece> pieces;
+
     /**
      * The Board map containing all squares.
      */
@@ -27,9 +28,22 @@ public class Board implements Model {
         pieces = new HashMap<>();
     }
 
+    /**
+     * Copy constructor. Creates an identical copy of the board passed in.
+     *
+     * @param board the board that should be copied.
+     */
+
     public Board(Board board) {
+        // The terrain never changes so it never needs to be copied. Same for the viewer.
+        // If a copy of a board does not need to update the GUI, then when calling movePiece() on the game,
+        // it can specify to not change the GUI
+
         terrain = board.terrain;
         view = board.view;
+
+        // A separate copy of the pieces are needed as otherwise, a copy of a piece in one board
+        // would affect the pieces in all of the other boards
         pieces = new HashMap<>();
 
         for (Map.Entry<Point, Piece> piece : board.pieces.entrySet()) {
@@ -76,6 +90,13 @@ public class Board implements Model {
         terrain.put(location, square);
     }
 
+    /**
+     * Determines if there is a piece at the given location.
+     *
+     * @param location the point to check for a piece
+     * @return true if there is a piece at that location
+     */
+
     public boolean hasPiece(Point location) {
         return pieces.containsKey(location);
     }
@@ -89,6 +110,12 @@ public class Board implements Model {
     public boolean hasSquare(Point location) {
         return terrain.containsKey(location);
     }
+
+    /**
+     * Get all of the pieces on this board.
+     *
+     * @return A map of pieces on this board, with their respective locations
+     */
 
     public Map<Point, Piece> getPieces() {
         return pieces;

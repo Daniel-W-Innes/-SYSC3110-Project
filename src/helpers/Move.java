@@ -91,6 +91,12 @@ public class Move {
         return "{" + start.x + ", " + start.y + "} -> {" + end.x + ", " + end.y + "}";
     }
 
+    /**
+     * Get the reverse of this move.
+     *
+     * @return a move object that is the reverse of this move(start and end points are swapped)
+     */
+
     public Move getReverse() {
         return new Move(new Point(end), new Point(start));
     }

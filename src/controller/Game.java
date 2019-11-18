@@ -49,24 +49,47 @@ public class Game {
         setLevel(observer, levelNumber);
     }
 
-    public void movePiece(Move move) {
-        movePiece(move, true);
+    /**
+     * Moves the point at the start point of move to the end point of move.
+     *
+     * @param move             the move representing the change being applied to the board
+     * @param applyChangesView whether a move should be reflected on-screen. When dealing with the GUI it is true;
+     *                         for internal logic such as a graph solution or tests it is false
+     */
+
+    public void movePiece(Move move, boolean applyChangesView) {
+        movePiece(move, true, applyChangesView);
+        // After a user has moved, the redo history is invalidated
         redoHistory.clear();
     }
 
-    private void movePiece(Move move, boolean addToUndoHistory) {
+    /**
+     * Helper function to process the move request.
+     *
+     * @param move             the move representing the change being applied to the board
+     * @param addToUndoHistory whether to store an equivalent undo command for the move
+     * @param applyChangesView whether a move should be reflected on-screen. When dealing with the GUI it is true;
+     */
+
+    /*
+        There are two cases to consider with the hint and undo buttons:
+        1. The user moves with the correct move. In that case, regardless if a hint was requested, the graph can continue using
+           then next hint move.
+
+        2. The user moves incorrectly, or applies a move that is not the same as the next hint, such as if the undo button is pressed.
+           In that case, regardless if a hint was requested, the solution is regenerated.  The history of moves
+           is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
+     */
+    private void movePiece(Move move, boolean addToUndoHistory, boolean applyChangesView) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
+        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), applyChangesView);
 
         // Must be called before the advance solution index!
         Optional<Move> hintMove = graph.getHintMove();
 
         // The solution has to remain synchronized by pointing to the next hint. Note that this is redundant if an incorrect move is made. See below hintMove.equals() check.
         // The user has moved away from the correct solution; therefore the current solution is invalid and has to be redone.
-        // This is deferred until the user presses "Hint" again, as otherwise this would cause a pause every time the user tries to solve the game differently than
-        // the calculated solution.
-        // TODO: Note that an optimization could be done where the user's moves are backtracked until a board a part of the original solution is achieved.
         if (hintMove.isEmpty() || !hintMove.get().equals(move)) {
             graph = new Graph(board);
         } else {
@@ -77,6 +100,14 @@ public class Game {
             undoHistory.push(move);
         }
     }
+
+    /**
+     * Get the list of possible moves for the given point, which will be non-empty if there is a moveable piece
+     * at that point.
+     *
+     * @param point the point that was clicked on the GUI
+     * @return a list of possible moves
+     */
 
     public List<Move> getMoves(Point point) {
         if (board.hasPiece(point)) {
@@ -114,29 +145,43 @@ public class Game {
         setLevel(observer, levelNumber);
     }
 
-        /*
-        There are two cases to consider with the hint and undo buttons:
-        1. The user moves with the correct move. In that case, regardless if a hint was requested, the graph can continue using
-           then next hint move, or the back track move. An undo will have to be synchronized with the solution.
-        2. The user moves incorrectly. In that case, regardless if a hint was requested, the solution is regenerated.  The history of moves
-           is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
+    /**
+     * Gets the hint for the next move that has to be applied to get closer to the winning board.
+     *
+     * @return If there is a hint for the next move (solution has been generated and current board is not winning), then return that move.
      */
 
     public Optional<Move> hint() {
         return graph.getHintMove();
     }
 
+    /**
+     *  Redo an undo that was previously made.
+     */
+
     public void redo() {
         if (!redoHistory.empty()) {
-            movePiece(redoHistory.pop().getReverse(), true);
+            movePiece(redoHistory.pop().getReverse(), true, true);
         }
     }
 
+    /**
+     *  Undo a move that was previously made.
+     */
     public void undo() {
         if (!undoHistory.empty()) {
             Move move = undoHistory.pop().getReverse();
-            movePiece(move, false);
+            movePiece(move, false, true);
             redoHistory.push(move);
         }
+    }
+
+    /**
+     * Returns whether the current board is the victory board.
+     *
+     * @return true if the current board is a victory board.
+     */
+    public boolean gameWon() {
+        return board.isVictory();
     }
 }

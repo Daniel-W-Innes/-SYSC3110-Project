@@ -1,18 +1,17 @@
 package controller;
 
 import helpers.Move;
-import model.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Gui;
 
-import java.awt.Point;
-import java.util.ArrayList;
+import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 class GameTest {
     Game game = null;
@@ -34,7 +33,7 @@ class GameTest {
     void movePiece() {
         game.setUp(new Gui(game), 1);
         List<Move> possibleMoves =  game.getMoves(new Point(2, 3));
-        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)));
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
         assertTrue(game.getMoves(new Point(2, 3)).isEmpty());
 
@@ -64,6 +63,34 @@ class GameTest {
         testFirstLevelCreation();
     }
 
+    /*
+        For the undo / redo tests, since the board is private and so whether or not a piece is at a location cannot
+        be tested against directly, the moves are done knowing the state of the board and where they should be.
+
+        If either undo or redo fails, then there won't be a piece at the hard-coded locations, and an exception will be
+        thrown, indicating a failure.
+     */
+
+    @Test
+    void testUndo() {
+        game.setUp(new Gui(game), 1);
+        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+
+        game.undo();
+
+        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+    }
+
+    @Test
+    void testRedo() {
+        game.setUp(new Gui(game), 1);
+        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+
+        game.undo();
+        game.redo();
+
+        game.movePiece(new Move(new Point(3, 0), new Point(0, 0)), false);
+    }
 
     void testFirstLevelCreation() {
         // Test possible moves for the only rabbit

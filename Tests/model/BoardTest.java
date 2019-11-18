@@ -47,7 +47,10 @@ class BoardTest {
 
         assertEquals(sameBoard.hashCode(), board.hashCode());
 
-        assertNotEquals(differentBoard.hashCode(), sameBoard.hashCode());
+        // Note: This MAY fail. It is unknown why. However, where this hashcode is used, in
+        // the contains function in the hash set, equal hashcodes will default to the .equals()
+        // method that is know to work.
+        assertNotEquals(differentBoard.hashCode(), board.hashCode());
     }
 
     @Test
@@ -98,7 +101,7 @@ class BoardTest {
     }
 
     @Test
-    void isVictory() {
+    void testIsVictory() {
         board.addPiece(new Point(0, 0), new Rabbit(new Point(0, 0)));
         board.addPiece(new Point(1, 1), new Rabbit(new Point(1, 1)));
         board.addPiece(new Point(2, 2), new Mushroom(new Point( 3, 4)));
@@ -107,6 +110,7 @@ class BoardTest {
         board.addSquare(new Point(1, 1), new Square(true));
         board.addSquare(new Point(2, 3), new Square(false));
 
+        assertTrue(board.isVictory());
     }
 
 }

@@ -112,7 +112,13 @@ class Tile extends JButton {
         }
     }
 
-    void setHintPiece(boolean showHintPiece) {
+    /**
+     * Sets the tile as part of the hit as highlighted.
+     *
+     * @param showHintPiece whether or not to highlight a square that is a part of the hint given
+     */
+
+    void setHintPieceHighlighted(boolean showHintPiece) {
         this.isHintPiece = showHintPiece;
         updateBorder();
     }

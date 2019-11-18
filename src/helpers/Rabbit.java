@@ -67,10 +67,23 @@ public class Rabbit implements Piece {
         return possibleMoves;
     }
 
+    /**
+     * Returns the String representation of the rabbit.
+     *
+     * @return String showing a textual representation of the rabbit
+     */
+
     @Override
     public String toString() {
         return "R";
     }
+
+    /**
+     * Determines if two rabbit objects are either the same object or are logically equivalent.
+     *
+     * @param obj the object to compare
+     * @return true if the two are the same
+     */
 
 
     @Override
@@ -85,11 +98,22 @@ public class Rabbit implements Piece {
         return boardSpot.equals(rabbit.boardSpot);
     }
 
+    /**
+     * The hash code for the rabbit object.
+     *
+     * @return the hashcode for this rabbit object.
+     */
 
     @Override
     public int hashCode() {
         return boardSpot.hashCode();
     }
+
+    /**
+     * Get a new equivalent copy of this rabbit. The new object is a separate object.
+     *
+     * @return a copy of this rabbit object
+     */
 
     @Override
     public Piece clonePiece() {

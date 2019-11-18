@@ -67,11 +67,23 @@ public class Fox implements Piece {
         occupiedBoardSpots = Set.of(headLocation, tailLocation);
     }
 
+    /**
+     * Returns the String representation of the fox.
+     *
+     * @return String showing a textual representation of the fox
+     */
+
     @Override
     public String toString() {
         return "F";
     }
 
+    /**
+     * Determines if two fox objects are either the same object or are logically equivalent.
+     *
+     * @param obj the object to compare
+     * @return true if the two are the same
+     */
 
     @Override
     public boolean equals(Object obj) {
@@ -85,10 +97,22 @@ public class Fox implements Piece {
         return direction.equals(fox.direction) && headLocation.equals(fox.headLocation);
     }
 
+    /**
+     * The hash code for the fox object.
+     *
+     * @return the hashcode for this fox object.
+     */
+
     @Override
     public int hashCode() {
         return occupiedBoardSpots.hashCode();
     }
+
+    /**
+     * Get a new equivalent copy of this fox. The new object is a separate object.
+     *
+     * @return a copy of this fox object
+     */
 
     @Override
     public Piece clonePiece() {

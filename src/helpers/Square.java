@@ -3,7 +3,6 @@ package helpers;
 /**
  * The Square class represents one square in the Board.
  *
- * @author frank liu
  */
 public class Square {
     /**
@@ -59,7 +58,7 @@ public class Square {
     }
 
     /**
-     * Get the hashcode for the square. This hashcode is generated with stringBuilders when the move is initialized. The hashcode is regenerated when {@code setPiece} or {@code removePiece} is called.
+     * Get the hashcode for the square.
      *
      * @return The hashcode
      */

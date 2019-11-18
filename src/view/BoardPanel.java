@@ -16,6 +16,9 @@ import java.util.Map;
 
 import static model.Board.maxBoardLength;
 
+/**
+ * The panel that holds all of the tiles for the game.
+ */
 class BoardPanel extends JPanel implements ActionListener {
     private final Map<Point, Tile> boardMap = new HashMap<>();
     private final Game game;
@@ -31,7 +34,7 @@ class BoardPanel extends JPanel implements ActionListener {
     BoardPanel(Game game) {
         this.game = game;
         setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
-        //Add the BoardTiles to the board
+        // Add the BoardTiles to the board
         for (int y = 0; y < maxBoardLength.y; y++) {
             for (int x = 0; x < maxBoardLength.y; x++) {
                 Point p = new Point(x, y);
@@ -89,7 +92,7 @@ class BoardPanel extends JPanel implements ActionListener {
         Point point = ((Tile) e.getSource()).getPoint();
 
         for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
-            tile.getValue().setHintPiece(false);
+            tile.getValue().setHintPieceHighlighted(false);
             tile.getValue().setHighlighted(false);
         }
 
@@ -112,7 +115,7 @@ class BoardPanel extends JPanel implements ActionListener {
             //Valid move
             if (availableMoves.contains(attemptedMove)) {
                 //Delegate to controller
-                game.movePiece(attemptedMove);
+                game.movePiece(attemptedMove, true);
                 clickedSquare = null;
                 //Remove highlighting
                 availableMoves.forEach(move -> boardMap.get(move.getEndPoint()).setHighlighted(false));
@@ -135,16 +138,25 @@ class BoardPanel extends JPanel implements ActionListener {
         clickedSquare = null;
     }
 
+    /**
+     * Visually show the hint to the user without applying it first
+     *
+     * @param move the move representation of the hint
+     */
+
     void showHint(Move move) {
 
+        // Remove highlighting for all squares as the hint is showed with highlights; not removing
+        // the highlight could make it confusing about what the hint actually is
         for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
-            tile.getValue().setHintPiece(false);
+            tile.getValue().setHintPieceHighlighted(false);
             tile.getValue().setHighlighted(false);
         }
 
-        boardMap.get(move.getStartPoint()).setHintPiece(true);
+        boardMap.get(move.getStartPoint()).setHintPieceHighlighted(true);
         boardMap.get(move.getEndPoint()).setHighlighted(true);
 
+        // Make it so that after pressing the hint, the user needs to click the a piece to move it
         clickedSquare = null;
     }
 }
