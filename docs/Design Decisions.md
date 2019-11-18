@@ -22,6 +22,9 @@ Design Decisions with Rationale
 
 More information can be found in the following document.
 
+## Primary Differences With Regards to Milestone 2
+
+* Added a graph-based solution that gives hint to the user when requested, as well as undo/redo functionality.
 
 ## Introduction
 The design of the program revolves around the MVC pattern. The MVC design used resembles an archery target, in the following sense.
@@ -63,9 +66,9 @@ This model is directly observed by the GUI. This allows the model to tell the GU
 
 Game:
 
-The Game class is the interface connecting the GUI to the Board class. It takes in the result of user input and calls the correct game logic to advance the game. The two primary operations are to query the possible moves for the piece clicked and telling the view of that, and forwarding a move to the board once a user has specifed a location to move a piece to. This stops the view from having to talk directly to the model.
+The Game class is the interface connecting the GUI to the Board class. It takes in the result of user input and calls the correct game logic to advance the game. The primary operations are to query the possible moves for the piece clicked and telling the view of that, and forwarding a move to the board once a user has specifed a location to move a piece to. This stops the view from having to talk directly to the model. Another operation is to handle requests about hints, undo and redo operations.
 
-There is additional functionality not yet implemented, but will be in future milestones: move, undo, serialize, and possibly others. 
+There is additional functionality not yet implemented, but will be in future milestones: serialize, and possibly others. 
 
 **_View(s)_**
 
@@ -93,7 +96,7 @@ The Move class is immutable because it is believed that there is no reason more 
 
 Square:
 
-The Square class contains variables regarding the state of a single board square. These variables include whether it is a hole or is raised, or just a flat square.
+The Square class contains variables regarding the state of a single board square. These variables include whether it is a hole.
 
 The terrain variables and other member functions are immutable. Having immutability, it eases the complexity of reasoning about the state of the program, and logically terrain squares is constant for the duration of the game.
 
@@ -105,8 +108,11 @@ Additionally, each piece stores the location of themselves on the board. This is
 
 Foxes are a special case. Since they are made up of two pieces, all of its moves are done relative to its head. By doing so, it removes any ambiguity around where the fox is being moved- the user clicks a square where to move the head only.   
 
-GameBuilder
+GameBuilder:
 
 The GameBuilder separates the logic of creating a game with the game controller. It creates a distinction between initializing the game and processing it. The only functionality provided to it is to initialize a board- nothing else. By doing so, it is quick to find where to add additional code to in order to add more levels.
 
+Graph:
+
+The graph creates a solution to the current state of the game, which is dependent on the board passed into the constructor of the graph. The solution is generated as a graph as it allows for a path to a solution to be found. This solution is stored as a stack as the user only needs the next hint, not an arbitrary hint.
 
