@@ -25,6 +25,10 @@ There are three steps to playing the game:
 	* Click a valid location to move the piece to that location 
 	* To exit the game, close the game window
 	* To reset the game, press the "Reset" button
+	* To get a hint, press the "Hint" button. The piece that the hint is being applied to is highlighted in red, and the point it should move to is highlighted in yellow. The piece that the hint refers to still needs to be clicked after receiving the hint to move it
+	* To undo a move, press the "Undo" button
+	* To redo a move, press the "Redo" button
+	* To change the level, press the "Change Level" button and enter a number level
 	* Keep entering moves until you win the game, or get bored
 	
 	
