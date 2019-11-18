@@ -35,8 +35,8 @@ class BoardPanel extends JPanel implements ActionListener {
         this.game = game;
         setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
         // Add the BoardTiles to the board
-        for (int y = 0; y < maxBoardLength.y; y++) {
-            for (int x = 0; x < maxBoardLength.y; x++) {
+        for (int x = 0; x < maxBoardLength.x; x++) {
+            for (int y = 0; y < maxBoardLength.y; y++) {
                 Point p = new Point(x, y);
                 Tile tile = new Tile(p);
                 tile.addActionListener(this);

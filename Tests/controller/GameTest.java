@@ -72,24 +72,36 @@ class GameTest {
      */
 
     @Test
-    void testUndo() {
+    void testUndo() throws InterruptedException {
         game.setUp(new Gui(game), 1);
-        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+
+        // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
+        Thread.sleep(200);
+
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
         game.undo();
 
-        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
     }
 
     @Test
-    void testRedo() {
+    void testRedo() throws InterruptedException {
         game.setUp(new Gui(game), 1);
-        game.movePiece(new Move(new Point(2, 3), new Point(3, 0)), false);
+
+        // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
+        Thread.sleep(1000);
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
         game.undo();
+
+        // Make sure a solution is generated before making a redo, as the undo forces a new solution to be created
+        // as it moves a piece not part of the solution
+        Thread.sleep(1000);
+
         game.redo();
 
-        game.movePiece(new Move(new Point(3, 0), new Point(0, 0)), false);
+        game.movePiece(new Move(new Point(0, 3), new Point(0, 0)), false);
     }
 
     void testFirstLevelCreation() {
