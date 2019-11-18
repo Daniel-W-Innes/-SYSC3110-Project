@@ -47,7 +47,14 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Load Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
         addToolbarButton("Save Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
 
-        addToolbarButton("Change Level", e -> game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number"))));
+        addToolbarButton("Change Level", e ->
+        {
+            try {
+                game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number")));
+            } catch (NumberFormatException exception) {
+                JOptionPane.showMessageDialog(this, "You must enter a valid number.");
+            }
+        });
 
         toolbar.add(Box.createHorizontalGlue());
         addToolbarButton("Hint", e -> {
