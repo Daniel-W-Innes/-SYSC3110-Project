@@ -68,6 +68,20 @@ public class Fox implements Piece {
     }
 
     /**
+     * Constructor that initializes the Fox to a copy of a fox.
+     *
+     * @param fox The fox to copy
+     */
+    public Fox(Fox fox) {
+        direction = fox.direction;
+        headLocation = fox.headLocation;
+        headIcon = fox.headIcon;
+        tailLocation = fox.tailLocation;
+        tailIcon = fox.tailIcon;
+        occupiedBoardSpots = Set.copyOf(fox.occupiedBoardSpots);
+    }
+
+    /**
      * Returns the String representation of the fox.
      *
      * @return String showing a textual representation of the fox
@@ -116,7 +130,7 @@ public class Fox implements Piece {
 
     @Override
     public Piece clonePiece() {
-        return new Fox(direction, new Point(headLocation));
+        return new Fox(this);
     }
 
     /**

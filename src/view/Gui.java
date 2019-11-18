@@ -51,7 +51,6 @@ public class Gui extends JFrame implements View {
 
         toolbar.add(Box.createHorizontalGlue());
         addToolbarButton("Hint", e -> {
-
             if (game.gameWon()) {
                 JOptionPane.showMessageDialog(this, "The game is already won.");
             } else {
