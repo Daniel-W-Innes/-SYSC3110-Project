@@ -102,7 +102,7 @@ public class Game {
     }
 
     /**
-     * Get the list of possible moves for the given point, which will be non-empty if there is a moveable piece
+     * Get the list of possible moves for the given point, which will be non-empty if there is a movable piece
      * at that point.
      *
      * @param point the point that was clicked on the GUI
