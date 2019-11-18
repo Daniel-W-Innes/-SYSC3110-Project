@@ -17,10 +17,10 @@ import static controller.Game.resourcesFolder;
 
 public class Fox implements Piece {
 
-    static final String horizontalHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_down.jpg";
-    static final String horizontalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_up.jpg";
-    static final String vertexHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_right.jpg";
-    static final String verticalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_left.jpg";
+    static final String horizontalHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_down.png";
+    static final String horizontalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_up.png";
+    static final String vertexHeadImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_right.png";
+    static final String verticalTailImageLocation = resourcesFolder + File.separator + "pieces" + File.separator + "fox" + File.separator + "Fox_left.png";
 
     private final ImageIcon headIcon;
     private final ImageIcon tailIcon;
