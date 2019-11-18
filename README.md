@@ -35,7 +35,7 @@ There are four phases of this program:
 
 More details can be found at appropriate document on cuLearn.
 
-Currently, phase two has been implemented.
+Currently, phase three has been implemented.
 
 ## Program Requirements
 
