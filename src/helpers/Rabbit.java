@@ -5,9 +5,8 @@ import protos.RabbitOuterClass;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static controller.Game.resourcesFolder;
 
@@ -31,7 +30,7 @@ public class Rabbit implements Piece {
         this.boardSpot = boardSpot;
     }
 
-    public Rabbit(RabbitOuterClass.Rabbit rabbit) {
+    private Rabbit(RabbitOuterClass.Rabbit rabbit) {
         boardSpot = new Point(rabbit.getBoardSpot());
     }
 
@@ -68,6 +67,11 @@ public class Rabbit implements Piece {
             return possibleMoves;
         }
         return possibleMoves;
+    }
+
+    public static Map<Point, Rabbit> fromListOfProtos(Collection<RabbitOuterClass.Rabbit> mushrooms) {
+        return mushrooms.stream()
+                .collect(Collectors.toMap(rabbit -> new Point(rabbit.getBoardSpot()), Rabbit::new));
     }
 
     public RabbitOuterClass.Rabbit toProto() {

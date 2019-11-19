@@ -5,9 +5,8 @@ import protos.MushroomOuterClass;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static controller.Game.resourcesFolder;
 
@@ -31,8 +30,13 @@ public class Mushroom implements Piece {
         this.boardSpot = boardSpot;
     }
 
-    public Mushroom(MushroomOuterClass.Mushroom mushroom) {
+    private Mushroom(MushroomOuterClass.Mushroom mushroom) {
         boardSpot = new Point(mushroom.getBoardSpot());
+    }
+
+    public static Map<Point, Mushroom> fromListOfProtos(Collection<MushroomOuterClass.Mushroom> mushrooms) {
+        return mushrooms.stream()
+                .collect(Collectors.toMap(mushroom -> new Point(mushroom.getBoardSpot()), Mushroom::new));
     }
 
     public MushroomOuterClass.Mushroom toProto() {

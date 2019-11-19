@@ -2,6 +2,10 @@ package helpers;
 
 import protos.SquareOuterClass;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 /**
  * The Square class represents one square in the Board.
  *
@@ -26,7 +30,7 @@ public class Square {
         hashCode = Boolean.hashCode(isHole);
     }
 
-    public Square(SquareOuterClass.Square square) {
+    private Square(SquareOuterClass.Square square) {
         isHole = square.getIsHole();
         hashCode = Boolean.hashCode(isHole);
     }
@@ -59,6 +63,10 @@ public class Square {
         return isHole == square.isHole;
     }
 
+    public static Map<Point, Square> fromListOfProtos(Collection<SquareOuterClass.Square> squares) {
+        return squares.stream()
+                .collect(Collectors.toMap(square -> new Point(square.getBoardSpot()), Square::new));
+    }
     public SquareOuterClass.Square toProto(Point point) {
         return SquareOuterClass.Square.newBuilder()
                 .setBoardSpot(point.toProto())

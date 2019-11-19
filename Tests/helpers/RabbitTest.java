@@ -27,7 +27,7 @@ class RabbitTest {
 
     @Test
     void testHash() {
-        Rabbit  similarRabbit = (Rabbit)rabbit.clonePiece();
+        Rabbit similarRabbit = (Rabbit) rabbit.clonePiece();
         Rabbit differentRabbit = new Rabbit(new Point(0, 1));
 
         assertEquals(similarRabbit.hashCode(), rabbit.hashCode());
@@ -52,7 +52,7 @@ class RabbitTest {
                 new Move(new Point(1, 2), new Point(4, 2)),
                 new Move(new Point(1, 2), new Point(1, 0)));
 
-        for(int i = 0; i < possibleMoves.size(); i++) {
+        for (int i = 0; i < possibleMoves.size(); i++) {
             assertTrue(possibleMoves.contains(rabbit.getMoves(board, new Point(1, 2)).get(i)));
         }
     }

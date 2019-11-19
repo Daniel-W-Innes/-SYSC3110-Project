@@ -18,14 +18,14 @@ class MushroomTest {
     void testClone() {
         Piece newMushroom = mushroom.clonePiece();
 
-        assertTrue(newMushroom instanceof  Mushroom);
+        assertTrue(newMushroom instanceof Mushroom);
         assertEquals(newMushroom, mushroom);
     }
 
     @Test
     void testHash() {
-        Mushroom similarMushroom = (Mushroom)mushroom.clonePiece();
-        Mushroom differentMushroom = new Mushroom( new Point(0, 1));
+        Mushroom similarMushroom = (Mushroom) mushroom.clonePiece();
+        Mushroom differentMushroom = new Mushroom(new Point(0, 1));
 
         assertEquals(similarMushroom.hashCode(), mushroom.hashCode());
         assertNotEquals(differentMushroom.hashCode(), mushroom.hashCode());

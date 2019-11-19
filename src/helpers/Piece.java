@@ -3,7 +3,6 @@ package helpers;
 import model.Board;
 
 import javax.swing.*;
-import java.awt.*;
 import java.util.List;
 import java.util.Set;
 

@@ -30,13 +30,13 @@ class FoxTest {
     void testClone() {
         Piece newFox = fox.clonePiece();
 
-        assertTrue(newFox instanceof  Fox);
+        assertTrue(newFox instanceof Fox);
         assertEquals(newFox, fox);
     }
 
     @Test
     void testHash() {
-        Fox similarFox = (Fox)fox.clonePiece();
+        Fox similarFox = (Fox) fox.clonePiece();
         Fox differentFox = new Fox(Direction.Y_AXIS, new Point(0, 1));
 
         assertEquals(similarFox.hashCode(), fox.hashCode());
@@ -105,7 +105,7 @@ class FoxTest {
 
         assertEquals(possibleMoves.size(), fox.getMoves(board, new Point(0, 2)).size());
 
-        for(int i = 0; i < possibleMoves.size(); i++) {
+        for (int i = 0; i < possibleMoves.size(); i++) {
             assertTrue(possibleMoves.contains(fox.getMoves(board, new Point(0, 2)).get(i)));
         }
     }

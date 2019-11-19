@@ -2,8 +2,6 @@ package helpers;
 
 import model.Board;
 
-import java.awt.*;
-import java.util.Queue;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
@@ -13,7 +11,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 
 public class Graph {
 
-    private Stack<Move> solution;
+    private final Stack<Move> solution;
     private boolean isReady;
 
     /**

@@ -52,7 +52,7 @@ class GameTest {
         expectedMoves.add(new Move(new Point(0, 3), new Point(0, 0)));
         expectedMoves.add(new Move(new Point(0, 3), new Point(2, 3)));
 
-        for(Move move : possibleMoves) {
+        for (Move move : possibleMoves) {
             assertTrue(expectedMoves.contains(move));
         }
     }
@@ -129,7 +129,7 @@ class GameTest {
 
     void testFirstLevelCreation() {
         // Test possible moves for the only rabbit
-        List<Move> possibleMoves =  game.getMoves(new Point(2, 3));
+        List<Move> possibleMoves = game.getMoves(new Point(2, 3));
         assertEquals(1, possibleMoves.size());
         assertEquals(new Point(0, 3), possibleMoves.get(0).getEndPoint());
 

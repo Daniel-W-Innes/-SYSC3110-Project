@@ -63,19 +63,6 @@ class Tile extends JButton {
     }
 
     /**
-     * Reset the tile to a default state.
-     */
-
-    void reset() {
-        isHole = false;
-        isRaised = false;
-        isHintPiece = false;
-        isHighlighted = false;
-        updateBorder();
-        setIcon(null);
-    }
-
-    /**
      * Set the current tile to represent a raised square.
      */
     void setRaised() {

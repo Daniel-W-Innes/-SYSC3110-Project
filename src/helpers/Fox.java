@@ -5,9 +5,9 @@ import protos.FoxOuterClass;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 import static controller.Game.resourcesFolder;
 
@@ -72,7 +72,7 @@ public class Fox implements Piece {
      *
      * @param fox The fox to copy
      */
-    public Fox(Fox fox) {
+    private Fox(Fox fox) {
         direction = fox.direction;
         headLocation = fox.headLocation;
         headIcon = fox.headIcon;
@@ -81,10 +81,16 @@ public class Fox implements Piece {
         occupiedBoardSpots = Set.copyOf(fox.occupiedBoardSpots);
     }
 
-    public Fox(FoxOuterClass.Fox fox) {
+    private Fox(FoxOuterClass.Fox fox) {
         this(new Point(fox.getHeadLocation()).x == new Point(fox.getTailLocation()).x ? Direction.Y_AXIS : Direction.X_AXIS, new Point(fox.getHeadLocation()));
     }
 
+
+    public static Map<Point, Fox> fromListOfProtos(Collection<FoxOuterClass.Fox> foxes) {
+        return foxes.stream()
+                .flatMap(fox -> Stream.of(Map.entry(fox.getHeadLocation(), fox), Map.entry(fox.getTailLocation(), fox)))
+                .collect(Collectors.toMap(entry -> new Point(entry.getKey()), entry -> new Fox(entry.getValue())));
+    }
 
     public FoxOuterClass.Fox toProto() {
         return FoxOuterClass.Fox.newBuilder()

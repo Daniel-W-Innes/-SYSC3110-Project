@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * A class representing the state of the Board.
@@ -41,13 +40,10 @@ public class Board implements Model {
     public Board(BoardOuterClass.Board board) {
         pieces = new HashMap<>();
         maxBoardSize = new Point(board.getMaxBoardSize());
-        terrain = board.getSquareList().stream()
-                .collect(Collectors.toMap(square -> new Point(square.getBoardSpot()), Square::new));
-        board.getMushroomList().forEach(mushroom -> pieces.put(new Point(mushroom.getBoardSpot()), new Mushroom(mushroom)));
-        board.getRabbitList().forEach(rabbit -> pieces.put(new Point(rabbit.getBoardSpot()), new Rabbit(rabbit)));
-        pieces.putAll(board.getFoxList().stream()
-                .flatMap(fox -> Stream.of(Map.entry(fox.getHeadLocation(), fox), Map.entry(fox.getTailLocation(), fox)))
-                .collect(Collectors.toMap(entry -> new Point(entry.getKey()), entry -> new Fox(entry.getValue()))));
+        terrain = Square.fromListOfProtos(board.getSquareList());
+        pieces.putAll(Mushroom.fromListOfProtos(board.getMushroomList()));
+        pieces.putAll(Fox.fromListOfProtos(board.getFoxList()));
+        pieces.putAll(Rabbit.fromListOfProtos(board.getRabbitList()));
     }
 
     /**
