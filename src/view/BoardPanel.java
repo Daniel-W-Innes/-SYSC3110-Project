@@ -3,6 +3,7 @@ package view;
 import controller.Game;
 import helpers.Move;
 import helpers.Piece;
+import helpers.Point;
 import model.Board;
 
 import javax.swing.*;
@@ -111,7 +112,7 @@ class BoardPanel extends JPanel implements ActionListener {
             }
         } else {
             //2nd part of the move: check validity and do move
-            Move attemptedMove = new Move(clickedSquare.getLocation(), point);
+            Move attemptedMove = new Move(clickedSquare, point);
             //Valid move
             if (availableMoves.contains(attemptedMove)) {
                 //Delegate to controller

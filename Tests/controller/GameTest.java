@@ -1,11 +1,11 @@
 package controller;
 
 import helpers.Move;
+import helpers.Point;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Gui;
 
-import java.awt.*;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;

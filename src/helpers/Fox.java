@@ -3,7 +3,6 @@ package helpers;
 import model.Board;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -205,47 +204,47 @@ public class Fox implements Piece {
          */
         switch (direction) {
             case X_AXIS -> {
-                headPointCopy.x += 1;
+                headPointCopy = headPointCopy.moveX(1);
                 while (headPointCopy.x != Board.maxBoardLength.x) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
-                    headPointCopy.x += 1;
+                    headPointCopy = headPointCopy.moveX(1);
                 }
                 headPointCopy = new Point(tailLocation);
-                headPointCopy.x -= 1;
+                headPointCopy = headPointCopy.moveX(-1);
                 while (0 <= headPointCopy.x) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     // Note the translation so that the move is relative to the head
-                    headPointCopy.x += 1;
+                    headPointCopy = headPointCopy.moveX(1);
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
                     // To continue looping starting at the next square to the left, not only does a '-1' have to be done,
                     // but so does another '-1' to account for the translation made earlier
-                    headPointCopy.x -= 2;
+                    headPointCopy = headPointCopy.moveX(-2);
                 }
             }
 // Same ideas a X_AXIS
             case Y_AXIS -> {
-                headPointCopy.y += 1;
+                headPointCopy = headPointCopy.moveY(1);
                 while (headPointCopy.y != Board.maxBoardLength.y) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
-                    headPointCopy.y += 1;
+                    headPointCopy = headPointCopy.moveY(1);
                 }
                 headPointCopy = new Point(tailLocation);
-                headPointCopy.y -= 1;
+                headPointCopy = headPointCopy.moveY(-1);
                 while (0 <= headPointCopy.y) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
-                    headPointCopy.y += 1;
+                    headPointCopy = headPointCopy.moveY(1);
                     possibleMoves.add(new Move(new Point(headLocation), new Point(headPointCopy)));
-                    headPointCopy.y -= 2;
+                    headPointCopy = headPointCopy.moveY(-2);
                 }
             }
         }

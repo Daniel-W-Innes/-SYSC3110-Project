@@ -1,5 +1,7 @@
 package view;
 
+import helpers.Point;
+
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.CompoundBorder;

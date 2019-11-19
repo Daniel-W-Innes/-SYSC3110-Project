@@ -3,7 +3,6 @@ package helpers;
 import model.Board;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,8 +49,7 @@ public class Rabbit implements Piece {
         List<Move> possibleMoves = new ArrayList<>();
         boolean objectToJump = true;
         while (objectToJump) {
-            startingPointCopy.x += direction.x;
-            startingPointCopy.y += direction.y;
+            startingPointCopy = startingPointCopy.move(direction);
             objectToJump = board.hasPiece(startingPointCopy);
         }
         // If there are no pieces in the immediate square adjacent to the rabbit in the given rabbit, there are no moves

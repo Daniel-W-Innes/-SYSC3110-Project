@@ -1,9 +1,9 @@
 package view;
 
 import helpers.Piece;
+import helpers.Point;
 import model.Board;
 
-import java.awt.*;
 
 /**
  * The interface that a view must implement.

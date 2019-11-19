@@ -5,7 +5,6 @@ import helpers.*;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 

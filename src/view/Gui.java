@@ -3,6 +3,7 @@ package view;
 import controller.Game;
 import helpers.Move;
 import helpers.Piece;
+import helpers.Point;
 import model.Board;
 
 import javax.swing.*;

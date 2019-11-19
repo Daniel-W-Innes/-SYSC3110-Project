@@ -2,11 +2,11 @@ package controller;
 
 import helpers.Graph;
 import helpers.Move;
+import helpers.Point;
 import model.Board;
 import view.Gui;
 import view.View;
 
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
