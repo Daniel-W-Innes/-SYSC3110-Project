@@ -1,5 +1,7 @@
 package helpers;
 
+import protos.SquareOuterClass;
+
 /**
  * The Square class represents one square in the Board.
  *
@@ -21,6 +23,11 @@ public class Square {
      */
     public Square(boolean isHole) {
         this.isHole = isHole;
+        hashCode = Boolean.hashCode(isHole);
+    }
+
+    public Square(SquareOuterClass.Square square) {
+        isHole = square.getIsHole();
         hashCode = Boolean.hashCode(isHole);
     }
 
@@ -50,6 +57,13 @@ public class Square {
         }
         Square square = (Square) obj;
         return isHole == square.isHole;
+    }
+
+    public SquareOuterClass.Square toProto(Point point) {
+        return SquareOuterClass.Square.newBuilder()
+                .setBoardSpot(point.toProto())
+                .setIsHole(isHole)
+                .build();
     }
 
     @Override

@@ -1,6 +1,7 @@
 package helpers;
 
 import model.Board;
+import protos.FoxOuterClass;
 
 import javax.swing.*;
 import java.io.File;
@@ -78,6 +79,18 @@ public class Fox implements Piece {
         tailLocation = fox.tailLocation;
         tailIcon = fox.tailIcon;
         occupiedBoardSpots = Set.copyOf(fox.occupiedBoardSpots);
+    }
+
+    public Fox(FoxOuterClass.Fox fox) {
+        this(new Point(fox.getHeadLocation()).x == new Point(fox.getTailLocation()).x ? Direction.Y_AXIS : Direction.X_AXIS, new Point(fox.getHeadLocation()));
+    }
+
+
+    public FoxOuterClass.Fox toProto() {
+        return FoxOuterClass.Fox.newBuilder()
+                .setHeadLocation(headLocation.toProto())
+                .setTailLocation(tailLocation.toProto())
+                .build();
     }
 
     /**

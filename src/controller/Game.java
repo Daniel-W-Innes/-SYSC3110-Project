@@ -8,6 +8,9 @@ import view.Gui;
 import view.View;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
@@ -127,6 +130,22 @@ public class Game {
     public void setLevel(View observer, int levelNumber) {
         this.levelNumber = levelNumber;
         board = getStartingBoard(levelNumber);
+        observer.sendInitialBoard(board);
+        board.setView(observer);
+
+        graph = new Graph(board);
+        undoHistory = new Stack<>();
+        redoHistory = new Stack<>();
+    }
+
+    public void save(String fileName) throws IOException {
+        FileOutputStream fos = new FileOutputStream(fileName);
+        board.toProto().writeTo(fos);
+    }
+
+    public void load(View observer, String fileName) throws IOException {
+        FileInputStream fis = new FileInputStream(fileName);
+        board = new Board(fis);
         observer.sendInitialBoard(board);
         board.setView(observer);
 

@@ -9,6 +9,7 @@ import model.Board;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.util.Optional;
 
 /**
@@ -45,8 +46,20 @@ public class Gui extends JFrame implements View {
         toolbar = new JToolBar();
 
         addToolbarButton("Reset Game", e -> game.resetLevel(this));
-        addToolbarButton("Load Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
-        addToolbarButton("Save Game", e -> JOptionPane.showMessageDialog(this, "Not Implemented"));
+        addToolbarButton("Load Game", e -> {
+            try {
+                game.load(this, JOptionPane.showInputDialog(this, "File Name"));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Failed to load");
+            }
+        });
+        addToolbarButton("Save Game", e -> {
+            try {
+                game.save(JOptionPane.showInputDialog(this, "File Name"));
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Failed to save");
+            }
+        });
 
         addToolbarButton("Change Level", e ->
         {

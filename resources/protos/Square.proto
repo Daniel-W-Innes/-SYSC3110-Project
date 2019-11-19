@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package protos;
+
+import "Point.proto";
+
+message Square {
+    Point boardSpot = 1;
+    bool isHole = 2;
+}

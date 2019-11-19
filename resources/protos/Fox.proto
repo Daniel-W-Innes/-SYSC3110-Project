@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package protos;
+
+import "Point.proto";
+
+message Fox {
+    Point headLocation = 1;
+    Point tailLocation = 2;
+}

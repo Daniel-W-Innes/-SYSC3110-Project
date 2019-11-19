@@ -1,11 +1,16 @@
 package model;
 
 import helpers.*;
+import protos.BoardOuterClass;
 import view.View;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * A class representing the state of the Board.
@@ -26,6 +31,19 @@ public class Board implements Model {
         terrain = new HashMap<>();
         pieces = new HashMap<>();
         maxBoardSize = new Point(5, 5);
+    }
+
+    public Board(FileInputStream fileInputStream) throws IOException {
+        pieces = new HashMap<>();
+        BoardOuterClass.Board proto = BoardOuterClass.Board.parseFrom(fileInputStream);
+        maxBoardSize = new Point(proto.getMaxBoardSize());
+        terrain = proto.getSquareList().stream()
+                .collect(Collectors.toMap(square -> new Point(square.getBoardSpot()), Square::new));
+        proto.getMushroomList().forEach(mushroom -> pieces.put(new Point(mushroom.getBoardSpot()), new Mushroom(mushroom)));
+        proto.getRabbitList().forEach(rabbit -> pieces.put(new Point(rabbit.getBoardSpot()), new Rabbit(rabbit)));
+        pieces.putAll(proto.getFoxList().stream()
+                .flatMap(fox -> Stream.of(Map.entry(fox.getHeadLocation(), fox), Map.entry(fox.getTailLocation(), fox)))
+                .collect(Collectors.toMap(entry -> new Point(entry.getKey()), entry -> new Fox(entry.getValue()))));
     }
 
     /**
@@ -262,6 +280,30 @@ public class Board implements Model {
         return terrain.get(loc);
     }
 
+
+    public BoardOuterClass.Board toProto() {
+        return BoardOuterClass.Board.newBuilder()
+                .setMaxBoardSize(maxBoardSize.toProto())
+                .addAllSquare(terrain.entrySet().stream()
+                        .map(entry -> entry.getValue().toProto(entry.getKey()))
+                        .collect(Collectors.toUnmodifiableSet()))
+                .addAllFox(pieces.values().stream()
+                        .filter(piece -> piece instanceof Fox)
+                        .map(piece -> (Fox) piece)
+                        .map(Fox::toProto)
+                        .collect(Collectors.toUnmodifiableSet()))
+                .addAllMushroom(pieces.values().stream()
+                        .filter(piece -> piece instanceof Mushroom)
+                        .map(piece -> (Mushroom) piece)
+                        .map(Mushroom::toProto)
+                        .collect(Collectors.toUnmodifiableSet()))
+                .addAllRabbit(pieces.values().stream()
+                        .filter(piece -> piece instanceof Rabbit)
+                        .map(piece -> (Rabbit) piece)
+                        .map(Rabbit::toProto)
+                        .collect(Collectors.toUnmodifiableSet()))
+                .build();
+    }
 
     /**
      * Get a string representation of the board. The String is formatted as squares separated by a "|".

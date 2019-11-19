@@ -1,6 +1,7 @@
 package helpers;
 
 import model.Board;
+import protos.RabbitOuterClass;
 
 import javax.swing.*;
 import java.io.File;
@@ -28,6 +29,10 @@ public class Rabbit implements Piece {
 
     public Rabbit(Point boardSpot) {
         this.boardSpot = boardSpot;
+    }
+
+    public Rabbit(RabbitOuterClass.Rabbit rabbit) {
+        boardSpot = new Point(rabbit.getBoardSpot());
     }
 
     /**
@@ -63,6 +68,12 @@ public class Rabbit implements Piece {
             return possibleMoves;
         }
         return possibleMoves;
+    }
+
+    public RabbitOuterClass.Rabbit toProto() {
+        return RabbitOuterClass.Rabbit.newBuilder()
+                .setBoardSpot(boardSpot.toProto())
+                .build();
     }
 
     /**

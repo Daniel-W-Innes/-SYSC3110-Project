@@ -1,9 +1,9 @@
 package helpers;
 
 import model.Board;
+import protos.MushroomOuterClass;
 
 import javax.swing.*;
-import java.awt.*;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -29,6 +29,16 @@ public class Mushroom implements Piece {
 
     public Mushroom(Point boardSpot) {
         this.boardSpot = boardSpot;
+    }
+
+    public Mushroom(MushroomOuterClass.Mushroom mushroom) {
+        boardSpot = new Point(mushroom.getBoardSpot());
+    }
+
+    public MushroomOuterClass.Mushroom toProto() {
+        return MushroomOuterClass.Mushroom.newBuilder()
+                .setBoardSpot(boardSpot.toProto())
+                .build();
     }
 
     /**

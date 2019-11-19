@@ -1,0 +1,17 @@
+syntax = "proto3";
+
+package protos;
+
+import "Point.proto";
+import "Fox.proto";
+import "Rabbit.proto";
+import "Mushroom.proto";
+import "Square.proto";
+
+message Board {
+    Point maxBoardSize = 1;
+    repeated Square square = 2;
+    repeated Fox fox = 3;
+    repeated Rabbit rabbit = 4;
+    repeated Mushroom mushroom = 5;
+}
