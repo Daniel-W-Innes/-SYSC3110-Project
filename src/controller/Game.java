@@ -4,6 +4,7 @@ import helpers.Graph;
 import helpers.Move;
 import helpers.Point;
 import model.Board;
+import protos.GameOuterClass;
 import view.Gui;
 import view.View;
 
@@ -24,7 +25,7 @@ import static helpers.GameBuilder.getStartingBoard;
  */
 public class Game {
     public static final String resourcesFolder = "resources" + File.separator;
-    private static final int STARTING_LEVEL_NUMBER = 20;
+    private static final String STARTING_LEVEL_NAME = "20";
     private Graph graph;
     private Stack<Move> undoHistory;
     private Stack<Move> redoHistory;
@@ -35,11 +36,11 @@ public class Game {
     /**
      * The level number of the game
      */
-    private int levelNumber;
+    private String levelName;
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         Game game = new Game();
-        game.setUp(new Gui(game), STARTING_LEVEL_NUMBER);
+        game.setUp(new Gui(game), STARTING_LEVEL_NAME);
     }
 
     /**
@@ -48,7 +49,7 @@ public class Game {
      * @param observer    A view to add to the new board
      * @param levelNumber A level number from the book. Note: not all of those are available.
      */
-    public void setUp(View observer, int levelNumber) {
+    public void setUp(View observer, String levelNumber) throws IOException {
         setLevel(observer, levelNumber);
     }
 
@@ -124,12 +125,12 @@ public class Game {
      * Set the level of game to the passed in level.
      *
      * @param observer    the view reference
-     * @param levelNumber the level to set the game to
+     * @param levelName the level to set the game to
      */
 
-    public void setLevel(View observer, int levelNumber) {
-        this.levelNumber = levelNumber;
-        board = getStartingBoard(levelNumber);
+    public void setLevel(View observer, String levelName) throws IOException {
+        this.levelName = levelName;
+        board = getStartingBoard(levelName);
         observer.sendInitialBoard(board);
         board.setView(observer);
 
@@ -139,13 +140,17 @@ public class Game {
     }
 
     public void save(String fileName) throws IOException {
-        FileOutputStream fos = new FileOutputStream(fileName);
-        board.toProto().writeTo(fos);
+        GameOuterClass.Game.newBuilder()
+                .setBoard(board.toProto())
+                .setLevelName(levelName)
+                .build()
+                .writeTo(new FileOutputStream(fileName));
     }
 
     public void load(View observer, String fileName) throws IOException {
-        FileInputStream fis = new FileInputStream(fileName);
-        board = new Board(fis);
+        GameOuterClass.Game game = GameOuterClass.Game.parseFrom(new FileInputStream(fileName));
+        board = new Board(game.getBoard());
+        levelName = game.getLevelName();
         observer.sendInitialBoard(board);
         board.setView(observer);
 
@@ -160,8 +165,8 @@ public class Game {
      * @param observer A view to add to the new board
      */
 
-    public void resetLevel(View observer) {
-        setLevel(observer, levelNumber);
+    public void resetLevel(View observer) throws IOException {
+        setLevel(observer, levelName);
     }
 
     /**

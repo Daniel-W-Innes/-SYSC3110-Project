@@ -6,12 +6,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import view.Gui;
 
+import java.io.IOException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GameTest {
     private Game game;
@@ -25,13 +25,21 @@ class GameTest {
 
     @Test
     void setUp() {
-        game.setUp(new Gui(game), 1);
+        try {
+            game.setUp(new Gui(game), "1");
+        } catch (IOException e) {
+            fail();
+        }
         testFirstLevelCreation();
     }
 
     @Test
     void movePiece() {
-        game.setUp(new Gui(game), 1);
+        try {
+            game.setUp(new Gui(game), "1");
+        } catch (IOException e) {
+            fail();
+        }
         List<Move> possibleMoves;
         game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
@@ -51,15 +59,23 @@ class GameTest {
 
     @Test
     void setLevel() {
-        game.setUp(new Gui(game), 1);
-        game.resetLevel(new Gui(game));
+        try {
+            game.setUp(new Gui(game), "1");
+            game.resetLevel(new Gui(game));
+        } catch (IOException e) {
+            fail();
+        }
         testFirstLevelCreation();
     }
 
     @Test
     void resetLevel() {
-        game.setUp(new Gui(game), 1);
-        game.resetLevel(new Gui(game));
+        try {
+            game.setUp(new Gui(game), "1");
+            game.resetLevel(new Gui(game));
+        } catch (IOException e) {
+            fail();
+        }
         testFirstLevelCreation();
     }
 
@@ -73,7 +89,11 @@ class GameTest {
 
     @Test
     void testUndo() throws InterruptedException {
-        game.setUp(new Gui(game), 1);
+        try {
+            game.setUp(new Gui(game), "1");
+        } catch (IOException e) {
+            fail();
+        }
 
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(200);
@@ -87,8 +107,11 @@ class GameTest {
 
     @Test
     void testRedo() throws InterruptedException {
-        game.setUp(new Gui(game), 1);
-
+        try {
+            game.setUp(new Gui(game), "1");
+        } catch (IOException e) {
+            fail();
+        }
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(1000);
         game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);

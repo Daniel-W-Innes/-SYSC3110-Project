@@ -45,7 +45,13 @@ public class Gui extends JFrame implements View {
     private void createToolbar() {
         toolbar = new JToolBar();
 
-        addToolbarButton("Reset Game", e -> game.resetLevel(this));
+        addToolbarButton("Reset Game", e -> {
+            try {
+                game.resetLevel(this);
+            } catch (IOException ex) {
+                JOptionPane.showMessageDialog(this, "Failed to load");
+            }
+        });
         addToolbarButton("Load Game", e -> {
             try {
                 game.load(this, JOptionPane.showInputDialog(this, "File Name"));
@@ -64,9 +70,9 @@ public class Gui extends JFrame implements View {
         addToolbarButton("Change Level", e ->
         {
             try {
-                game.setLevel(this, Integer.parseInt(JOptionPane.showInputDialog(this, "Level Number")));
-            } catch (NumberFormatException exception) {
-                JOptionPane.showMessageDialog(this, "You must enter a valid number.");
+                game.setLevel(this, JOptionPane.showInputDialog(this, "Level Name"));
+            } catch (IOException exception) {
+                JOptionPane.showMessageDialog(this, "You must enter a valid level.");
             }
         });
 

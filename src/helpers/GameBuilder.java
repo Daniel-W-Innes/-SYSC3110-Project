@@ -2,7 +2,7 @@ package helpers;
 
 import model.Board;
 
-import java.awt.*;
+import java.io.IOException;
 
 /**
  * Helper class to initialize the populate the board with pieces, thus creating an initial boars state.
@@ -13,21 +13,22 @@ public class GameBuilder {
     /**
      * Constructs a initial board state based off of the level passed in.
      *
-     * @param levelNumber the desired level, and thus difficulty, of the game
+     * @param levelName the desired level, and thus difficulty, of the game
      * @return an instance of Board initialized with pieces and terrain corresponding to the level passed in
      */
 
-    public static Board getStartingBoard(int levelNumber) {
+    public static Board getStartingBoard(String levelName) throws IOException {
         Board board = new Board();
-        switch (levelNumber) {
-            case 1 -> {
+        boolean loadFromFile = false;
+        switch (levelName) {
+            case "1" -> {
                 board.addPiece(new Rabbit(new Point(2, 3)));
                 board.addPiece(new Mushroom(new Point(0, 1)));
                 board.addPiece(new Mushroom(new Point(0, 2)));
                 board.addPiece(new Mushroom(new Point(1, 3)));
                 setDefaultTerrain(board);
             }
-            case 20 -> {
+            case "20" -> {
                 board.addPiece(new Rabbit((new Point(1, 4))));
                 board.addPiece(new Rabbit((new Point(4, 2))));
                 board.addPiece(new Rabbit((new Point(3, 0))));
@@ -40,7 +41,7 @@ public class GameBuilder {
 
                 setDefaultTerrain(board);
             }
-            case 2 -> {
+            case "2" -> {
                 board.addPiece(new Rabbit((new Point(4, 2))));
                 board.addPiece(new Rabbit((new Point(2, 4))));
 
@@ -51,7 +52,7 @@ public class GameBuilder {
                 board.addPiece(new Mushroom(new Point(2, 3)));
                 setDefaultTerrain(board);
             }
-            case 3 -> {
+            case "3" -> {
                 board.addPiece(new Rabbit(new Point(3, 0)));
                 board.addPiece(new Rabbit(new Point(4, 2)));
                 board.addPiece(new Rabbit(new Point(1, 4)));
@@ -63,7 +64,7 @@ public class GameBuilder {
                 board.addPiece(new Mushroom(new Point(2, 4)));
                 setDefaultTerrain(board);
             }
-            case 60 -> {
+            case "60" -> {
                 board.addPiece(new Rabbit(new Point(1, 3)));
                 board.addPiece(new Rabbit(new Point(2, 4)));
                 board.addPiece(new Rabbit(new Point(4, 3)));
@@ -75,8 +76,10 @@ public class GameBuilder {
                 board.addPiece(new Mushroom(new Point(3, 0)));
                 setDefaultTerrain(board);
             }
-            default -> setDefaultTerrain(board);
-
+            default -> loadFromFile = true;
+        }
+        if (loadFromFile) {
+            board = new Board(levelName);
         }
         return board;
     }

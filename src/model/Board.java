@@ -33,15 +33,18 @@ public class Board implements Model {
         maxBoardSize = new Point(5, 5);
     }
 
-    public Board(FileInputStream fileInputStream) throws IOException {
+    public Board(String fileName) throws IOException {
+        this(BoardOuterClass.Board.parseFrom(new FileInputStream(fileName)));
+    }
+
+    public Board(BoardOuterClass.Board board) {
         pieces = new HashMap<>();
-        BoardOuterClass.Board proto = BoardOuterClass.Board.parseFrom(fileInputStream);
-        maxBoardSize = new Point(proto.getMaxBoardSize());
-        terrain = proto.getSquareList().stream()
+        maxBoardSize = new Point(board.getMaxBoardSize());
+        terrain = board.getSquareList().stream()
                 .collect(Collectors.toMap(square -> new Point(square.getBoardSpot()), Square::new));
-        proto.getMushroomList().forEach(mushroom -> pieces.put(new Point(mushroom.getBoardSpot()), new Mushroom(mushroom)));
-        proto.getRabbitList().forEach(rabbit -> pieces.put(new Point(rabbit.getBoardSpot()), new Rabbit(rabbit)));
-        pieces.putAll(proto.getFoxList().stream()
+        board.getMushroomList().forEach(mushroom -> pieces.put(new Point(mushroom.getBoardSpot()), new Mushroom(mushroom)));
+        board.getRabbitList().forEach(rabbit -> pieces.put(new Point(rabbit.getBoardSpot()), new Rabbit(rabbit)));
+        pieces.putAll(board.getFoxList().stream()
                 .flatMap(fox -> Stream.of(Map.entry(fox.getHeadLocation(), fox), Map.entry(fox.getTailLocation(), fox)))
                 .collect(Collectors.toMap(entry -> new Point(entry.getKey()), entry -> new Fox(entry.getValue()))));
     }

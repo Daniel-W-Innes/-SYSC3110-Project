@@ -3,14 +3,22 @@ package helpers;
 import model.Board;
 import org.junit.jupiter.api.Test;
 
+import java.io.IOException;
+
 import static helpers.GameBuilder.getStartingBoard;
 import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
 
 class GraphTest {
 
     @Test
     void testLevelOneSolution() throws InterruptedException {
-        Board board = getStartingBoard(1);
+        Board board = null;
+        try {
+            board = getStartingBoard("1");
+        } catch (IOException e) {
+            fail();
+        }
 
         Graph solution = new Graph(board);
 
@@ -33,7 +41,12 @@ class GraphTest {
 
     @Test
     void testLevel20Solution() throws InterruptedException {
-        Board board = getStartingBoard(20);
+        Board board = null;
+        try {
+            board = getStartingBoard("20");
+        } catch (IOException e) {
+            fail();
+        }
 
         Graph solution = new Graph(board);
 
