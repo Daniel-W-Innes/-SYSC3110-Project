@@ -205,7 +205,7 @@ public class Fox implements Piece {
         switch (direction) {
             case X_AXIS -> {
                 headPointCopy = headPointCopy.moveX(1);
-                while (headPointCopy.x != Board.maxBoardLength.x) {
+                while (headPointCopy.x != board.maxBoardSize.x) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }
@@ -229,7 +229,7 @@ public class Fox implements Piece {
 // Same ideas a X_AXIS
             case Y_AXIS -> {
                 headPointCopy = headPointCopy.moveY(1);
-                while (headPointCopy.y != Board.maxBoardLength.y) {
+                while (headPointCopy.y != board.maxBoardSize.y) {
                     if (board.hasPiece(headPointCopy) || board.hasSquare(headPointCopy)) {
                         break;
                     }

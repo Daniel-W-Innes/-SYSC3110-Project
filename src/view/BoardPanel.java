@@ -15,13 +15,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import static model.Board.maxBoardLength;
-
 /**
  * The panel that holds all of the tiles for the game.
  */
 class BoardPanel extends JPanel implements ActionListener {
-    private final Map<Point, Tile> boardMap = new HashMap<>();
+    private final Map<Point, Tile> boardMap;
     private final Game game;
     private Point clickedSquare;
     private List<Move> availableMoves;
@@ -34,18 +32,7 @@ class BoardPanel extends JPanel implements ActionListener {
 
     BoardPanel(Game game) {
         this.game = game;
-        setLayout(new GridLayout(maxBoardLength.x, maxBoardLength.y));
-        // Add the BoardTiles to the board
-        for (int x = 0; x < maxBoardLength.x; x++) {
-            for (int y = 0; y < maxBoardLength.y; y++) {
-                Point p = new Point(x, y);
-                Tile tile = new Tile(p);
-                tile.addActionListener(this);
-
-                boardMap.put(p, tile);
-                add(tile);
-            }
-        }
+        boardMap = new HashMap<>();
         availableMoves = new ArrayList<>();
     }
 
@@ -55,10 +42,24 @@ class BoardPanel extends JPanel implements ActionListener {
      * @param board the new board
      */
     void updateBoardTerrain(Board board) {
-        board.getTerrain().forEach((point, square) -> {
-            boardMap.get(point).setRaised();
-            boardMap.get(point).setHole(square.isHole());
-        });
+        clickedSquare = null;
+        boardMap.values().forEach(this::remove);
+        setLayout(new GridLayout(board.maxBoardSize.x, board.maxBoardSize.y));
+        // Add the BoardTiles to the board
+        for (int x = 0; x < board.maxBoardSize.x; x++) {
+            for (int y = 0; y < board.maxBoardSize.y; y++) {
+                Point p = new Point(x, y);
+                Tile tile = new Tile(p);
+                tile.addActionListener(this);
+                if (board.hasSquare(p)) {
+                    tile.setRaised();
+                    tile.setHole(board.getSquare(p).isHole());
+                }
+                boardMap.put(p, tile);
+
+                add(tile);
+            }
+        }
     }
 
     /**
@@ -128,15 +129,6 @@ class BoardPanel extends JPanel implements ActionListener {
             }
 
         }
-    }
-
-    /**
-     * Visually reset the board to a default state.
-     */
-
-    void reset() {
-        boardMap.values().forEach(Tile::reset);
-        clickedSquare = null;
     }
 
     /**

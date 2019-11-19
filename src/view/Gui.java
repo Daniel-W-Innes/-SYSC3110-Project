@@ -138,7 +138,6 @@ public class Gui extends JFrame implements View {
 
     @Override
     public void sendInitialBoard(Board board) {
-        boardPanel.reset();
         boardPanel.updateBoardTerrain(board);
         board.getPieces().forEach((point, piece) -> boardPanel.addPiece(point, piece));
     }

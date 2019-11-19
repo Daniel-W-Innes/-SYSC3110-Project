@@ -13,7 +13,7 @@ import java.util.Map;
  */
 public class Board implements Model {
 
-    public static final Point maxBoardLength = new Point(5, 5);
+    public final Point maxBoardSize;
     private final Map<Point, Piece> pieces;
 
     /**
@@ -25,6 +25,7 @@ public class Board implements Model {
     public Board() {
         terrain = new HashMap<>();
         pieces = new HashMap<>();
+        maxBoardSize = new Point(5, 5);
     }
 
     /**
@@ -34,6 +35,8 @@ public class Board implements Model {
      */
 
     public Board(Board board) {
+        maxBoardSize = board.maxBoardSize;
+
         // The terrain never changes so it never needs to be copied. Same for the viewer.
         // If a copy of a board does not need to update the GUI, then when calling movePiece() on the game,
         // it can specify to not change the GUI
@@ -57,14 +60,14 @@ public class Board implements Model {
      * @throws IllegalArgumentException If the point is NOT within the board space
      */
 
-    private static void checkValidLocation(Point location) {
+    private void checkValidLocation(Point location) {
         if (0 > location.x || 0 > location.y) {
             throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location);
         }
         // Index for points start at 0, meaning that even though the max board length is 5, any value above 4 leads
         // to an invalid index. Hence the minus 1 in the if statement.
-        if (location.x > (maxBoardLength.x - 1) || location.y > (maxBoardLength.y - 1)) {
-            throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location + ".\nMax Board length = " + maxBoardLength);
+        if (location.x > (maxBoardSize.x - 1) || location.y > (maxBoardSize.y - 1)) {
+            throw new IllegalArgumentException("Invalid location for piece specified. Passed in: " + location + ".\nMax Board length = " + maxBoardSize);
         }
     }
 
@@ -255,7 +258,7 @@ public class Board implements Model {
      * @return The square, nullable
      */
 
-    private Square getSquare(Point loc) {
+    public Square getSquare(Point loc) {
         return terrain.get(loc);
     }
 
@@ -269,8 +272,8 @@ public class Board implements Model {
     public String toString() {
         StringBuilder stringBuilder = new StringBuilder();
         Point point;
-        for (int x = 0; x <= maxBoardLength.x; x++) {
-            for (int y = 0; y <= maxBoardLength.y; y++) {
+        for (int x = 0; x <= maxBoardSize.x; x++) {
+            for (int y = 0; y <= maxBoardSize.y; y++) {
                 point = new Point(x, y);
                 stringBuilder.append('|');
                 stringBuilder.append(hasSquare(point) ? getSquare(point).toString() : "_");
