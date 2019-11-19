@@ -139,12 +139,15 @@ public class Game {
         redoHistory = new Stack<>();
     }
 
-    public void save(String fileName) throws IOException {
-        GameOuterClass.Game.newBuilder()
+    private GameOuterClass.Game toProto() {
+        return GameOuterClass.Game.newBuilder()
                 .setBoard(board.toProto())
                 .setLevelName(levelName)
-                .build()
-                .writeTo(new FileOutputStream(fileName));
+                .build();
+    }
+
+    public void save(String fileName) throws IOException {
+        toProto().writeTo(new FileOutputStream(fileName));
     }
 
     public void load(View observer, String fileName) throws IOException {

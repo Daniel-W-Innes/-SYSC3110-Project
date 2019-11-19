@@ -5,6 +5,7 @@ import protos.BoardOuterClass;
 import view.View;
 
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -387,5 +388,9 @@ public class Board implements Model {
     @Override
     public void setView(View view) {
         this.view = view;
+    }
+
+    public void save(String fileName) throws IOException {
+        toProto().writeTo(new FileOutputStream(fileName));
     }
 }
