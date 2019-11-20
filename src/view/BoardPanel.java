@@ -43,7 +43,7 @@ class BoardPanel extends JPanel implements ActionListener {
      */
     void updateBoardTerrain(Board board) {
         clickedSquare = null;
-        boardMap.values().forEach(this::remove);
+        removeAll();
         setLayout(new GridLayout(board.maxBoardSize.x, board.maxBoardSize.y));
         // Add the BoardTiles to the board
         for (int x = 0; x < board.maxBoardSize.x; x++) {
@@ -138,17 +138,12 @@ class BoardPanel extends JPanel implements ActionListener {
      */
 
     void showHint(Move move) {
-
         // Remove highlighting for all squares as the hint is showed with highlights; not removing
         // the highlight could make it confusing about what the hint actually is
-        for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
-            tile.getValue().setHintPieceHighlighted(false);
-            tile.getValue().setHighlighted(false);
-        }
-
-        boardMap.get(move.getStartPoint()).setHintPieceHighlighted(true);
-        boardMap.get(move.getEndPoint()).setHighlighted(true);
-
+        boardMap.forEach((key, value) -> {
+            value.setHintPieceHighlighted(key.equals(move.getStartPoint()));
+            value.setHighlighted(key.equals(move.getEndPoint()));
+        });
         // Make it so that after pressing the hint, the user needs to click the a piece to move it
         clickedSquare = null;
     }

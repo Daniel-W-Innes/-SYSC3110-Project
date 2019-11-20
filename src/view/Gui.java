@@ -18,9 +18,7 @@ import java.util.Optional;
 public class Gui extends JFrame implements View {
     private static final int WIDTH = 900;
     private static final int HEIGHT = 960;
-    private final Game game;
-    private BoardPanel boardPanel;
-    private JToolBar toolbar;
+    private final BoardPanel boardPanel;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -29,37 +27,36 @@ public class Gui extends JFrame implements View {
      */
     public Gui(Game game) {
         super("Jumpin game simulator");
-        this.game = game;
 
         setSize(WIDTH, HEIGHT);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        createToolbar();
-        populateBoard();
+        createToolbar(game);
+        boardPanel = new BoardPanel(game);
+        add(boardPanel, BorderLayout.CENTER);
         setVisible(true);
-
     }
 
     /**
      * Creates a toolbar for the gui with the buttons: New game, save game, load game, redo and undo
      */
-    private void createToolbar() {
-        toolbar = new JToolBar();
+    private void createToolbar(Game game) {
+        JToolBar toolbar = new JToolBar();
 
-        addToolbarButton("Reset Game", e -> {
+        addToolbarButton(toolbar, "Reset Game", e -> {
             try {
                 game.resetLevel(this);
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to load");
             }
         });
-        addToolbarButton("Load Game", e -> {
+        addToolbarButton(toolbar, "Load Game", e -> {
             try {
                 game.load(this, JOptionPane.showInputDialog(this, "File Name"));
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to load");
             }
         });
-        addToolbarButton("Save Game", e -> {
+        addToolbarButton(toolbar, "Save Game", e -> {
             try {
                 game.save(JOptionPane.showInputDialog(this, "File Name"));
             } catch (IOException ex) {
@@ -67,7 +64,7 @@ public class Gui extends JFrame implements View {
             }
         });
 
-        addToolbarButton("Change Level", e ->
+        addToolbarButton(toolbar, "Change Level", e ->
         {
             try {
                 game.setLevel(this, JOptionPane.showInputDialog(this, "Level Name"));
@@ -77,7 +74,7 @@ public class Gui extends JFrame implements View {
         });
 
         toolbar.add(Box.createHorizontalGlue());
-        addToolbarButton("Hint", e -> {
+        addToolbarButton(toolbar, "Hint", e -> {
             if (game.gameWon()) {
                 JOptionPane.showMessageDialog(this, "The game is already won.");
             } else {
@@ -89,8 +86,8 @@ public class Gui extends JFrame implements View {
                 }
             }
         });
-        addToolbarButton("Undo", e -> game.undo());
-        addToolbarButton("Redo", e -> game.redo());
+        addToolbarButton(toolbar, "Undo", e -> game.undo());
+        addToolbarButton(toolbar, "Redo", e -> game.redo());
 
         add(toolbar, BorderLayout.PAGE_START);
     }
@@ -102,19 +99,10 @@ public class Gui extends JFrame implements View {
      * @param actionListener the ActionListener to be triggered when the button is pressed
      */
 
-    private void addToolbarButton(String text, ActionListener actionListener) {
+    private void addToolbarButton(JToolBar toolbar, String text, ActionListener actionListener) {
         JButton button = new JButton(text);
         button.addActionListener(actionListener);
         toolbar.add(button);
-    }
-
-    /**
-     * Add the board panel to this frame.
-     */
-
-    private void populateBoard() {
-        boardPanel = new BoardPanel(game);
-        add(boardPanel, BorderLayout.CENTER);
     }
 
     /**
@@ -158,6 +146,6 @@ public class Gui extends JFrame implements View {
     @Override
     public void sendInitialBoard(Board board) {
         boardPanel.updateBoardTerrain(board);
-        board.getPieces().forEach((point, piece) -> boardPanel.addPiece(point, piece));
+        board.getPieces().forEach(boardPanel::addPiece);
     }
 }
