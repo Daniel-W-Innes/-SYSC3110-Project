@@ -88,8 +88,11 @@ public class Fox implements Piece {
 
     public static Map<Point, Fox> fromListOfProtos(Collection<FoxOuterClass.Fox> foxes) {
         return foxes.stream()
-                .flatMap(fox -> Stream.of(Map.entry(fox.getHeadLocation(), fox), Map.entry(fox.getTailLocation(), fox)))
-                .collect(Collectors.toMap(entry -> new Point(entry.getKey()), entry -> new Fox(entry.getValue())));
+                .flatMap(foxProto -> {
+                    Fox fox = new Fox(foxProto);
+                    return Stream.of(Map.entry(foxProto.getHeadLocation(), fox), Map.entry(foxProto.getTailLocation(), fox));
+                })
+                .collect(Collectors.toMap(entry -> new Point(entry.getKey()), Map.Entry::getValue));
     }
 
     public FoxOuterClass.Fox toProto() {
