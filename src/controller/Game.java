@@ -143,6 +143,7 @@ public class Game {
         return GameOuterClass.Game.newBuilder()
                 .setBoard(board.toProto())
                 .setLevelName(levelName)
+                .setGraph(graph.toProto())
                 .build();
     }
 
@@ -157,7 +158,7 @@ public class Game {
         observer.sendInitialBoard(board);
         board.setView(observer);
 
-        graph = new Graph(board);
+        graph = new Graph(game.getGraph(), board);
         undoHistory = new Stack<>();
         redoHistory = new Stack<>();
     }

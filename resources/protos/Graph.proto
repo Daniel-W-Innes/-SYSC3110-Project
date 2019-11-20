@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package protos;
+
+import "Move.proto";
+
+message Graph {
+    repeated Move move = 1;
+    bool isReady = 2;
+}

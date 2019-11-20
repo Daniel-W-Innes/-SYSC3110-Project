@@ -1,9 +1,11 @@
 package helpers;
 
 import model.Board;
+import protos.GraphOuterClass;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.stream.Collectors;
 
 /**
  * Class that generates a solution for a given board.
@@ -25,7 +27,22 @@ public class Graph {
         solution = new Stack<>();
         // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
         // being generated while the solution is being created.
+        genSolution(startingBoard);
+    }
+
+    public Graph(GraphOuterClass.Graph graph, Board board) {
+        solution = new Stack<>();
+        if (graph.getIsReady()) {
+            graph.getMoveList().forEach(move -> solution.push(new Move(move)));
+        } else {
+            genSolution(board);
+        }
+        isReady = graph.getIsReady();
+    }
+
+    private void genSolution(Board board) {
         new Thread(() -> {
+            System.out.println("test");
             //Keep track of which nodes we visited
             Set<Board> visited = new HashSet<>();
 
@@ -34,7 +51,7 @@ public class Graph {
             Queue<TreeNode<Board>> nextQueue = new ConcurrentLinkedQueue<>();
 
             //Create a tree to track it's path
-            Tree<Board> traversalPath = new Tree<>(new TreeNode<>(new Board(startingBoard)));
+            Tree<Board> traversalPath = new Tree<>(new TreeNode<>(new Board(board)));
             currQueue.add(traversalPath.root); //Add starting root node
 
             outer:
@@ -101,6 +118,13 @@ public class Graph {
 
             isReady = true;
         }).start();
+    }
+
+    public GraphOuterClass.Graph toProto() {
+        return GraphOuterClass.Graph.newBuilder()
+                .setIsReady(isReady)
+                .addAllMove(solution.stream().map(Move::toProto).collect(Collectors.toUnmodifiableList()))
+                .build();
     }
 
     public Optional<Move> getHintMove() {
