@@ -16,18 +16,10 @@ public class Graph {
     private final Stack<Move> solution;
     private boolean isReady;
 
-    /**
-     * Constructor that takes in a board and creates a solution from that board.
-     *
-     * @param startingBoard the board that needs a solution to be created
-     */
 
-    public Graph(Board startingBoard) {
+    public Graph() {
         isReady = false;
         solution = new Stack<>();
-        // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
-        // being generated while the solution is being created.
-        genSolution(startingBoard);
     }
 
     public Graph(GraphOuterClass.Graph graph, Board board) {
@@ -40,9 +32,10 @@ public class Graph {
         isReady = graph.getIsReady();
     }
 
-    private void genSolution(Board board) {
+    public void genSolution(Board board) {
+        // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
+        // being generated while the solution is being created.
         new Thread(() -> {
-            System.out.println("test");
             //Keep track of which nodes we visited
             Set<Board> visited = new HashSet<>();
 

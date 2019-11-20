@@ -27,8 +27,8 @@ public class Game {
     public static final String resourcesFolder = "resources" + File.separator;
     private static final String STARTING_LEVEL_NAME = "20";
     private Graph graph;
-    private Stack<Move> undoHistory;
-    private Stack<Move> redoHistory;
+    private final Stack<Move> undoHistory;
+    private final Stack<Move> redoHistory;
     /**
      * A reference to the board modal
      */
@@ -38,19 +38,18 @@ public class Game {
      */
     private String levelName;
 
-    public static void main(String[] args) throws IOException {
-        Game game = new Game();
-        game.setUp(new Gui(game), STARTING_LEVEL_NAME);
+
+    public Game(String startingLevelName) throws IOException {
+        undoHistory = new Stack<>();
+        redoHistory = new Stack<>();
+        graph = new Graph();
+        setLevel(new Gui(this), startingLevelName);
+        graph.genSolution(board);
+
     }
 
-    /**
-     * Sets up the board with the given observer, and level.
-     *
-     * @param observer    A view to add to the new board
-     * @param levelNumber A level number from the book. Note: not all of those are available.
-     */
-    public void setUp(View observer, String levelNumber) throws IOException {
-        setLevel(observer, levelNumber);
+    public static void main(String[] args) throws IOException {
+        new Game(STARTING_LEVEL_NAME);
     }
 
     /**
@@ -95,7 +94,7 @@ public class Game {
         // The solution has to remain synchronized by pointing to the next hint. Note that this is redundant if an incorrect move is made. See below hintMove.equals() check.
         // The user has moved away from the correct solution; therefore the current solution is invalid and has to be redone.
         if (hintMove.isEmpty() || !hintMove.get().equals(move)) {
-            graph = new Graph(board);
+            graph.genSolution(board);
         } else {
             graph.advanceSolutionIndex();
         }
@@ -129,14 +128,9 @@ public class Game {
      */
 
     public void setLevel(View observer, String levelName) throws IOException {
-        this.levelName = levelName;
         board = getStartingBoard(levelName);
-        observer.sendInitialBoard(board);
-        board.setView(observer);
-
-        graph = new Graph(board);
-        undoHistory = new Stack<>();
-        redoHistory = new Stack<>();
+        graph.genSolution(board);
+        cleanGame(observer, levelName);
     }
 
     private GameOuterClass.Game toProto() {
@@ -154,13 +148,16 @@ public class Game {
     public void load(View observer, String fileName) throws IOException {
         GameOuterClass.Game game = GameOuterClass.Game.parseFrom(new FileInputStream(fileName));
         board = new Board(game.getBoard());
-        levelName = game.getLevelName();
+        graph = new Graph(game.getGraph(), board);
+        cleanGame(observer, game.getLevelName());
+    }
+
+    private void cleanGame(View observer, String levelName) {
+        this.levelName = levelName;
         observer.sendInitialBoard(board);
         board.setView(observer);
-
-        graph = new Graph(game.getGraph(), board);
-        undoHistory = new Stack<>();
-        redoHistory = new Stack<>();
+        undoHistory.clear();
+        redoHistory.clear();
     }
 
     /**

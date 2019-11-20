@@ -19,27 +19,21 @@ class GameTest {
     // Note:  Window will briefly appear as a new GUI is temporarily created in each of the tests
 
     @BeforeEach
-    void testSetUp() {
-        game = new Game();
-    }
-
-    @Test
     void setUp() {
         try {
-            game.setUp(new Gui(game), "1");
+            game = new Game("1");
         } catch (IOException e) {
             fail();
         }
+    }
+
+    @Test
+    void testSetUp() {
         testFirstLevelCreation();
     }
 
     @Test
     void movePiece() {
-        try {
-            game.setUp(new Gui(game), "1");
-        } catch (IOException e) {
-            fail();
-        }
         List<Move> possibleMoves;
         game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
 
@@ -60,8 +54,7 @@ class GameTest {
     @Test
     void setLevel() {
         try {
-            game.setUp(new Gui(game), "1");
-            game.resetLevel(new Gui(game));
+            game.setLevel(new Gui(game), "1");
         } catch (IOException e) {
             fail();
         }
@@ -71,7 +64,6 @@ class GameTest {
     @Test
     void resetLevel() {
         try {
-            game.setUp(new Gui(game), "1");
             game.resetLevel(new Gui(game));
         } catch (IOException e) {
             fail();
@@ -89,11 +81,6 @@ class GameTest {
 
     @Test
     void testUndo() throws InterruptedException {
-        try {
-            game.setUp(new Gui(game), "1");
-        } catch (IOException e) {
-            fail();
-        }
 
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(200);
@@ -107,11 +94,6 @@ class GameTest {
 
     @Test
     void testRedo() throws InterruptedException {
-        try {
-            game.setUp(new Gui(game), "1");
-        } catch (IOException e) {
-            fail();
-        }
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(1000);
         game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);

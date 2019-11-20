@@ -20,20 +20,21 @@ class GraphTest {
             fail();
         }
 
-        Graph solution = new Graph(board);
+        Graph graph = new Graph();
+        graph.genSolution(board);
 
         Thread.sleep(250);
 
         while (true) {
 
-            if (solution.getHintMove().isPresent()) {
-                Move hintMove = solution.getHintMove().get();
+            if (graph.getHintMove().isPresent()) {
+                Move hintMove = graph.getHintMove().get();
                 board.movePiece(board.getPieces().get(hintMove.getStartPoint()), hintMove.getEndPoint(), false);
             } else {
                 break;
             }
 
-            solution.advanceSolutionIndex();
+            graph.advanceSolutionIndex();
         }
 
         assertTrue(board.isVictory());
@@ -48,20 +49,21 @@ class GraphTest {
             fail();
         }
 
-        Graph solution = new Graph(board);
+        Graph graph = new Graph();
+        graph.genSolution(board);
 
         Thread.sleep(2500);
 
         while (true) {
 
-            if (solution.getHintMove().isPresent()) {
-                Move hintMove = solution.getHintMove().get();
+            if (graph.getHintMove().isPresent()) {
+                Move hintMove = graph.getHintMove().get();
                 board.movePiece(board.getPieces().get(hintMove.getStartPoint()), hintMove.getEndPoint(), false);
             } else {
                 break;
             }
 
-            solution.advanceSolutionIndex();
+            graph.advanceSolutionIndex();
         }
 
         assertTrue(board.isVictory());
