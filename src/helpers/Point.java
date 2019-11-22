@@ -1,7 +1,5 @@
 package helpers;
 
-import protos.PointOuterClass;
-
 import java.util.Objects;
 
 public final class Point {
@@ -23,7 +21,7 @@ public final class Point {
         y = 0;
     }
 
-    public Point(PointOuterClass.Point point) {
+    public Point(Proto.Point point) {
         x = point.getX();
         y = point.getY();
     }
@@ -41,8 +39,8 @@ public final class Point {
         return new Point(x, y + offsetY);
     }
 
-    public PointOuterClass.Point toProto() {
-        return PointOuterClass.Point.newBuilder().setX(x).setY(y).build();
+    public Proto.Point toProto() {
+        return Proto.Point.newBuilder().setX(x).setY(y).build();
     }
 
     @Override

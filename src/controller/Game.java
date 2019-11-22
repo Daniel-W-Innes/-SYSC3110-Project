@@ -3,8 +3,8 @@ package controller;
 import helpers.Graph;
 import helpers.Move;
 import helpers.Point;
+import helpers.Proto;
 import model.Board;
-import protos.GameOuterClass;
 import view.Gui;
 import view.View;
 
@@ -133,8 +133,8 @@ public class Game {
         cleanGame(observer, levelName);
     }
 
-    private GameOuterClass.Game toProto() {
-        return GameOuterClass.Game.newBuilder()
+    private Proto.Game toProto() {
+        return Proto.Game.newBuilder()
                 .setBoard(board.toProto())
                 .setLevelName(levelName)
                 .setGraph(graph.toProto())
@@ -146,7 +146,7 @@ public class Game {
     }
 
     public void load(View observer, String fileName) throws IOException {
-        GameOuterClass.Game game = GameOuterClass.Game.parseFrom(new FileInputStream(fileName));
+        Proto.Game game = Proto.Game.parseFrom(new FileInputStream(fileName));
         board = new Board(game.getBoard());
         graph = new Graph(game.getGraph(), board);
         cleanGame(observer, game.getLevelName());

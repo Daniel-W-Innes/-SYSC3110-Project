@@ -1,7 +1,6 @@
 package model;
 
 import helpers.*;
-import protos.BoardOuterClass;
 import view.View;
 
 import java.io.FileInputStream;
@@ -34,10 +33,10 @@ public class Board implements Model {
     }
 
     public Board(String fileName) throws IOException {
-        this(BoardOuterClass.Board.parseFrom(new FileInputStream(fileName)));
+        this(Proto.Board.parseFrom(new FileInputStream(fileName)));
     }
 
-    public Board(BoardOuterClass.Board board) {
+    public Board(Proto.Board board) {
         pieces = new HashMap<>();
         maxBoardSize = new Point(board.getMaxBoardSize());
         terrain = Square.fromListOfProtos(board.getSquareList());
@@ -281,8 +280,8 @@ public class Board implements Model {
     }
 
 
-    public BoardOuterClass.Board toProto() {
-        return BoardOuterClass.Board.newBuilder()
+    public Proto.Board toProto() {
+        return Proto.Board.newBuilder()
                 .setMaxBoardSize(maxBoardSize.toProto())
                 .addAllSquare(terrain.entrySet().stream()
                         .map(entry -> entry.getValue().toProto(entry.getKey()))

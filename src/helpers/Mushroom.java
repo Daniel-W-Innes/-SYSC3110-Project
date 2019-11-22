@@ -1,7 +1,6 @@
 package helpers;
 
 import model.Board;
-import protos.MushroomOuterClass;
 
 import javax.swing.*;
 import java.io.File;
@@ -30,17 +29,17 @@ public class Mushroom implements Piece {
         this.boardSpot = boardSpot;
     }
 
-    private Mushroom(MushroomOuterClass.Mushroom mushroom) {
+    private Mushroom(Proto.Mushroom mushroom) {
         boardSpot = new Point(mushroom.getBoardSpot());
     }
 
-    public static Map<Point, Mushroom> fromListOfProtos(Collection<MushroomOuterClass.Mushroom> mushrooms) {
+    public static Map<Point, Mushroom> fromListOfProtos(Collection<Proto.Mushroom> mushrooms) {
         return mushrooms.stream()
                 .collect(Collectors.toMap(mushroom -> new Point(mushroom.getBoardSpot()), Mushroom::new));
     }
 
-    public MushroomOuterClass.Mushroom toProto() {
-        return MushroomOuterClass.Mushroom.newBuilder()
+    public Proto.Mushroom toProto() {
+        return Proto.Mushroom.newBuilder()
                 .setBoardSpot(boardSpot.toProto())
                 .build();
     }

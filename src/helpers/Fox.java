@@ -1,7 +1,6 @@
 package helpers;
 
 import model.Board;
-import protos.FoxOuterClass;
 
 import javax.swing.*;
 import java.io.File;
@@ -81,12 +80,12 @@ public class Fox implements Piece {
         occupiedBoardSpots = Set.copyOf(fox.occupiedBoardSpots);
     }
 
-    private Fox(FoxOuterClass.Fox fox) {
+    private Fox(Proto.Fox fox) {
         this(new Point(fox.getHeadLocation()).x == new Point(fox.getTailLocation()).x ? Direction.Y_AXIS : Direction.X_AXIS, new Point(fox.getHeadLocation()));
     }
 
 
-    public static Map<Point, Fox> fromListOfProtos(Collection<FoxOuterClass.Fox> foxes) {
+    public static Map<Point, Fox> fromListOfProtos(Collection<Proto.Fox> foxes) {
         return foxes.stream()
                 .flatMap(foxProto -> {
                     Fox fox = new Fox(foxProto);
@@ -95,8 +94,8 @@ public class Fox implements Piece {
                 .collect(Collectors.toMap(entry -> new Point(entry.getKey()), Map.Entry::getValue));
     }
 
-    public FoxOuterClass.Fox toProto() {
-        return FoxOuterClass.Fox.newBuilder()
+    public Proto.Fox toProto() {
+        return Proto.Fox.newBuilder()
                 .setHeadLocation(headLocation.toProto())
                 .setTailLocation(tailLocation.toProto())
                 .build();

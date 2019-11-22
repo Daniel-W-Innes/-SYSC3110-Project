@@ -1,7 +1,5 @@
 package helpers;
 
-import protos.SquareOuterClass;
-
 import java.util.Collection;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -30,7 +28,7 @@ public class Square {
         hashCode = Boolean.hashCode(isHole);
     }
 
-    private Square(SquareOuterClass.Square square) {
+    private Square(Proto.Square square) {
         isHole = square.getIsHole();
         hashCode = Boolean.hashCode(isHole);
     }
@@ -63,12 +61,13 @@ public class Square {
         return isHole == square.isHole;
     }
 
-    public static Map<Point, Square> fromListOfProtos(Collection<SquareOuterClass.Square> squares) {
+    public static Map<Point, Square> fromListOfProtos(Collection<Proto.Square> squares) {
         return squares.stream()
                 .collect(Collectors.toMap(square -> new Point(square.getBoardSpot()), Square::new));
     }
-    public SquareOuterClass.Square toProto(Point point) {
-        return SquareOuterClass.Square.newBuilder()
+
+    public Proto.Square toProto(Point point) {
+        return Proto.Square.newBuilder()
                 .setBoardSpot(point.toProto())
                 .setIsHole(isHole)
                 .build();

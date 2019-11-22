@@ -1,7 +1,5 @@
 package helpers;
 
-import protos.MoveOuterClass;
-
 import java.util.Arrays;
 
 /**
@@ -34,12 +32,12 @@ public class Move {
         hashcode = Arrays.hashCode((new int[]{start.hashCode(), end.hashCode()}));
     }
 
-    public Move(MoveOuterClass.Move move) {
+    public Move(Proto.Move move) {
         this(new Point(move.getStart()), new Point(move.getEnd()));
     }
 
-    MoveOuterClass.Move toProto() {
-        return MoveOuterClass.Move.newBuilder()
+    Proto.Move toProto() {
+        return Proto.Move.newBuilder()
                 .setStart(start.toProto())
                 .setEnd(end.toProto())
                 .build();

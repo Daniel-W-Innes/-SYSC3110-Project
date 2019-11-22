@@ -1,7 +1,6 @@
 package helpers;
 
 import model.Board;
-import protos.GraphOuterClass;
 
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
@@ -22,7 +21,7 @@ public class Graph {
         solution = new Stack<>();
     }
 
-    public Graph(GraphOuterClass.Graph graph, Board board) {
+    public Graph(Proto.Graph graph, Board board) {
         solution = new Stack<>();
         if (graph.getIsReady()) {
             graph.getMoveList().forEach(move -> solution.push(new Move(move)));
@@ -113,8 +112,8 @@ public class Graph {
         }).start();
     }
 
-    public GraphOuterClass.Graph toProto() {
-        return GraphOuterClass.Graph.newBuilder()
+    public Proto.Graph toProto() {
+        return Proto.Graph.newBuilder()
                 .setIsReady(isReady)
                 .addAllMove(solution.stream().map(Move::toProto).collect(Collectors.toUnmodifiableList()))
                 .build();

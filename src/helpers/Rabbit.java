@@ -1,7 +1,6 @@
 package helpers;
 
 import model.Board;
-import protos.RabbitOuterClass;
 
 import javax.swing.*;
 import java.io.File;
@@ -30,7 +29,7 @@ public class Rabbit implements Piece {
         this.boardSpot = boardSpot;
     }
 
-    private Rabbit(RabbitOuterClass.Rabbit rabbit) {
+    private Rabbit(Proto.Rabbit rabbit) {
         boardSpot = new Point(rabbit.getBoardSpot());
     }
 
@@ -69,13 +68,13 @@ public class Rabbit implements Piece {
         return possibleMoves;
     }
 
-    public static Map<Point, Rabbit> fromListOfProtos(Collection<RabbitOuterClass.Rabbit> mushrooms) {
+    public static Map<Point, Rabbit> fromListOfProtos(Collection<Proto.Rabbit> mushrooms) {
         return mushrooms.stream()
                 .collect(Collectors.toMap(rabbit -> new Point(rabbit.getBoardSpot()), Rabbit::new));
     }
 
-    public RabbitOuterClass.Rabbit toProto() {
-        return RabbitOuterClass.Rabbit.newBuilder()
+    public Proto.Rabbit toProto() {
+        return Proto.Rabbit.newBuilder()
                 .setBoardSpot(boardSpot.toProto())
                 .build();
     }

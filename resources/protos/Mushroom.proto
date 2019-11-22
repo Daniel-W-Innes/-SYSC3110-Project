@@ -1,9 +1,0 @@
-syntax = "proto3";
-
-package protos;
-
-import "Point.proto";
-
-message Mushroom {
-    Point boardSpot = 1;
-}
