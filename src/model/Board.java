@@ -189,78 +189,14 @@ public class Board implements Model {
      */
 
     public void movePiece(Piece piece, Point newLocation, boolean applyChangesView) {
-        /* When moving a piece, the fox has to be dealt with separately in the following way:
-         *  > When removing the fox, the head is removed. This is done through the getHeadLocation() method
-         *  > After removing the head, and knowing the direction of the fox, the tail location can be found and removed
-         *  > This process is repeated to remove the pieces from the view
-         *
-         *  > When adding a fox, the opposite is done. The head is added to the new location, and knowing the direction
-         *   of the fox the respective location of the tail can be found. Both of these new locations are added to the
-         *   piece map in addition to the view.
-         *
-         *  Remember that the tail is always on one side of the head!
-         */
-        if (piece instanceof Fox) {
-            Fox removedPiece = (Fox) piece;
-            if (Direction.X_AXIS == removedPiece.getDirection()) {
-                pieces.remove(removedPiece.getHeadLocation()); // Remove fox head
-                pieces.remove(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail
-
-                if (applyChangesView) {
-                    view.removePiece(removedPiece.getHeadLocation()); // Remove fox head from view
-                    view.removePiece(new Point(removedPiece.getHeadLocation().x - 1, removedPiece.getHeadLocation().y)); // Remove fox tail from view
-                }
-
-                // Since the piece has moved, its internal representation has to be updated as well to match the new location
-                // of it stored in the board
-                piece.updateBoardSpotUsed(newLocation);
-
-                pieces.put(newLocation, removedPiece); // Add new fox head
-                pieces.put(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail
-
-                if (applyChangesView) {
-                    view.addPiece(newLocation, removedPiece); // Add new fox head to view
-                    view.addPiece(new Point(newLocation.x - 1, newLocation.y), removedPiece); // Add new fox tail to view
-                }
-            } else {
-                pieces.remove(removedPiece.getHeadLocation());
-                pieces.remove(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
-
-                if (applyChangesView) {
-                    view.removePiece(removedPiece.getHeadLocation());
-                    view.removePiece(new Point(removedPiece.getHeadLocation().x, removedPiece.getHeadLocation().y - 1));
-                }
-
-                // Since the piece has moved, its internal representation has to be updated as well to match the new location
-                // of it stored in the board
-                piece.updateBoardSpotUsed(newLocation);
-
-                pieces.put(newLocation, removedPiece);
-                pieces.put(new Point(newLocation.x, newLocation.y - 1), removedPiece);
-
-                if (applyChangesView) {
-                    view.addPiece(newLocation, removedPiece);
-                    view.addPiece(new Point(newLocation.x, newLocation.y - 1), removedPiece);
-                }
-            }
-        } else {
-            // Since every piece that is not a fox takes only one board square, the collection returned by boardSpotsUsed()
-            // can only have one result, which corresponds to the location of the piece
-            for (Point point : piece.boardSpotsUsed()) {
-                pieces.remove(point);
-
-                if (applyChangesView) {
-                    view.removePiece(point);
-                }
-            }
-            // Since the piece has moved, its internal representation has to be updated as well to match the new location
-            // of it stored in the board
-            piece.updateBoardSpotUsed(newLocation);
-            pieces.put(newLocation, piece);
-
-            if (applyChangesView) {
-                view.addPiece(newLocation, piece);
-            }
+        piece.boardSpotsUsed().forEach(pieces::remove);
+        if (applyChangesView) {
+            piece.boardSpotsUsed().forEach(view::removePiece);
+        }
+        piece.updateBoardSpotUsed(newLocation);
+        piece.boardSpotsUsed().forEach(point -> pieces.put(point, piece));
+        if (applyChangesView) {
+            piece.boardSpotsUsed().forEach(point -> view.addPiece(point, piece));
         }
         if (isVictory() && applyChangesView) {
             view.notifyWin();

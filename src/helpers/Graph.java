@@ -67,9 +67,9 @@ public class Graph {
                     //For each piece on the board
                     for (Piece piece : currNode.contents.getPieces().values()) {
                         //For every point the piece occupies
-                        for (Point point : piece.boardSpotsUsed())
+                        for (Point startPoint : piece.boardSpotsUsed())
                             //For every move that the piece has
-                            for (Move move : piece.getMoves(currNode.contents, point)) {
+                            for (Point endPoint : piece.getEndPoint(currNode.contents, startPoint)) {
 
                                 // Apply the move to a fresh copy of the current board to get a board representing the state
                                 // of the game after the move has been applied
@@ -77,11 +77,11 @@ public class Graph {
 
                                 // The piece being passed in has to be cloned so that the updating of the position of the piece
                                 // within the movePiece function does not affect the location of the equivalent piece in the current board
-                                end.movePiece(piece.clonePiece(), move.getEndPoint(), false);
+                                end.movePiece(piece.clonePiece(), endPoint, false);
 
                                 //Make a new node
                                 TreeNode<Board> newNode = new TreeNode<>(end);
-                                newNode.move = move; //Assign it the move that caused the board state
+                                newNode.move = new Move(startPoint, endPoint); //Assign it the move that caused the board state
                                 //Add it to the tree
                                 newNode.addParent(currNode);
                                 newNode.parent = currNode;

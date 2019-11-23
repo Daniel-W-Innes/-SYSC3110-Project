@@ -4,7 +4,10 @@ import model.Board;
 
 import javax.swing.*;
 import java.io.File;
-import java.util.*;
+import java.util.Collection;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import static controller.Game.resourcesFolder;
@@ -126,8 +129,8 @@ public class Mushroom implements Piece {
      */
 
     @Override
-    public List<Move> getMoves(Board board, Point clickedPoint) {
-        return new ArrayList<>();
+    public Set<Point> getEndPoint(Board board, Point clickedPoint) {
+        return new HashSet<>();
     }
 
     /**

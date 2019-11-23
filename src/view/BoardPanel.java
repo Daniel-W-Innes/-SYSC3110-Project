@@ -10,10 +10,10 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 
 /**
  * The panel that holds all of the tiles for the game.
@@ -21,8 +21,8 @@ import java.util.Map;
 class BoardPanel extends JPanel implements ActionListener {
     private final Map<Point, Tile> boardMap;
     private final Game game;
-    private Point clickedSquare;
-    private List<Move> availableMoves;
+    private Point startPoint;
+    private Set<Point> endPoints;
 
     /**
      * Initializes the panel with Tiles to represent the game
@@ -33,7 +33,7 @@ class BoardPanel extends JPanel implements ActionListener {
     BoardPanel(Game game) {
         this.game = game;
         boardMap = new HashMap<>();
-        availableMoves = new ArrayList<>();
+        endPoints = new HashSet<>();
     }
 
     /**
@@ -42,7 +42,7 @@ class BoardPanel extends JPanel implements ActionListener {
      * @param board the new board
      */
     void updateBoardTerrain(Board board) {
-        clickedSquare = null;
+        startPoint = null;
         removeAll();
         setLayout(new GridLayout(board.maxBoardSize.x, board.maxBoardSize.y));
         // Add the BoardTiles to the board
@@ -91,41 +91,39 @@ class BoardPanel extends JPanel implements ActionListener {
 
     @Override
     public void actionPerformed(ActionEvent e) {
-        Point point = ((Tile) e.getSource()).getPoint();
+        Point clickedPoint = ((Tile) e.getSource()).getPoint();
 
         for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
             tile.getValue().setHintPieceHighlighted(false);
             tile.getValue().setHighlighted(false);
         }
 
-        if (null == clickedSquare) {
+        if (null == startPoint) {
             //1st part of the move: update currently selected square
-            clickedSquare = point;
-            availableMoves = game.getMoves(point);
+            startPoint = clickedPoint;
+            endPoints = game.getEndPoint(clickedPoint);
             //Don't count the click if there are no available moves
-            if (availableMoves.isEmpty()) {
-                clickedSquare = null;
+            if (endPoints.isEmpty()) {
+                startPoint = null;
             } else {
-                availableMoves.forEach(move -> {
+                endPoints.forEach(point -> {
                     //Highlight available moves
-                    boardMap.get(move.getEndPoint()).setHighlighted(true);
+                    boardMap.get(point).setHighlighted(true);
                 });
             }
         } else {
-            //2nd part of the move: check validity and do move
-            Move attemptedMove = new Move(clickedSquare, point);
             //Valid move
-            if (availableMoves.contains(attemptedMove)) {
+            if (endPoints.contains(clickedPoint)) {
                 //Delegate to controller
-                game.movePiece(attemptedMove, true);
-                clickedSquare = null;
+                game.movePiece(new Move(startPoint, clickedPoint), true);
+                startPoint = null;
                 //Remove highlighting
-                availableMoves.forEach(move -> boardMap.get(move.getEndPoint()).setHighlighted(false));
+                endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
             } else { //Invalid move, deselect
-                clickedSquare = null;
+                startPoint = null;
                 //Remove highlighting
-                availableMoves.forEach(move -> boardMap.get(move.getEndPoint()).setHighlighted(false));
-                availableMoves.clear();
+                endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
+                endPoints.clear();
             }
 
         }
@@ -145,6 +143,6 @@ class BoardPanel extends JPanel implements ActionListener {
             value.setHighlighted(key.equals(move.getEndPoint()));
         });
         // Make it so that after pressing the hint, the user needs to click the a piece to move it
-        clickedSquare = null;
+        startPoint = null;
     }
 }

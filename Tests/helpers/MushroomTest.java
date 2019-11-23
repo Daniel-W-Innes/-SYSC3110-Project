@@ -46,7 +46,7 @@ class MushroomTest {
 
     @Test
     void testGetMoves() {
-        assertTrue(mushroom.getMoves(new Board(), new Point(1, 1)).isEmpty());
+        assertTrue(mushroom.getEndPoint(new Board(), new Point(1, 1)).isEmpty());
     }
 
     @Test

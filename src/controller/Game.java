@@ -12,9 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Optional;
+import java.util.Set;
 import java.util.Stack;
 
 import static helpers.GameBuilder.getStartingBoard;
@@ -112,11 +112,11 @@ public class Game {
      * @return a list of possible moves
      */
 
-    public List<Move> getMoves(Point point) {
+    public Set<Point> getEndPoint(Point point) {
         if (board.hasPiece(point)) {
-            return board.getPieces().get(point).getMoves(board, point);
+            return board.getPieces().get(point).getEndPoint(board, point);
         } else {
-            return new ArrayList<>();
+            return new HashSet<>();
         }
     }
 
