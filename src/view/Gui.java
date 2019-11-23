@@ -51,14 +51,20 @@ public class Gui extends JFrame implements View {
         });
         addToolbarButton(toolbar, "Load Game", e -> {
             try {
-                game.load(this, JOptionPane.showInputDialog(this, "File Name"));
+                String fileName = JOptionPane.showInputDialog(this, "File Name");
+                if (null != fileName) {
+                    game.load(this, fileName);
+                }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to load");
             }
         });
         addToolbarButton(toolbar, "Save Game", e -> {
             try {
-                game.save(JOptionPane.showInputDialog(this, "File Name"));
+                String fileName = JOptionPane.showInputDialog(this, "File Name");
+                if (null != fileName) {
+                    game.save(fileName);
+                }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to save");
             }
@@ -67,7 +73,10 @@ public class Gui extends JFrame implements View {
         addToolbarButton(toolbar, "Change Level", e ->
         {
             try {
-                game.setLevel(this, JOptionPane.showInputDialog(this, "Level Name"));
+                String levelName = JOptionPane.showInputDialog(this, "Level Name");
+                if (null != levelName) {
+                    game.setLevel(this, levelName);
+                }
             } catch (IOException exception) {
                 JOptionPane.showMessageDialog(this, "You must enter a valid level.");
             }

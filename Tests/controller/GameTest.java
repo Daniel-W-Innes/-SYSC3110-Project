@@ -81,18 +81,18 @@ class GameTest {
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(200);
 
-        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)));
 
         game.undo();
 
-        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)));
     }
 
     @Test
     void testRedo() throws InterruptedException {
         // Make sure a solution is generated before making a move, as the movePiece function requests from the solution
         Thread.sleep(1000);
-        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)), false);
+        game.movePiece(new Move(new Point(2, 3), new Point(0, 3)));
 
         game.undo();
 
@@ -102,7 +102,7 @@ class GameTest {
 
         game.redo();
 
-        game.movePiece(new Move(new Point(0, 3), new Point(0, 0)), false);
+        game.movePiece(new Move(new Point(0, 3), new Point(0, 0)));
     }
 
 //    void testFirstLevelCreation() {
