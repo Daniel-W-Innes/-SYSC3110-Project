@@ -115,7 +115,7 @@ class BoardPanel extends JPanel implements ActionListener {
             //Valid move
             if (endPoints.contains(clickedPoint)) {
                 //Delegate to controller
-                game.movePiece(new Move(startPoint, clickedPoint), true);
+                game.movePiece(new Move(startPoint, clickedPoint));
                 startPoint = null;
                 //Remove highlighting
                 endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));

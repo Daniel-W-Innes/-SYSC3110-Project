@@ -55,13 +55,11 @@ public class Game {
     /**
      * Moves the point at the start point of move to the end point of move.
      *
-     * @param move             the move representing the change being applied to the board
-     * @param applyChangesView whether a move should be reflected on-screen. When dealing with the GUI it is true;
-     *                         for internal logic such as a graph solution or tests it is false
+     * @param move the move representing the change being applied to the board
      */
 
-    public void movePiece(Move move, boolean applyChangesView) {
-        movePiece(move, true, applyChangesView);
+    public void movePiece(Move move) {
+        movePiece(move, true);
         // After a user has moved, the redo history is invalidated
         redoHistory.clear();
     }
@@ -71,7 +69,6 @@ public class Game {
      *
      * @param move             the move representing the change being applied to the board
      * @param addToUndoHistory whether to store an equivalent undo command for the move
-     * @param applyChangesView whether a move should be reflected on-screen. When dealing with the GUI it is true;
      */
 
     /*
@@ -83,10 +80,10 @@ public class Game {
            In that case, regardless if a hint was requested, the solution is regenerated.  The history of moves
            is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
      */
-    private void movePiece(Move move, boolean addToUndoHistory, boolean applyChangesView) {
+    private void movePiece(Move move, boolean addToUndoHistory) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
-        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), applyChangesView);
+        board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);
 
         // Must be called before the advance solution index!
         Optional<Move> hintMove = graph.getHintMove();
@@ -186,7 +183,7 @@ public class Game {
 
     public void redo() {
         if (!redoHistory.empty()) {
-            movePiece(redoHistory.pop().getReverse(), true, true);
+            movePiece(redoHistory.pop().getReverse(), true);
         }
     }
 
@@ -196,7 +193,7 @@ public class Game {
     public void undo() {
         if (!undoHistory.empty()) {
             Move move = undoHistory.pop().getReverse();
-            movePiece(move, false, true);
+            movePiece(move, false);
             redoHistory.push(move);
         }
     }
