@@ -30,7 +30,7 @@ public class Game {
     private final Stack<Move> undoHistory;
     private final Stack<Move> redoHistory;
     /**
-     * A reference to the board modal
+     * A reference to the board model
      */
     private Board board;
     /**

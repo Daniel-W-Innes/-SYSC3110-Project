@@ -90,7 +90,7 @@ public class GameBuilder {
      * @param board the board to populate with terrain squares
      */
 
-    private static void setDefaultTerrain(Board board) {
+    public static void setDefaultTerrain(Board board) {
         board.addSquare(new Point(0, 0), new Square(true));
         board.addSquare(new Point(2, 0), new Square(false));
         board.addSquare(new Point(4, 0), new Square(true));
