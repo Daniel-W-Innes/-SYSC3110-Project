@@ -6,15 +6,14 @@ import model.Board;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
 
 //Singleton builder?
 public class LevelCreator {
-    private static Board board;
+    //Package private so it can be unit tested
+    static Board board;
 
     //Static initializer for the board
     static {
@@ -32,11 +31,19 @@ public class LevelCreator {
     }
 
     /**
+     * Place a Hole at Point p on the level
+     * @param p The point where to put the Hole
+     */
+    public static void placeHole(Point p) {
+        board.addSquare(p, new Square(true));
+    }
+
+    /**
      * Gets a list of Points where you can put the provided Piece.
      * @param piece The piece you want to check the available spots.
      * @return a list of valid Points where you can place the piece
      */
-    public static List<Point> getAvailableSpots(Piece piece) {
+    public static Set<Point> getAvailableSpots(Piece piece) {
         //Start with all points
         List<Point> spots = new ArrayList<>();
         for (int x = 0; x < board.maxBoardSize.x; x++) {
@@ -53,29 +60,31 @@ public class LevelCreator {
                 //Fox X-Foxes
                 return spots.stream()
                         .filter(point -> (point.y == 1 || point.y == 3) //X-Foxes only fit on rows 1 and 3
-                                && point.x < board.maxBoardSize.x - 1 //If it fits horizontally
-                                && (!terrain.get(point).isHole() || !terrain.get(new Point(point.x + 1, point.y)).isHole()) //Can't fit over Holes
-                                && (!pieces.containsKey(point) || !pieces.containsKey(new Point(point.x + 1, point.y)))) //No pieces there
-                        .collect(Collectors.toList());
+                                && point.x > 0 //If it fits horizontally
+                                && (!terrain.containsKey(point) || !terrain.get(point).isHole())
+                                && (!terrain.containsKey(new Point(point.x - 1, point.y)) || !terrain.get(new Point(point.x - 1, point.y)).isHole()) //Can't fit over Holes
+                                && (!pieces.containsKey(point) && !pieces.containsKey(new Point(point.x - 1, point.y)))) //No pieces there
+                        .collect(Collectors.toSet());
             } else {
                 //For Y-Foxes
                 return spots.stream()
                         .filter(point -> (point.x == 1 || point.x == 3) //Y-Foxes only fit on columns 1 and 3
-                                && point.y < board.maxBoardSize.y - 1 //If it fits vertically
-                                && (!terrain.get(point).isHole() || !terrain.get(new Point(point.x, point.y + 1)).isHole()) //Can't fit over Holes
-                                && (!pieces.containsKey(point) || !pieces.containsKey(new Point(point.x, point.y + 1)))) //No pieces there
-                        .collect(Collectors.toList());
+                                && point.y > 0 //If it fits vertically
+                                && (!terrain.containsKey(point)  || !terrain.get(point).isHole())
+                                && (!terrain.containsKey(new Point(point.x, point.y - 1)) || !terrain.get(new Point(point.x, point.y - 1)).isHole()) //Can't fit over Holes
+                                && (!pieces.containsKey(point) && !pieces.containsKey(new Point(point.x, point.y - 1)))) //No pieces there
+                        .collect(Collectors.toSet());
             }
         } else if (piece instanceof Rabbit) {
             //Rabbits can be placed anywhere except on other pieces
             return spots.stream()
                     .filter(point -> !pieces.containsKey(point))
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         } else if (piece instanceof Mushroom) {
             //Mushrooms can be placed anywhere except on pieces or holes
             return spots.stream()
                     .filter(point -> !pieces.containsKey(point) && !terrain.get(point).isHole())
-                    .collect(Collectors.toList());
+                    .collect(Collectors.toSet());
         } else {
             throw new IllegalStateException("Error: invalid piece type");
         }
