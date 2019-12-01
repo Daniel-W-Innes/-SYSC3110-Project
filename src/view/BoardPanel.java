@@ -1,6 +1,7 @@
 package view;
 
 import controller.Game;
+import controller.LevelCreator;
 import helpers.Move;
 import helpers.Piece;
 import helpers.Point;
@@ -10,10 +11,8 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Map;
-import java.util.Set;
+import java.util.List;
+import java.util.*;
 
 /**
  * The panel that holds all of the tiles for the game.
@@ -23,6 +22,11 @@ class BoardPanel extends JPanel implements ActionListener {
     private final Game game;
     private Point startPoint;
     private Set<Point> endPoints;
+    Piece selectedPiece; // Keeps track of what piece to be added given the next tile click, if in editing mode
+    private List<Point> availableBoardSpots;
+    private boolean inLevelEditorMode = false;
+    private boolean pieceSelected = false;
+    private boolean deletePieces = false; // Determines if tile clicks should be interpreted as removing pieces
 
     /**
      * Initializes the panel with Tiles to represent the game
@@ -34,6 +38,71 @@ class BoardPanel extends JPanel implements ActionListener {
         this.game = game;
         boardMap = new HashMap<>();
         endPoints = new HashSet<>();
+        availableBoardSpots = new ArrayList<>();
+    }
+
+    /**
+     * Returns whether the view is in editing mode.
+     *
+     * @return true if the view is in editing mode
+     */
+
+    public boolean inEditingMode() {
+        return inLevelEditorMode;
+    }
+
+    /**
+     * Switch between editing mode and game mode.
+     *
+     * @param inLevelEditorMode true if the view should switch to editing mode
+     */
+
+    public void toggleInLevelEditor(boolean inLevelEditorMode) {
+        this.inLevelEditorMode = inLevelEditorMode;
+    }
+
+    /**
+     * Highlights all the valid location to place a piece.
+     *
+     * @param selectedPiece   the selected piece that will later be added to the board
+     * @param availablePoints collection of points where the selectedPiece can be placed
+     */
+
+    void highlightAvailableTiles(Piece selectedPiece, Set<Point> availablePoints) {
+        if (!inLevelEditorMode) {
+            return;
+        }
+
+        availableBoardSpots.clear();
+        for (Point point : availablePoints) {
+            this.availableBoardSpots.add(point);
+        }
+        this.selectedPiece = selectedPiece;
+        pieceSelected = true;
+        deletePieces = false; // User is in the sub-mode of editing mode where pieces are added
+        for (Point point : availablePoints) {
+            boardMap.get(point).setHighlighted(true);
+        }
+    }
+
+    /**
+     * Unhighlight all of the tiles, regardless of why there were highlighted earlier.
+     */
+
+    void unHighlightAllTiles() {
+        for (Tile tile : boardMap.values()) {
+            tile.setHighlighted(false);
+            tile.setHintPieceHighlighted(false);
+        }
+    }
+
+    /**
+     * Switch into delete mode. Until a LevelEditorButton is clicked again, all tile clicks
+     * will be interpreter as trying to remove a piece from a point.
+     */
+
+    void inDeleteMode() {
+        deletePieces = true;
     }
 
     /**
@@ -93,39 +162,60 @@ class BoardPanel extends JPanel implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Point clickedPoint = ((Tile) e.getSource()).getPoint();
 
-        for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
-            tile.getValue().setHintPieceHighlighted(false);
-            tile.getValue().setHighlighted(false);
-        }
-
-        if (null == startPoint) {
-            //1st part of the move: update currently selected square
-            startPoint = clickedPoint;
-            endPoints = game.getEndPoint(clickedPoint);
-            //Don't count the click if there are no available moves
-            if (endPoints.isEmpty()) {
-                startPoint = null;
+        if (inLevelEditorMode) {
+            if (!deletePieces) {
+                if (availableBoardSpots.contains(clickedPoint)) {
+                    if (pieceSelected) {
+                        // Clone the selected piece; otherwise all pieces of the same type
+                        // will refer to the same object
+                        Piece newPiece = selectedPiece.clonePiece();
+                        newPiece.updateBoardSpotUsed(clickedPoint);
+                        LevelCreator.placePiece(newPiece); // Logically add the new piece
+                        for (Point point : newPiece.boardSpotsUsed()) { // Visually add the new piece
+                            addPiece(point, newPiece);
+                        }
+                        pieceSelected = false;
+                        unHighlightAllTiles(); // Clear any highlighting from the previous showing of valid points
+                    }
+                }
             } else {
-                endPoints.forEach(point -> {
-                    //Highlight available moves
-                    boardMap.get(point).setHighlighted(true);
-                });
+                LevelCreator.clearSquare(clickedPoint);
             }
         } else {
-            //Valid move
-            if (endPoints.contains(clickedPoint)) {
-                //Delegate to controller
-                game.movePiece(new Move(startPoint, clickedPoint));
-                startPoint = null;
-                //Remove highlighting
-                endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
-            } else { //Invalid move, deselect
-                startPoint = null;
-                //Remove highlighting
-                endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
-                endPoints.clear();
+            for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {
+                tile.getValue().setHintPieceHighlighted(false);
+                tile.getValue().setHighlighted(false);
             }
 
+            if (null == startPoint) {
+                //1st part of the move: update currently selected square
+                startPoint = clickedPoint;
+                endPoints = game.getEndPoint(clickedPoint);
+                //Don't count the click if there are no available moves
+                if (endPoints.isEmpty()) {
+                    startPoint = null;
+                } else {
+                    endPoints.forEach(point -> {
+                        //Highlight available moves
+                        boardMap.get(point).setHighlighted(true);
+                    });
+                }
+            } else {
+                //Valid move
+                if (endPoints.contains(clickedPoint)) {
+                    //Delegate to controller
+                    game.movePiece(new Move(startPoint, clickedPoint));
+                    startPoint = null;
+                    //Remove highlighting
+                    endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
+                } else { //Invalid move, deselect
+                    startPoint = null;
+                    //Remove highlighting
+                    endPoints.forEach(move -> boardMap.get(clickedPoint).setHighlighted(false));
+                    endPoints.clear();
+                }
+
+            }
         }
     }
 

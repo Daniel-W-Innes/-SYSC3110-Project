@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 /**
@@ -204,6 +205,24 @@ public class Board implements Model {
     }
 
     /**
+     * Remove any piece at the given point from the board- if the piece exists.
+     *
+     * @param point the point at which any piece, if present, should be removed
+     */
+
+    public void removePiece(Point point) {
+        // Since a piece could be a fox, which takes up two spaces, but is represented by one point,
+        // it is necessary to loop over all of the board spots of the piece
+        if (pieces.containsKey(point)) {
+            pieces.get(point).boardSpotsUsed().forEach(view::removePiece);
+            Set<Point> boardSpotsUsed = pieces.get(point).boardSpotsUsed();
+            for (Point boardSport : boardSpotsUsed) {
+                pieces.remove(boardSport);
+            }
+        }
+    }
+
+    /**
      * Get a square at the given point from the board.
      * Note: This will return null if the board does not have a square at the point.
      *
@@ -272,14 +291,22 @@ public class Board implements Model {
      * @return If the board is victory
      */
     public boolean isVictory() {
+        // Since a board could be checked for a winning state even if there are no rabbits,
+        // as the board can now be created incrementally, it is necessary to ensure that a winning
+        // notification is sent only if there are any rabbits, along with if they are in holes.
+        int rabbitCount = 0;
+
         for (Map.Entry<Point, Piece> entry : pieces.entrySet()) {
             //Return false if a rabbit is not in a hole
-            if (Rabbit.class == entry.getValue().getClass()
-                    && ((null == terrain.get(entry.getKey())) || !terrain.get(entry.getKey()).isHole())) {
-                return false;
+            if (Rabbit.class == entry.getValue().getClass()) {
+                rabbitCount += 1;
+                if ((null == terrain.get(entry.getKey())) || !terrain.get(entry.getKey()).isHole()) {
+                    return false;
+                }
             }
         }
-        return true;
+
+        return rabbitCount != 0;
     }
 
     /**

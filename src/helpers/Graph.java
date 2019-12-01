@@ -106,7 +106,9 @@ public class Graph {
             }
 
             // For some reason the last hint move is null; it is removed to prevent a null move being attempted to be used
-            solution.pop();
+            if (!solution.isEmpty()) {
+                solution.pop();
+            }
 
             isReady = true;
         }).start();

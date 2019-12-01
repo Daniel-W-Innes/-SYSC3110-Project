@@ -19,5 +19,7 @@ public interface Piece {
 
     ImageIcon getImageIcon(Point location);
 
+    ImageIcon getLevelEditorIcon();
+
     void updateBoardSpotUsed(Point newLocation);
 }

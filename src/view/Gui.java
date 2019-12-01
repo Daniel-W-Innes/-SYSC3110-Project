@@ -1,6 +1,7 @@
 package view;
 
 import controller.Game;
+import controller.LevelCreator;
 import helpers.Move;
 import helpers.Piece;
 import helpers.Point;
@@ -16,9 +17,10 @@ import java.util.Optional;
  * GUI for the game.
  */
 public class Gui extends JFrame implements View {
-    private static final int WIDTH = 900;
+    private static final int WIDTH = 1025;
     private static final int HEIGHT = 960;
     private final BoardPanel boardPanel;
+    private LevelEditorPanel levelEditorPanel;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -32,7 +34,9 @@ public class Gui extends JFrame implements View {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         createToolbar(game);
         boardPanel = new BoardPanel(game);
+        levelEditorPanel = new LevelEditorPanel(boardPanel);
         add(boardPanel, BorderLayout.CENTER);
+        add(levelEditorPanel, BorderLayout.EAST);
         setVisible(true);
     }
 
@@ -49,16 +53,19 @@ public class Gui extends JFrame implements View {
                 JOptionPane.showMessageDialog(this, "Failed to load");
             }
         });
+
         addToolbarButton(toolbar, "Load Game", e -> {
             try {
                 String fileName = JOptionPane.showInputDialog(this, "File Name");
                 if (null != fileName) {
                     game.load(this, fileName);
+                    boardPanel.toggleInLevelEditor(false); // Re-enable game logic
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to load");
             }
         });
+
         addToolbarButton(toolbar, "Save Game", e -> {
             try {
                 String fileName = JOptionPane.showInputDialog(this, "File Name");
@@ -87,16 +94,59 @@ public class Gui extends JFrame implements View {
             if (game.gameWon()) {
                 JOptionPane.showMessageDialog(this, "The game is already won.");
             } else {
-                Optional<Move> hint = game.hint();
-                if (hint.isPresent()) {
-                    boardPanel.showHint(hint.get());
+                // While a solution is being generated, this Thread is put to sleep. Thus the InterruptedException
+                if (boardPanel.inEditingMode()) {
+                    try {
+                        if (!LevelCreator.solutionExists()) {
+                            JOptionPane.showMessageDialog(this, "No solution found for the board");
+                        } else {
+                            JOptionPane.showMessageDialog(this, "There is solution for the board");
+                        }
+                    } catch (InterruptedException ex) {
+                        ex.printStackTrace();
+                    }
                 } else {
-                    JOptionPane.showMessageDialog(this, "Hint is still loading try again later");
+                    Optional<Move> hint = null;
+
+                    hint = game.hint();
+
+                    if (hint.isPresent()) {
+                        boardPanel.showHint(hint.get());
+                    } else {
+                        JOptionPane.showMessageDialog(this, "Hint is still loading try again later");
+                    }
                 }
             }
         });
         addToolbarButton(toolbar, "Undo", e -> game.undo());
         addToolbarButton(toolbar, "Redo", e -> game.redo());
+        addToolbarButton(toolbar, "Enter Game Design Mode", e ->
+        {
+            LevelCreator.showGameBeingCreated(this);
+            boardPanel.unHighlightAllTiles();
+            boardPanel.toggleInLevelEditor(true);
+            levelEditorPanel.enableEditingButtons();
+
+        });
+
+        addToolbarButton(toolbar, "Exit Game Design Mode", e ->
+        {
+            if (boardPanel.inEditingMode()) {
+                try {
+                    String fileName = JOptionPane.showInputDialog(this, "File Name");
+                    if (null != fileName) {
+                        LevelCreator.saveLevel(fileName);
+                        boardPanel.toggleInLevelEditor(false);
+                        game.load(this, fileName);
+                    }
+                } catch (IOException | InterruptedException ex) {
+                    JOptionPane.showMessageDialog(this, "Failed to save");
+                }
+
+                levelEditorPanel.disableEditingButtons();
+            }
+
+        });
 
         add(toolbar, BorderLayout.PAGE_START);
     }

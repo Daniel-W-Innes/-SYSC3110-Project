@@ -294,6 +294,20 @@ public class Fox implements Piece {
     }
 
     /**
+     * Returns the icon that should be used by the LevelEditorButtons.
+     * <p>
+     * Note that this could be obtained from the getImageIcon function, but it would require
+     * calculating where the head is, which is not ideal.
+     *
+     * @return ImageIcon to be used for the LevelEditorButton
+     */
+
+    @Override
+    public ImageIcon getLevelEditorIcon() {
+        return headIcon;
+    }
+
+    /**
      * Calculate the location of the fox tail given the positions of its head and the direction of the fox.
      *
      * @return the point representing the location of the fox tail

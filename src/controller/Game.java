@@ -29,6 +29,7 @@ public class Game {
     private Graph graph;
     private final Stack<Move> undoHistory;
     private final Stack<Move> redoHistory;
+
     /**
      * A reference to the board model
      */
@@ -38,6 +39,12 @@ public class Game {
      */
     private String levelName;
 
+    /**
+     * Initializes the game with the given starting level.
+     *
+     * @param startingLevelName the initial level to load
+     * @throws IOException
+     */
 
     public Game(String startingLevelName) throws IOException {
         undoHistory = new Stack<>();
@@ -130,6 +137,12 @@ public class Game {
         cleanGame(observer, levelName);
     }
 
+    /**
+     * Helper function to aid in saving the game.
+     *
+     * @return
+     */
+
     private Proto.Game toProto() {
         return Proto.Game.newBuilder()
                 .setBoard(board.toProto())
@@ -138,9 +151,24 @@ public class Game {
                 .build();
     }
 
+    /**
+     * Save the current state of the game to a file, that can later loaded for playing.
+     *
+     * @param fileName name of the file holding the level
+     * @throws IOException
+     */
+
     public void save(String fileName) throws IOException {
         toProto().writeTo(new FileOutputStream(fileName));
     }
+
+    /**
+     * Load the specified the game so that it can be played.
+     *
+     * @param observer reference to the view where the board should be displayed
+     * @param fileName name of the text file that holds the level to be loaded
+     * @throws IOException
+     */
 
     public void load(View observer, String fileName) throws IOException {
         Proto.Game game = Proto.Game.parseFrom(new FileInputStream(fileName));
@@ -148,6 +176,13 @@ public class Game {
         graph = new Graph(game.getGraph(), board);
         cleanGame(observer, game.getLevelName());
     }
+
+    /**
+     * Clears the game of any previous game history
+     *
+     * @param observer  reference to the view where the board should be displayed
+     * @param levelName the name of the level that is being played
+     */
 
     private void cleanGame(View observer, String levelName) {
         this.levelName = levelName;

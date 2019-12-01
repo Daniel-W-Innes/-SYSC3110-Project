@@ -191,4 +191,18 @@ public class Rabbit implements Piece {
     public ImageIcon getImageIcon(Point location) {
         return icon;
     }
+
+    /**
+     * Returns the icon that should be used by the LevelEditorButtons.
+     * <p>
+     * Note that this could be obtained from the getImageIcon function, but due to the usage of fox
+     * such a function helps in readability and separation of duties.
+     *
+     * @return ImageIcon to be used for the LevelEditorButton
+     */
+
+    @Override
+    public ImageIcon getLevelEditorIcon() {
+        return icon;
+    }
 }
