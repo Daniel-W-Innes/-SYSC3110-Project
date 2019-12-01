@@ -27,6 +27,14 @@ public class LevelCreator {
     }
 
     /**
+     * Reset the game being created to an empty board.
+     */
+
+    public static void resetLevel() {
+        board = new Board();
+    }
+
+    /**
      * Determines if there is a solution for the given board being constructed.
      *
      * @return true if there is a solution
@@ -127,9 +135,10 @@ public class LevelCreator {
     /**
      * Clear everything off the Square, the piece and if it's a Hole
      * @param p the point on the board to clear
+     * @param applyChangesView true if removing the changes should be made to the view
      */
-    public static void clearSquare(Point p) {
-        board.removePiece(p);
+    public static void clearSquare(Point p, boolean applyChangesView) {
+        board.removePiece(p, applyChangesView);
     }
 
     /**

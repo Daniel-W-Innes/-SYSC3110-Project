@@ -210,11 +210,13 @@ public class Board implements Model {
      * @param point the point at which any piece, if present, should be removed
      */
 
-    public void removePiece(Point point) {
+    public void removePiece(Point point, boolean applyChangesView) {
         // Since a piece could be a fox, which takes up two spaces, but is represented by one point,
         // it is necessary to loop over all of the board spots of the piece
         if (pieces.containsKey(point)) {
-            pieces.get(point).boardSpotsUsed().forEach(view::removePiece);
+            if (applyChangesView) {
+                pieces.get(point).boardSpotsUsed().forEach(view::removePiece);
+            }
             Set<Point> boardSpotsUsed = pieces.get(point).boardSpotsUsed();
             for (Point boardSport : boardSpotsUsed) {
                 pieces.remove(boardSport);

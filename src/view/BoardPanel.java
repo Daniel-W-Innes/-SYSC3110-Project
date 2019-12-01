@@ -179,7 +179,7 @@ class BoardPanel extends JPanel implements ActionListener {
                     }
                 }
             } else {
-                LevelCreator.clearSquare(clickedPoint);
+                LevelCreator.clearSquare(clickedPoint, true);
             }
         } else {
             for (Map.Entry<Point, Tile> tile : boardMap.entrySet()) {

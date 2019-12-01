@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -24,16 +23,9 @@ public class LevelCreatorTest {
         LevelCreator.placePiece(new Rabbit(rabbitLoc));
         assertTrue(LevelCreator.board.hasPiece(rabbitLoc));
 
-        LevelCreator.clearSquare(rabbitLoc);
+        LevelCreator.clearSquare(rabbitLoc, false);
         assertFalse(LevelCreator.board.hasPiece(rabbitLoc));
 
-        //Test clearing Hole
-        Point holeLoc = new Point(2,2);
-        LevelCreator.placeHole(holeLoc);
-        assertTrue(LevelCreator.board.getTerrain().get(holeLoc).isHole());
-
-        LevelCreator.clearSquare(holeLoc);
-        assertFalse(LevelCreator.board.getTerrain().containsKey(holeLoc));
     }
 
     @Test
@@ -91,19 +83,5 @@ public class LevelCreatorTest {
         expected2.remove(new Point(mushroomLoc.x, mushroomLoc.y+1));
         Set<Point> comp4 = LevelCreator.getAvailableSpots(yFox);
         assertEquals(expected2, comp4);
-
-        //Test going over Holes
-        Point holeLoc = new Point(3,3);
-        LevelCreator.placeHole(holeLoc);
-        //X-Foxes
-        Set<Point> comp5 = LevelCreator.getAvailableSpots(xFox);
-        expected1.remove(holeLoc);
-        expected1.remove(new Point(holeLoc.x+1, holeLoc.y));
-        assertEquals(expected1, comp5);
-        //Y-Foxes
-        Set<Point> comp6 = LevelCreator.getAvailableSpots(yFox);
-        expected2.remove(holeLoc);
-        expected2.remove(new Point(holeLoc.x, holeLoc.y+1));
-        assertEquals(expected2, comp6);
     }
 }
