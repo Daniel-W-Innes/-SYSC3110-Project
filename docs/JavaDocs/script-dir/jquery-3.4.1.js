@@ -2835,7 +2835,6 @@
     var rsingleTag = (/^<([a-z][^\/\0>:\x20\t\r\n\f]*)[\x20\t\r\n\f]*\/?>(?:<\/\1>|)$/i);
 
 
-
 // Implement the identical functionality for filter and not
     function winnow(elements, qualifier, not) {
         if (isFunction(qualifier)) {
@@ -3216,7 +3215,6 @@
         };
     });
     var rnothtmlwhite = (/[^\x20\t\r\n\f]+/g);
-
 
 
 // Convert String-formatted options into Object-formatted ones
@@ -3857,8 +3855,6 @@
     };
 
 
-
-
 // The deferred used on DOM ready
     var readyList = jQuery.Deferred();
 
@@ -4181,7 +4177,6 @@
     var dataPriv = new Data();
 
     var dataUser = new Data();
-
 
 
 //	Implementation Summary
@@ -4718,7 +4713,6 @@
     var rtagName = (/<([a-z][^\/\0>\x20\t\r\n\f]*)/i);
 
     var rscriptType = (/^$|^module$|\/(?:java|ecma)script/i);
-
 
 
 // We have to close these tags to support XHTML (#13200)
@@ -7505,7 +7499,7 @@
             // Show any hidden elements after setting opacity to 0
             return this.filter(isHiddenWithinTree).css("opacity", 0).show()
 
-            // Animate to the value specified
+                // Animate to the value specified
                 .end().animate({opacity: to}, speed, easing, callback);
         },
         animate: function (prop, speed, easing, callback) {
@@ -8600,7 +8594,6 @@
     var nonce = Date.now();
 
     var rquery = (/\?/);
-
 
 
 // Cross-browser xml parsing

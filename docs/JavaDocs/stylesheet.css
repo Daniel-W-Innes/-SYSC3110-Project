@@ -196,6 +196,7 @@ button {
 .subNav .navList {
     padding-top: 5px;
 }
+
 ul.navList, ul.subNavList {
     float: left;
     margin: 0 25px 0 0;
@@ -208,6 +209,7 @@ ul.navList li {
     padding: 5px 6px;
     text-transform: uppercase;
 }
+
 .subNav .navListSearch {
     float: right;
     margin: 0 0 0 0;
@@ -714,6 +716,7 @@ main, nav, header, footer, section {
     white-space: nowrap;
     box-shadow: 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
 }
+
 ul.ui-autocomplete {
     position: fixed;
     z-index: 999999;
@@ -724,6 +727,7 @@ ul.ui-autocomplete li {
     clear: both;
     width: 100%;
 }
+
 .resultHighlight {
     font-weight: bold;
 }
