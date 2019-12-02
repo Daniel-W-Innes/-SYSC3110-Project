@@ -20,7 +20,7 @@ public class Gui extends JFrame implements View {
     private static final int WIDTH = 1025;
     private static final int HEIGHT = 960;
     private final BoardPanel boardPanel;
-    private LevelEditorPanel levelEditorPanel;
+    private final LevelEditorPanel levelEditorPanel;
 
     /**
      * Starts up an instance of the TextView GUI
@@ -59,7 +59,7 @@ public class Gui extends JFrame implements View {
                 String fileName = JOptionPane.showInputDialog(this, "File Name");
                 if (null != fileName) {
                     game.load(this, fileName);
-                    boardPanel.toggleInLevelEditor(false); // Re-enable game logic
+                    boardPanel.toggleInLevelEditor(); // Re-enable game logic
                 }
             } catch (IOException ex) {
                 JOptionPane.showMessageDialog(this, "Failed to load");
@@ -106,10 +106,7 @@ public class Gui extends JFrame implements View {
                         ex.printStackTrace();
                     }
                 } else {
-                    Optional<Move> hint = null;
-
-                    hint = game.hint();
-
+                    Optional<Move> hint = game.hint();
                     if (hint.isPresent()) {
                         boardPanel.showHint(hint.get());
                     } else {
@@ -120,24 +117,22 @@ public class Gui extends JFrame implements View {
         });
         addToolbarButton(toolbar, "Undo", e -> game.undo());
         addToolbarButton(toolbar, "Redo", e -> game.redo());
-        addToolbarButton(toolbar, "Enter Game Design Mode", e ->
-        {
+        addToolbarButton(toolbar, "Enter Game Design Mode", e -> {
             LevelCreator.showGameBeingCreated(this);
             boardPanel.unHighlightAllTiles();
-            boardPanel.toggleInLevelEditor(true);
+            boardPanel.toggleInLevelEditor();
             levelEditorPanel.enableEditingButtons();
 
         });
 
-        addToolbarButton(toolbar, "Exit Game Design Mode", e ->
-        {
+        addToolbarButton(toolbar, "Exit Game Design Mode", e -> {
             if (boardPanel.inEditingMode()) {
                 try {
                     String fileName = JOptionPane.showInputDialog(this, "File Name");
                     if (null != fileName) {
                         LevelCreator.saveLevel(fileName);
-                        boardPanel.toggleInLevelEditor(false);
-                        game.load(this, fileName);
+                        boardPanel.toggleInLevelEditor();
+                        game.setLevel(this,fileName);
                     }
                 } catch (IOException | InterruptedException ex) {
                     JOptionPane.showMessageDialog(this, "Failed to save");

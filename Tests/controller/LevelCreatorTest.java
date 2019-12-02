@@ -21,10 +21,10 @@ public class LevelCreatorTest {
         //Test clearing Rabbit
         Point rabbitLoc = new Point(1,1);
         LevelCreator.placePiece(new Rabbit(rabbitLoc));
-        assertTrue(LevelCreator.board.hasPiece(rabbitLoc));
+        assertTrue(LevelCreator.getBoard().hasPiece(rabbitLoc));
 
         LevelCreator.clearSquare(rabbitLoc, false);
-        assertFalse(LevelCreator.board.hasPiece(rabbitLoc));
+        assertFalse(LevelCreator.getBoard().hasPiece(rabbitLoc));
 
     }
 

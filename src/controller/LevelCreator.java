@@ -4,7 +4,6 @@ import helpers.*;
 import model.Board;
 import view.View;
 
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -15,13 +14,9 @@ import java.util.stream.Collectors;
 
 //Singleton builder?
 public class LevelCreator {
-    //Package private so it can be unit tested
-    static Board board;
-    static Graph solution;
+    private static Board board;
 
-    //Static initializer for the board
     static {
-        //Default terrain only.
         board = new Board();
         GameBuilder.setDefaultTerrain(board);
     }
@@ -42,7 +37,7 @@ public class LevelCreator {
      */
 
     public static boolean solutionExists() throws InterruptedException {
-        solution = new Graph();
+        Graph solution = new Graph();
         solution.genSolution(board);
         Thread.sleep(500);
         return solution.getHintMove().isPresent();
@@ -146,26 +141,6 @@ public class LevelCreator {
      */
     public static void saveLevel(String fileName) throws IOException, InterruptedException {
         solutionExists();
-        toProto(fileName, solution).writeTo(new FileOutputStream(fileName));
-    }
-
-    public static void main(String[] args) {
-        LevelCreator.getAvailableSpots(new Mushroom(new Point()));
-    }
-
-    /**
-     * Internal helper to aid in saving the game
-     *
-     * @param levelName name of the level to save
-     * @param graph     solution of the level that is being saved
-     * @return
-     */
-
-    private static Proto.Game toProto(String levelName, Graph graph) {
-        return Proto.Game.newBuilder()
-                .setBoard(board.toProto())
-                .setLevelName(levelName)
-                .setGraph(graph.toProto())
-                .build();
+        board.save(fileName);
     }
 }

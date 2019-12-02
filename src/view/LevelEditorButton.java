@@ -11,7 +11,7 @@ import java.awt.*;
 
 public class LevelEditorButton extends JButton {
 
-    private Piece piece;
+    private final Piece piece;
 
     /**
      * Initializes the button with the piece it represents.

@@ -23,7 +23,7 @@ class BoardPanel extends JPanel implements ActionListener {
     private Point startPoint;
     private Set<Point> endPoints;
     Piece selectedPiece; // Keeps track of what piece to be added given the next tile click, if in editing mode
-    private List<Point> availableBoardSpots;
+    private final List<Point> availableBoardSpots;
     private boolean inLevelEditorMode = false;
     private boolean pieceSelected = false;
     private boolean deletePieces = false; // Determines if tile clicks should be interpreted as removing pieces
@@ -53,12 +53,10 @@ class BoardPanel extends JPanel implements ActionListener {
 
     /**
      * Switch between editing mode and game mode.
-     *
-     * @param inLevelEditorMode true if the view should switch to editing mode
      */
 
-    public void toggleInLevelEditor(boolean inLevelEditorMode) {
-        this.inLevelEditorMode = inLevelEditorMode;
+    public void toggleInLevelEditor() {
+        inLevelEditorMode = !inLevelEditorMode;
     }
 
     /**
@@ -74,9 +72,7 @@ class BoardPanel extends JPanel implements ActionListener {
         }
 
         availableBoardSpots.clear();
-        for (Point point : availablePoints) {
-            this.availableBoardSpots.add(point);
-        }
+        availableBoardSpots.addAll(availablePoints);
         this.selectedPiece = selectedPiece;
         pieceSelected = true;
         deletePieces = false; // User is in the sub-mode of editing mode where pieces are added

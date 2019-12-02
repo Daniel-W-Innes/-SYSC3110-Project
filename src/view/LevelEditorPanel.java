@@ -17,13 +17,13 @@ import java.util.Set;
 
 public class LevelEditorPanel extends JPanel implements ActionListener {
 
-    private LevelEditorButton mushroomButton;
-    private LevelEditorButton rabbitButton;
-    private LevelEditorButton horizontalFoxButton;
-    private LevelEditorButton verticalFoxButton;
-    private JButton deleteButton;
+    private final LevelEditorButton mushroomButton;
+    private final LevelEditorButton rabbitButton;
+    private final LevelEditorButton horizontalFoxButton;
+    private final LevelEditorButton verticalFoxButton;
+    private final JButton deleteButton;
 
-    private BoardPanel boardPanel;
+    private final BoardPanel boardPanel;
 
     /**
      * Initializes the Level Editor with buttons that the user can press to modify the
