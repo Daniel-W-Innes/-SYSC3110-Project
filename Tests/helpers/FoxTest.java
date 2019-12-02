@@ -1,10 +1,12 @@
 package helpers;
 
+import model.Board;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -75,36 +77,36 @@ class FoxTest {
         assertEquals(Fox.horizontalTailImageLocation, fox.getImageIcon(new Point(0, 1)).getDescription());
     }
 
-//    @Test
-//    void testGetMovesX() {
-//        Board board = new Board();
-//
-//        board.addSquare(new Point(0, 0), new Square(false));
-//        board.addSquare(new Point(4, 0), new Square(false));
-//
-//        board.addPiece(fox);
-//
-//        assertEquals(1, fox.getEndPoint(board, new Point(2, 0)).size());
-//        assertEquals(new Move(new Point(2, 0), new Point(3, 0)), fox.getEndPoint(board, new Point(2, 0)).get(0));
-//    }
+    @Test
+    void testGetMovesX() {
+        Board board = new Board();
 
-//    @Test
-//    void testGetMovesY() {
-//        Board board = new Board();
-//
-//        Fox fox = new Fox(Direction.Y_AXIS, new Point(0, 2));
-//
-//        board.addPiece(fox);
-//
-//        Set<Move> possibleMoves = Set.of(
-//                new Move(new Point(0, 2), new Point(0, 3)),
-//                new Move(new Point(0, 2), new Point(0, 4)),
-//                new Move(new Point(0, 2), new Point(0, 1)));
-//
-//        assertEquals(possibleMoves.size(), fox.getEndPoint(board, new Point(0, 2)).size());
-//
-//        for (int i = 0; i < possibleMoves.size(); i++) {
-//            assertTrue(possibleMoves.contains(fox.getEndPoint(board, new Point(0, 2)).get(i)));
-//        }
-//    }
+        board.addSquare(new Point(0, 0), new Square(false));
+        board.addSquare(new Point(4, 0), new Square(false));
+
+        board.addPiece(fox);
+
+        assertEquals(1, fox.getEndPoint(board, new Point(2, 0)).size());
+        assertTrue(fox.getEndPoint(board, new Point(2, 0)).contains(new Point(3, 0)));
+    }
+
+    @Test
+    void testGetMovesY() {
+        Board board = new Board();
+
+        Fox fox = new Fox(Direction.Y_AXIS, new Point(0, 2));
+
+        board.addPiece(fox);
+
+        Set<Point> expectedEndPoint = Set.of(
+                new Point(0, 3),
+                new Point(0, 4),
+                new Point(0, 1));
+
+        assertEquals(expectedEndPoint.size(), fox.getEndPoint(board, new Point(0, 2)).size());
+        Set<Point> possibleEndPoint = fox.getEndPoint(board, new Point(0, 2));
+        for (Point point : expectedEndPoint) {
+            assertTrue(possibleEndPoint.contains(point));
+        }
+    }
 }

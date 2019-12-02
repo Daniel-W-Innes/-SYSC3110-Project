@@ -147,6 +147,13 @@ public class Rabbit implements Piece {
         boardSpot = new Point(newLocation);
     }
 
+    @Override
+    public Set<Point> getAvailableSpots(Board board, Set<Point> points) {
+        return points.stream()
+                .filter(point -> !board.getPieces().containsKey(point))
+                .collect(Collectors.toSet());
+    }
+
     /**
      * Find the possible moves the rabbit can take given the current state of the board.
      *

@@ -275,6 +275,31 @@ public class Fox implements Piece {
         return possibleEndPoint;
     }
 
+    public Set<Point> getAvailableSpots(Board board, Set<Point> points) {
+        Map<Point, Piece> pieces = board.getPieces();
+        Map<Point, Square> terrain = board.getTerrain();
+
+        if (direction == Direction.X_AXIS) {
+            //Fox X-Foxes
+            return points.stream()
+                    .filter(point -> (point.y == 1 || point.y == 3) //X-Foxes only fit on rows 1 and 3
+                            && point.x > 0 //If it fits horizontally
+                            && (!terrain.containsKey(point) || !terrain.get(point).isHole())
+                            && (!terrain.containsKey(new Point(point.x - 1, point.y)) || !terrain.get(new Point(point.x - 1, point.y)).isHole()) //Can't fit over Holes
+                            && (!pieces.containsKey(point) && !pieces.containsKey(new Point(point.x - 1, point.y)))) //No pieces there
+                    .collect(Collectors.toSet());
+        } else {
+            //For Y-Foxes
+            return points.stream()
+                    .filter(point -> (point.x == 1 || point.x == 3) //Y-Foxes only fit on columns 1 and 3
+                            && point.y > 0 //If it fits vertically
+                            && (!terrain.containsKey(point) || !terrain.get(point).isHole())
+                            && (!terrain.containsKey(new Point(point.x, point.y - 1)) || !terrain.get(new Point(point.x, point.y - 1)).isHole()) //Can't fit over Holes
+                            && (!pieces.containsKey(point) && !pieces.containsKey(new Point(point.x, point.y - 1)))) //No pieces there
+                    .collect(Collectors.toSet());
+        }
+    }
+
     /**
      * Get the texture that should be drawn to represent the fox at a given point.
      *

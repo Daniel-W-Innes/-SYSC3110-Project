@@ -14,7 +14,7 @@ public class Graph {
 
     private final Stack<Move> solution;
     private boolean isReady;
-
+    private Thread thread;
 
     public Graph() {
         isReady = false;
@@ -34,7 +34,7 @@ public class Graph {
     public void genSolution(Board board) {
         // The solution has to be created asynchronously so that a dialog can be shown to the user that the solution is
         // being generated while the solution is being created.
-        new Thread(() -> {
+        thread = new Thread(() -> {
             //Keep track of which nodes we visited
             Set<Board> visited = new HashSet<>();
 
@@ -111,7 +111,8 @@ public class Graph {
             }
 
             isReady = true;
-        }).start();
+        });
+        thread.start();
     }
 
     public Proto.Graph toProto() {
@@ -123,6 +124,10 @@ public class Graph {
 
     public Optional<Move> getHintMove() {
         return solution.empty() || !isReady ? Optional.empty() : Optional.of(solution.peek());
+    }
+
+    public Thread getThread() {
+        return thread;
     }
 
     public void advanceSolutionIndex() {

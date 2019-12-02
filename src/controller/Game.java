@@ -87,7 +87,7 @@ public class Game {
            In that case, regardless if a hint was requested, the solution is regenerated.  The history of moves
            is kept, but none of the history is synchronized with the solution, as the history was made before the new solution was created.
      */
-    private void movePiece(Move move, boolean addToUndoHistory) {
+    void movePiece(Move move, boolean addToUndoHistory) {
         // The user saw the possible moves for the piece that was clicked, and selected a new location for the piece.
         // It is time to apply to the piece that was previously queried for valid moves.
         board.movePiece(board.getPieces().get(move.getStartPoint()), move.getEndPoint(), true);

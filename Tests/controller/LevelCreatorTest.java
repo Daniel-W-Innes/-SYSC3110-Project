@@ -51,7 +51,7 @@ public class LevelCreatorTest {
         assertEquals(expected1, comp2);
 
         //Test with a Fox on the board
-        Fox fox = new Fox(Direction.Y_AXIS, new Point(3,1));
+        new Fox(Direction.Y_AXIS, new Point(3, 1));
     }
 
     @Test

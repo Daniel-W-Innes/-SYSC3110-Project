@@ -22,4 +22,6 @@ public interface Piece {
     ImageIcon getLevelEditorIcon();
 
     void updateBoardSpotUsed(Point newLocation);
+
+    Set<Point> getAvailableSpots(Board board, Set<Point> points);
 }

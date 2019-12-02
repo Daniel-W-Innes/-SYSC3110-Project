@@ -109,6 +109,14 @@ public class Mushroom implements Piece {
         boardSpot = new Point(newLocation);
     }
 
+    @Override
+    public Set<Point> getAvailableSpots(Board board, Set<Point> points) {
+        return points.stream()
+                .filter(point -> !board.getPieces().containsKey(point))
+                .filter(point -> !board.getTerrain().containsKey(point) || !board.getTerrain().get(point).isHole())
+                .collect(Collectors.toSet());
+    }
+
     /**
      * Get all of the board spots used by the mushroom piece.
      *
