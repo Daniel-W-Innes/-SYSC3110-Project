@@ -101,8 +101,12 @@ public class LevelCreator {
     /**
      * Exports the board to a file. Call this when the user is done creating the level.
      */
-    public static void saveLevel(String fileName) throws IOException, InterruptedException {
-        solutionExists();
-        board.save(fileName);
+    public static boolean saveLevel(String fileName) throws IOException, InterruptedException {
+        if (solutionExists()) {
+            board.save(fileName);
+            return true;
+        } else {
+            return false;
+        }
     }
 }

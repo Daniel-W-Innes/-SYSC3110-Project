@@ -130,15 +130,17 @@ public class Gui extends JFrame implements View {
                 try {
                     String fileName = JOptionPane.showInputDialog(this, "File Name");
                     if (null != fileName) {
-                        LevelCreator.saveLevel(fileName);
-                        boardPanel.toggleInLevelEditor();
-                        game.setLevel(this,fileName);
+                        if (LevelCreator.saveLevel(fileName)) {
+                            boardPanel.toggleInLevelEditor();
+                            levelEditorPanel.disableEditingButtons();
+                            game.setLevel(this, fileName);
+                        } else {
+                            JOptionPane.showMessageDialog(this, "Level is not solvable");
+                        }
                     }
                 } catch (IOException | InterruptedException ex) {
                     JOptionPane.showMessageDialog(this, "Failed to save");
                 }
-
-                levelEditorPanel.disableEditingButtons();
             }
 
         });

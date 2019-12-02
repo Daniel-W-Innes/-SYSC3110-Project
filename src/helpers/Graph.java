@@ -123,7 +123,7 @@ public class Graph {
     }
 
     public Optional<Move> getHintMove() {
-        return solution.empty() || !isReady ? Optional.empty() : Optional.of(solution.peek());
+        return solution.empty() || !isReady || solution.empty() ? Optional.empty() : Optional.of(solution.peek());
     }
 
     public Thread getThread() {
