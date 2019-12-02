@@ -7,6 +7,7 @@ Design Decisions with Rationale
 ## Authors:
  1. Frank Liu
  2. Binyamin Brion
+ 3. Frank Yu
  
 ## Primary Differences With Regards to Milestone 1
 
@@ -26,7 +27,7 @@ More information can be found in the following document.
 
 * Added a graph-based solution that gives hint to the user when requested, as well as undo/redo functionality.
 
-## Primary Differneces With Regards to Milestone 3
+## Primary Differences With Regards to Milestone 3
 
 * There is now a level editor with which the user can design their own levels. It is composed of a back-end and a front-end. The front-end talks to the back-end, which is an additional controller, to incrementally build a new level. When the user is done, the option to export it as a playable level is present.
 
@@ -74,7 +75,9 @@ Game:
 
 The Game class is the interface connecting the GUI to the Board class. It takes in the result of user input and calls the correct game logic to advance the game. The primary operations are to query the possible moves for the piece clicked and telling the view of that, and forwarding a move to the board once a user has specifed a location to move a piece to. This stops the view from having to talk directly to the model. Another operation is to handle requests about hints, undo and redo operations.
 
-There is additional functionality not yet implemented, but will be in future milestones: serialize, and possibly others. 
+LevelCreator:
+
+The LevelCreator class handles all the backend logic concerning custom level creation. Relatively minimal logic is contained in the class because the LevelCreator mostly operates like a higher level API abstraction of Board operations (it delegates a lot of functionality to the Board class). The design of the LevelCreator class is a sort of fusion of the Singleton and Builder patterns, but it's not really true to either. The LevelCreator class maintains a private static instance of the board which can be modified through static method calls such as `LevelCreator.placePiece()`, `LevelCreator.clearSquare()`, etc, which can then be persisted using the Board's save function.
 
 **_View(s)_**
 
