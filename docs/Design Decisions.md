@@ -26,6 +26,12 @@ More information can be found in the following document.
 
 * Added a graph-based solution that gives hint to the user when requested, as well as undo/redo functionality.
 
+## Primary Differneces With Regards to Milestone 3
+
+* There is now a level editor with which the user can design their own levels. It is composed of a back-end and a front-end. The front-end talks to the back-end, which is an additional controller, to incrementally build a new level. When the user is done, the option to export it as a playable level is present.
+
+* Levels and currently-played games can be saved, and uploaded into the game later picking up where the user left off.
+
 ## Introduction
 The design of the program revolves around the MVC pattern. The MVC design used resembles an archery target, in the following sense.
  
@@ -77,6 +83,14 @@ There is additional functionality not yet implemented, but will be in future mil
 GUI:
 
 The view is split into three different classes, as there are logically three different parts to the GUI- the window itself, the panel that contains all of the buttons, and the buttons themselves. Dividing the functionality into these three pieces allow for delegation to happen. For example, having the logic of how a button is painted is handled by the Tile class. This allows the BoardPanel to not worry how to paint each button- it just needs to be able to organize them.
+
+LevelEditorPanel:
+
+This brings together the functionality of the level editor. The ability to modify the board is done through respective buttons. Having them all in one place allows a central location to manage all of those buttons, and allows those buttons to not have to worry about with interfacing with the rest of the GUI. This allows for a clearer separation of duties.
+
+LevelEditorButton:
+
+Each instance of this class is responsible for adding a certain piece to the new board. When a button is clicked, the piece they represent is the next piece that will be added to the board the next time the user clicks a valid location on the board. This is true until the next LevelEditorButton or the delete button is clicked. Having buttons responsible for individual pieces increases cohesion as one button is responsible for one piece- a one-to-one relationship.
 
 **_Helper(s)_**
 
