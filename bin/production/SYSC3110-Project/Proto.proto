@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package helpers;
+
+message Point {
+    int32 x = 1;
+    int32 y = 2;
+}
+
+message Square {
+    Point boardSpot = 1;
+    bool isHole = 2;
+}
+
+message Rabbit {
+    Point boardSpot = 1;
+}
+
+message Mushroom {
+    Point boardSpot = 1;
+}
+
+message Fox {
+    Point headLocation = 1;
+    Point tailLocation = 2;
+}
+
+message Board {
+    Point maxBoardSize = 1;
+    repeated Square square = 2;
+    repeated Fox fox = 3;
+    repeated Rabbit rabbit = 4;
+    repeated Mushroom mushroom = 5;
+}
+
+message Game {
+    Board board = 1;
+    string levelName = 2;
+    Graph graph = 3;
+}
+
+message Move {
+    Point start = 1;
+    Point end = 2;
+}
+
+message Graph {
+    repeated Move move = 1;
+    bool isReady = 2;
+}
