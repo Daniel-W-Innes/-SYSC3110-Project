@@ -5,6 +5,11 @@ JumpIN' Java Implementation
    
 **The game implementation found in this repository is created for educational purposes ONLY.** 
 
+## Known Issues
+
+* After exiting the game design mode, the game is not able to continue running due to
+a CalssNotFoundException. This also corrupts the saved file leading to the saved level unable to be loaded. Running from the IDE works however.
+
 ## Authors
 
 * Binyamin Brion

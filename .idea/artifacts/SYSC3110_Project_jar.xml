@@ -7,6 +7,7 @@
         <element id="file-copy" path="$PROJECT_DIR$/META-INF/MANIFEST.MF" />
       </element>
       <element id="library" level="project" name="com.google.protobuf:protobuf-java:3.10.0" />
+      <element id="file-copy" path="$USER_HOME$/Downloads/protobuf-java-3.11.0.jar" />
     </root>
   </artifact>
 </component>

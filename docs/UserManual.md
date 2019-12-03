@@ -31,4 +31,8 @@ There are three steps to playing the game:
 	* To change the level, press the "Change Level" button and enter a number level
 	* Keep entering moves until you win the game, or get bored
 	
+5. 
+	There is additionally a level design mode. To enter it, press "Enter Game Design Mode". When in that mode, click on a button
+	piece on the right hand side to view all the valid tiles to place that piece. Click on a highlighted tile to place that piece 	there. To delete pieces, press the delete button and click on a tile with a piece. The hint button is available to check if the level created is solvable. Once done, click the "Exit Game Design Mode". Upon exit, a prompt to save the game to a file will appear. The level can now be played and loaded later for later gameplay.
+	
 	
